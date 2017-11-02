@@ -1,4 +1,0 @@
-{
-  "schema_seq_no": "<a reference to the schema, like sequence number of schema on the ledger>",
-  "issuer_did": "<reference to the issuer, like the issuer’s DID on the ledger>"
-}
