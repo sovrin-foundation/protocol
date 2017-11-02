@@ -28,17 +28,14 @@
 ## Proof Request
 ```json
 {
-  "name": "Job-Application-2",
-  "version": "0.3",
+  "name": "<name of the proof request>",
+  "version": "<version of the proof request>",
   "attributes": {
-      "ssn": "string",
-      "last_name": "string",
-      "status": "string",
-      "first_name": "string",
-      "degree": "string",
-      "phone_number": "string"
+      "<attribute name, like age>": "<attribute type, like number>",
+      "<attribute name, like ssn>": "<attribute type, like string>",
+      "<attribute name, like status>": "<attribute type, like enum>"
   },
-  "verifiableAttributes": ["status", "degree"]
+  "verifiableAttributes": "<a list of attribute names for which the proof has to be presented>",
   "nonce": "<a nonce acting as request id>"
 }
 ```
