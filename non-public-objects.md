@@ -21,6 +21,24 @@
     },
     "prover_did": "<does not have to be the prover's DID, but some unique identifier by which the issuer knows the prover>"
   },
-  "nonce": "<a nonce>"
+  "nonce": "<a nonce acting as request id>"
+}
+```
+
+## Proof Request
+```json
+{
+  "name": "Job-Application-2",
+  "version": "0.3",
+  "attributes": {
+      "ssn": "string",
+      "last_name": "string",
+      "status": "string",
+      "first_name": "string",
+      "degree": "string",
+      "phone_number": "string"
+  },
+  "verifiableAttributes": ["status", "degree"]
+  "nonce": "<a nonce acting as request id>"
 }
 ```
