@@ -48,7 +48,16 @@ There is currently only one scheme in use today: CL(TODO).
   "verification_key": {
     "y": "<large number>",
     "pk": "<large number>",
-    "_TODO": "add the other values here"
+    "h": "<large number>",
+    "h0": "<large number>",
+    "h1": "<large number>",
+    "h2": "<large number>",
+    "htilde": "<large number>",
+    "hhat": "<large number>",
+    "g": "<large number>",
+    "gprime": "<large number>",
+    "u": "<large number>",
+    "qr": "<large number>",
   }
 }
 ```
