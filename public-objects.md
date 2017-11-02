@@ -46,18 +46,18 @@ There is currently only one scheme in use today: CL(TODO).
 {
   "sig_type": "(TODO: what do we all our revocation sig scheme?)",
   "verification_key": {
-    "y": "<large number>",
-    "pk": "<large number>",
-    "h": "<large number>",
-    "h0": "<large number>",
-    "h1": "<large number>",
-    "h2": "<large number>",
-    "htilde": "<large number>",
-    "hhat": "<large number>",
-    "g": "<large number>",
-    "gprime": "<large number>",
-    "u": "<large number>",
-    "qr": "<large number>",
+    "y": "<large random number in G2>",
+    "pk": "<large random number in G1>",
+    "h": "<large random number in G1>",
+    "h0": "<large random number in G1>",
+    "h1": "<large random number in G1>",
+    "h2": "<large random number in G1>",
+    "htilde": "<large random number in G1>",
+    "hhat": "<large random number in G2>",
+    "g": "<large random number in G1>",
+    "gprime": "<large random number in G2>",
+    "u": "<large random number in G2>",
+    "qr": "<large number specifying the order of the pairing group>",
   }
 }
 ```
