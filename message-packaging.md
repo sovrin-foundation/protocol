@@ -1,5 +1,33 @@
 # Basic Message Packaging
-Messages are not self describing by themselves. They need to be packaged so handlers know what to do with them. A basic message package looks like this:
+Messages are not self describing by themselves. They need a header to describe what they are.
+
+Example header value:
+```json
+{
+    "type": "CLAIM",
+    "type_version": "0.1"
+}
+```
+
+Messages need to be packaged with their headers so recipients know how to understand them. For this reason, 
+the message is included as the "payload" of a new object, along with its header:
+
+
+```json
+{
+    "header": {...},
+    "payload": {...}
+}
+```
+This object is called an **Qualified Message**
+
+##Signing
+Signing is only done when the use case requires it, for several reasons: 
+1. Authentication can be accomplished as part of the Public Key Authenticated Encryption (PKAE). 
+2. The Non-Repudiation offered by signing (DSA, ECDSA, EDDSA) is not always desired, as in the interrim steps of a negotiation. Signatures make a message non-repudiable. 
+3. Signatures are somewhat more expensive to compute and verify than other ways to authenticate, like PKAE.    
+
+If a signature is required, the header and payload need to be encoded as BASE64URL and two signature fields added to the object: 
 
 ```json
 {
@@ -11,21 +39,21 @@ Messages are not self describing by themselves. They need to be packaged so hand
 }
 ```
 
-Example header value:
-```json
-{
-    "type": "CLAIM",
-    "type_version": "0.1"
-}
-```
-
 # Protocol Message Packaging
 Messages are usually part of interactions.
 
 Multiple interactions can happen simultaneously, and so an interaction identifier (IID) is needed to keep things straight.
 
-The first message in an interaction should set an IID (128-bit random number) that the two parties use to keep track of an interaction.
-Each message in an interaction needs a way to be uniquely identified. The first message from each party is always 0, the second message sent from each party is always 1, and so forth. A message is uniquely identified in an interaction by its IID, the sender DID, and the MID.
+The first message in an interaction should set an IID 
+(128-bit random number) that the two parties use to keep 
+track of an interaction.
+
+Each message in an interaction needs a way to be uniquely 
+identified. This is done with Message ID (mid). The first 
+message from each party has an mid of 0, 
+the second message sent from each party is 1, and 
+so forth. A message is uniquely identified in an 
+interaction by its IID, the sender DID, and the MID.
 
 There can be nested interaction, as in the case of a Claim Request. 
 Alice sends Bob a Claim Request. 
@@ -42,7 +70,7 @@ This is actually a Proving Interaction nested within an Issuing Interaction.
 }
 ```
 
-To keep track of nesting, the initiator of an interaction can also reference an optional parent IID.
+To keep track of nesting, the initiator of an interaction can also reference an optional parent iid.
 
 iid: A mutually agreed identifier for the Interaction.
 mid: A message ID unique to the IID and sender.

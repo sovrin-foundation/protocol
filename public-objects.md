@@ -2,7 +2,7 @@
 ## Claim Definition
 ```json
 {
-  "ref": "<schema id>",
+  "schema_ref": "<schema id>",
   "primary": {
     "sig_type": "<primary claim signature scheme>",
     "verification_key": { <scheme-specific public key material> }
@@ -13,6 +13,7 @@
   }
 }
 ```
+<span style="color:yellow">TODO: Needs Issuer reference</span>
 
 # Signature Schemes
 ## Primary Claim Signature Schemes

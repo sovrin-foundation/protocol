@@ -1,6 +1,6 @@
 # Non Public Objects
 
-## Claim Offer
+## CLAIM_OFFER
 ```json
 {
   "schema_seq_no": "<a reference to the schema, like sequence number of schema on the ledger>",
