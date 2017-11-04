@@ -21,7 +21,7 @@ the message is included as the "payload" of a new object, along with its header:
 ```
 This object is called an **Qualified Message**
 
-##Signing
+## Signing
 Signing is only done when the use case requires it, for several reasons: 
 1. Authentication can be accomplished as part of the Public Key Authenticated Encryption (PKAE). 
 2. The Non-Repudiation offered by signing (DSA, ECDSA, EDDSA) is not always desired, as in the interrim steps of a negotiation. Signatures make a message non-repudiable. 
@@ -33,7 +33,7 @@ If a signature is required, the header and payload need to be encoded as BASE64U
 {
     "header": <JSON header value encoded as BASE64URL>,
     "payload": <arbitrary message encoded as BASE64URL>,
-    "sig": "<BASE64URL encoding of sig of header + payload>"
+    "sig": "<BASE64URL encoding of sig of header||payload>"
     "sig_type": "ED25519_HMAC_SHA256",
     }
 }
@@ -72,13 +72,11 @@ This is actually a Proving Interaction nested within an Issuing Interaction.
 
 To keep track of nesting, the initiator of an interaction can also reference an optional parent iid.
 
-iid: A mutually agreed identifier for the Interaction.
-mid: A message ID unique to the IID and sender.
-piid: A parent iid used when branching or nesting a new interaction off of an existing one.
-lmid: A reference to the last message the sender received from the receiver. Missing if it is the first message in an interaction.
-
-
-to_did: who the message is to. This did should stay constant throughout the negotiation.
+iid: A mutually agreed identifier for the Interaction.  
+mid: A message ID unique to the IID and sender.  
+piid: A parent iid used when branching or nesting a new interaction off of an existing one.  
+lmid: A reference to the last message the sender received from the receiver. Missing if it is the first message in an interaction.  
+to_did: who the message is to. This did should stay constant throughout the negotiation.  
 from_did: who the message is from. This did should stay constant throughout the negotiation.
 
 ```json

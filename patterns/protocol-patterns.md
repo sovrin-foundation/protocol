@@ -16,7 +16,7 @@ Examples:
 The following are higher level constructs that are used in the pattern description.
 
 ##### Matter
-The matter is the element that is being negotiated. This matter must have meaning to both parties and that meaning is understood outside of this framework. That understanding is important to the use of the protocol framework but not the framework itself. For example, a party that is deciding whether it should agree to terms presented must interpret the semantic meaning of the matter that is being discussed. But the mechanism for the act of agreement is the same regardless of the meaning of the matter. 
+The matter is the element that is being negotiated. This matter must have meaning to both parties and that meaning is understood outside of this framework. That understanding is important to the use of the protocol but not the framework itself. For example, a party that is deciding whether it should agree to terms presented must interpret the semantic meaning of the matter that is being discussed. But the mechanism for the act of agreement is the same regardless of the meaning of the matter. 
 
 #### Party Roles
 During a negotiation there are two primary parties involved. There is a provider and a acquirer.  Both parties must maintain their respective control of their side of the negotiation. They both are free to agree, counter and terminate the negotiation. And when they agree, they are the two parties that must come to agreement before the matter is exchanged. 
@@ -43,7 +43,7 @@ Sent by the Acquirer to the Provider. This message must provide context to the P
 Sent by the Provider. The matter message contains the matter that has been negotiated. Should match the semantics of the last request message that the Provider has agreed to. This message marks the end of the negotiation.
 
 ##### Confirmation
-The Acquirer can optionally send a confirmation message after receiving the matter.  This confirmation will allow the Provider to know that the matter was received and in the possession of the Acquirer. Since this message is option it is not reflected in the state diagram below. But this step could be required by the context of the negotiation.
+The Acquirer can optionally send a confirmation message after receiving the matter.  This confirmation will allow the Provider to know that the matter was received and in the possession of the Acquirer. Since this message is optional it is not reflected in the state diagram below. But this step could be required by the context of the negotiation.
 
 ##### Rejection
 Either the Provider or the Acquirer can send a rejection message. This message has context after either the Provider has received a request or the Acquirer has received an offer.  Additionally, this message can be expressed as a response to any message from the other party after deciding to reject the negotiation.  This message has the basic semantics that one party no longer want to negotiate over the matter. The cause may vary but the conversation is dead. Either party can initiate a negotiation by starting a new negotiation.
