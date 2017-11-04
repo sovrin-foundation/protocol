@@ -13,31 +13,31 @@ The framework provides the construct that both parties in an interaction could r
 1. Scales to work for every person, org, or thing
 
 ## Guiding Principles of this Protocol
-1. Distributed/Decentralized
-1. Privacy by design
-    1. Encrypted communications
-    1. Selective disclosure
-    1. Non-correlating
-    1. Minimize dependency on the ledger.
-1. Security by design
-    1. Keys at the edge
-    1. Private keys never shared
-    1. Every actor is authorized
-    1. Minimal authorization of keys
-    1. Minimal risk of impersonation by service providers
-    1. Zero-trust architecture
-1. Financially accessible to all
-    1. Minimize writes to the ledger.
-1. Functionally accessible
-    1. Allow for third party app and service providers while maintaining other security and privacy principles.
-1. Scalable
-    1. Minimize dependency on the ledger, especially writes.
+### Distributed/Decentralized
+### Privacy by design
+##### Encrypted communications
+##### Selective disclosure
+##### Non-correlating
+##### Minimize dependency on the ledger.
+### Security by design
+##### Keys at the edge
+##### Private keys never shared
+##### Every actor is authorized
+##### Minimal authorization of keys
+##### Minimal risk of impersonation by service providers
+##### Zero-trust architecture
+### Financially accessible to all
+##### Minimize writes to the ledger.
+### Functionally accessible
+##### Allow for third party app and service providers while maintaining other security and privacy principles.
+### Scalable
+##### Minimize dependency on the ledger, especially writes.
 
 ## Basic Description of What's Possible with Sovrin
 
 
 ## What's on the Ledger?
-The protocol stores the following on the ledger:
+The protocol stores the following Ledger Objects on the ledger:
 1. Public DIDs and DID Documents (inluding public keys and addressable endpoints)
 2. Schema
 3. Claim Definitions (references a Schema and includes an Issuer's public keys)
@@ -51,14 +51,38 @@ The protocol stores the following on the ledger:
 1. Proofs
 1. Authentication or Verification transactions
 
-## Orchestrated Interactions
-The Sovrin protocol has two rough classifications of communications, (1) Ledger and (2) Peer.
+## The Sovrin Sub-protocols
+The Sovrin Sub-protocols include:
+1. Issuer Setup
+1. Connecting
+1. Issuing
+1. Proving
+1. Revoking
 
-### Ledger Writes and Reads
-Ledger communications include the writes and reads to the Sovrin Ledger. Because the Sovrin protocol seeks to minimize dependencies on the ledger where possible, many interactions are peer interactions.
+### Issuer Setup
+Issuers of Claims need four basic Ledger Objects before they can issue Claims:
+1. A public DID and Document
+3. Claim Definition
+4. Revocation Registry
 
-### Peer Interactions
-Peer interactions are the heart of the Sovrin protocol.
+#### Public DID and DID Document
+An Issuer is a well-known entity in the Sovrin ecosystem. They have a public DID that is referenced by their Claim Definitions and Revocation Registries.
+
+#### Claim Definition
+An Issuer issues Claims against a Claim type, called a Claim Definition. A Claim Definition includes two major parts: (1) a reference to a Schema, and (2) public keys specific to the claims issued under that Claim Definition. 
+
+The Schema is a template that defines the fields and data types and semmantics of the claims issued under that Claim Definitions. A Claim Definition can reference any public Schema created by any party. This allows for public reuse of well-designed Schema, which should drive consolidation and a form of standardization over time.
+
+The public keys are used by Relying Parties to verify that a person really has a Claim from that Issuer. The issuer generates special private and public keys for a specific Claim Definition, securely storing the private keys, and publishing the public key in the Claim Definition on the ledger.
+
+These terms are abstract, so an example may be helpful. The California State Driver License Division is an Issuer. They have a number of fields on their standard driver license. They create a Schema (if an existing one is not adequate) with those fields they use on their driver license today. They call this Schema "Bear Driver License" and give it version "0.1.0". They generate the keys and publish it in a Claim Definition they call "California Driver License" and give it version "1".
+
+#### Revocation Registry
+Holders of Claims need the ability to prove the claim they have is valid without 
+
+In order to support anonymous revocation ()
+
+Because the Sovrin protocol seeks to minimize dependencies on the ledger where possible, many interactions do not require direct ledger writes.
 
 ### Agents
 Agents are dedicated to supporting one entity (person or organization), which is perpendicular to modern web infrastructure and horizontal architectures in general. An agent is aligned to one and only one entity, and everything it does is in direct support of that one entity.
@@ -66,8 +90,14 @@ Agents are dedicated to supporting one entity (person or organization), which is
 Agents come in two basic flavors: (1) Edge Agents and (2) Cloud Agents.
 
 ####
-Edge Agents, also known as Local Agents, are Sovrin-aware code running on a device in direct control of the owner. Devices include mobile phones, tablets, PCs, and servers controlled by enterprises. 
+Edge Agents, also known as Local Agents, are Sovrin-aware code (perhaps in the form of an SDK) running on a device in direct control of the owner. Devices include mobile phones, tablets, PCs, and servers controlled by enterprises. 
 
 ####
 Cloud Agents are any agents running on hardware physically controlled by another party.
 
+## An independent protocol for Self-Sovereign Identity
+Any public ledger that is capable of storing and maintaining the core Ledger Objects (DIDs/DID docs, Schema, Claim Defs, Revocation Registries, and Anchors) could provide the Public Ledger requirements of the protocol, as long as the consumers of those objects trusted that particular ledger.
+
+### Interoperability Requirements
+
+### Ledger Requirements
