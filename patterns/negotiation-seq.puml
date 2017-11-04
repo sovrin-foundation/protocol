@@ -1,0 +1,46 @@
+@startuml
+title Negotiation Pattern Sequence
+actor Acquirer as a
+actor Provider as p
+a <-- p : <font color=green><b>OFFER
+note left
+An initial offer is strictly required,
+though in practice, it is expected
+OFFERs will precede a REQUEST.
+end note
+
+a -> p : <font color=green><b>REQUEST
+opt optional; can loop as long as the parties have \npatience
+
+a <- p : <font color=green><b>OFFER
+note left
+If the Provider does not like the
+terms of a previous REQUEST,
+it may counter with a new
+OFFER, or it may abandon the
+negotiation.
+end note
+
+a -> p : <font color=green><b>REQUEST
+note left
+If the Acquirer does not like the
+terms of a previous OFFER, it
+may propose the terms they like
+in the REQUEST, or it may
+abandon the negotiation.
+end note
+
+end
+
+a <- p : <font color=green><b><MATTER>
+note left
+The thing that was negotiated.
+end note
+
+a --> p : <font color=green><b>ACK
+note left
+An acknowledgement the
+<MATTER> was received.
+end note
+
+@enduml
