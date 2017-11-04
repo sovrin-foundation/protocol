@@ -1,8 +1,8 @@
 @startuml
-
+title States for the Negotiation Pattern
 state Acquirer {
-  state "Dead" as aDead
-  state "Complete" as aComplete
+  state "<b>Dead" as aDead
+  state "<b>Complete" as aComplete
   [*] --> HasOffer : got\n<font color=green><b>OFFER
   [*] --> Requested : send\n<font color=green><b>REQUEST
   Requested --> HasOffer : counter\noffer\nreceived\n(got\n<font color=green><b>OFFER</font>)
@@ -19,8 +19,8 @@ state Acquirer {
 
 
 state Provider {
-  state "Dead" as pDead
-  state "Complete" as pComplete
+  state "<b>Dead" as pDead
+  state "<b>Complete" as pComplete
   [*] --> Offered : offer\n(send\n<font color=green><b>OFFER</font>)
   Offered -> HasRequest : got\n<font color=green><b>REQUEST
   [*] --> HasRequest : got\n<font color=green><b>REQUEST
