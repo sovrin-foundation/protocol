@@ -6,6 +6,7 @@ The framework provides the construct that both parties in an interaction could r
 
 ## Guiding Principles of SSI
 1. Distributed/Decentralized
+1. The Identity Owner is in control
 1. Privacy by design
 1. Security by design
 1. Financially accessible to all (basic identity should be free or very low cost)
@@ -14,10 +15,32 @@ The framework provides the construct that both parties in an interaction could r
 
 ## Guiding Principles of this Protocol
 ### Distributed/Decentralized
+### The Identity Owner is in control
+TODO: They hold the claims. They don't have to go back to the issuer to tweak their claims to be able to prove things on their claims.
+
+No coordination needed between Issuer Relying Parties.
+
 ### Privacy by design
 ##### Encrypted communications
-##### Selective disclosure
+TODO: Encrypted only for the recipient
+##### Selective Disclosure
+###### True Selective Disclosure requires pairwise identifiers
+TODO
+###### True Selective Disclosure requires ZKP
+There are levels of selective disclosure. An example of selective disclosure might be to share just my birthdate from my driver license when I need to prove I'm over the age of 18. My birthdate can be used with other information about me shared or inferred to strongly identify me. We can do better.
+
+Better would be to share just my birth year, which would work for most people. If I turned 18 this year, then I'd have to fall back to showing birth month, and possibly birth day as well. But it's still better.
+
+Better might be to ask the Issuer to include a field just for "over 18". Then I can prove I'm over 18 without sharing my birthdate or birth year. But what if I'm a smoker and I travel to a state in the US that has a 19 year-old smoking statute? What if I'm over 18 in the UK, and I travel to the US and want to prove I'm over 21 (US drinking age). 
+
+One of the core principles of SSI is the issuer has minimal coordination with relying parties. The more flexibility an Identity Owner has to prove things about him/herself the more useful those claims will be.
+
+Sovrin claims allow the identity holder to prove arbitrary predicates. My driver license can contain my birthdate, and I can prove that I am over 18, or over 19, or over 27.5, or under 65.
+
+Even for (especially for) service providers.
+
 ##### Non-correlating
+TODO Requires pairwise and ZKP
 ##### Minimize dependency on the ledger.
 ### Security by design
 ##### Keys at the edge
@@ -37,7 +60,7 @@ The framework provides the construct that both parties in an interaction could r
 
 
 ## What's on the Ledger?
-The protocol stores the following Ledger Objects on the ledger:
+The protocol stores the following Public Objects on the ledger:
 1. Public DIDs and DID Documents (inluding public keys and addressable endpoints)
 2. Schema
 3. Claim Definitions (references a Schema and includes an Issuer's public keys)
@@ -60,10 +83,10 @@ The Sovrin Sub-protocols include:
 1. Revoking
 
 ### Issuer Setup
-Issuers of Claims need four basic Ledger Objects before they can issue Claims:
+Issuers of Claims need three basic Public Objects before they can issue Claims:
 1. A public DID and Document
-3. Claim Definition
-4. Revocation Registry
+1. Claim Definition
+1. Revocation Registry
 
 #### Public DID and DID Document
 An Issuer is a well-known entity in the Sovrin ecosystem. They have a public DID that is referenced by their Claim Definitions and Revocation Registries.
@@ -78,7 +101,7 @@ The public keys are used by Relying Parties to verify that a person really has a
 These terms are abstract, so an example may be helpful. The California State Driver License Division is an Issuer. They have a number of fields on their standard driver license. They create a Schema (if an existing one is not adequate) with those fields they use on their driver license today. They call this Schema "Bear Driver License" and give it version "0.1.0". They generate the keys and publish it in a Claim Definition they call "California Driver License" and give it version "1".
 
 #### Revocation Registry
-Holders of Claims need the ability to prove the claim they have is valid without 
+Holders of Claims need the ability to prove the claim they have is valid without disclosing 
 
 In order to support anonymous revocation ()
 
@@ -96,7 +119,7 @@ Edge Agents, also known as Local Agents, are Sovrin-aware code (perhaps in the f
 Cloud Agents are any agents running on hardware physically controlled by another party.
 
 ## An independent protocol for Self-Sovereign Identity
-Any public ledger that is capable of storing and maintaining the core Ledger Objects (DIDs/DID docs, Schema, Claim Defs, Revocation Registries, and Anchors) could provide the Public Ledger requirements of the protocol, as long as the consumers of those objects trusted that particular ledger.
+Any public ledger that is capable of storing and maintaining the core Public Objects (DIDs/DID docs, Schema, Claim Defs, Revocation Registries, and Anchors) could provide the Public Ledger requirements of the protocol, as long as the consumers of those objects trusted that particular ledger.
 
 ### Interoperability Requirements
 
