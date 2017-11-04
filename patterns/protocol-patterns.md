@@ -57,3 +57,4 @@ At any time and outside the flow of the other messages, either party should be a
 #### Negotiation State Machine
 For either party the state machine is mostly the same. There are few paths that only one party can path through. For example, only the Acquirer can receive the matter while in the sent state and only the Provider can send the matter in the accepted state. But there is symmetry between the two parties in most areas of the exchange. For example, once either party sends an offer/req, it must wait for a response from the other party.
 
+See negotiation-seq.puml and negotiation-state.puml for the sequence diagram and states of this pattern, respectively.
