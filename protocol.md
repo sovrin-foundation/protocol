@@ -101,3 +101,5 @@ Any public ledger that is capable of storing and maintaining the core Ledger Obj
 ### Interoperability Requirements
 
 ### Ledger Requirements
+Generating a new claim or proof or verifying a proof does not require writing on the ledger. It requires reading from ledger (in case of cache miss). The ledger is only written to when a new Schema or Claim Definition is published or a claim is revoked hence updating the revocation registry.
+Hence the ledger should have a good read performance.   
