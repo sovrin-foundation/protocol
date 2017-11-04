@@ -1,0 +1,38 @@
+@startuml
+
+state Acquirer {
+  state "Dead" as aDead
+  state "Complete" as aComplete
+  [*] --> HasOffer : got\n<font color=green><b>OFFER
+  [*] --> Requested : send\n<font color=green><b>REQUEST
+  Requested --> HasOffer : counter\noffer\nreceived\n(got\n<font color=green><b>OFFER</font>)
+  HasOffer --> Requested : accept\n(send\n<font color=green><b>REQUEST</font>)
+  HasOffer --> OfferDeclined : decline
+  OfferDeclined --> aDead : abandon\nnegotiation
+  OfferDeclined --> Requested : counter\n(send\n<font color=green><b>REQUEST</font>)
+  Requested --> Received : got\n<font color=green><b><MATTER>
+  Received --> aComplete : acknowledge\n(send\n<font color=green><b>ACK</font>)
+  Received --> aComplete : ACK\nNot\nNeeded
+  aDead --> [*]
+  aComplete --> [*]
+}
+
+
+state Provider {
+  state "Dead" as pDead
+  state "Complete" as pComplete
+  [*] --> Offered : offer\n(send\n<font color=green><b>OFFER</font>)
+  Offered -> HasRequest : got\n<font color=green><b>REQUEST
+  [*] --> HasRequest : got\n<font color=green><b>REQUEST
+  HasRequest --> RequestRejected : reject
+  RequestRejected --> Offered : counter\n(send\n<font color=green><b>OFFER</font>)
+  HasRequest --> Fulfilled : fulfill\n(send\n<font color=green><b><MATTER></font>)
+  Fulfilled --> pComplete : got\n<font color=green><b>ACK
+  Fulfilled --> pComplete : ACK\nnot\nneeded
+  RequestRejected --> pDead : abandon\nnegotiation
+  pDead --> [*]
+  pComplete --> [*]
+}
+
+@enduml
+

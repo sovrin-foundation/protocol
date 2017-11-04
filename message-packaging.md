@@ -112,6 +112,7 @@ Alice sends to Bob:
 {
   "iid": "Gh4...y4p",
   "mid": 0,
+  "lmid": 0,
   "msg": {
     "header": BASE64URL({
       "type": "CLAIM_REQUEST",
@@ -121,7 +122,6 @@ Alice sends to Bob:
     }
 }
 ```
-
 
 Bob sends to Alice:
 ```json
@@ -138,6 +138,7 @@ Bob sends to Alice:
     }
 }
 ```
+This is the first message in a new nested interaction!
 
 
 Alice sends to Bob:
@@ -155,7 +156,7 @@ Alice sends to Bob:
     }
 }
 ```
-
+This is the second message in the nested interaction.
 
 Bob sends to Alice:
 ```json
@@ -172,7 +173,7 @@ Bob sends to Alice:
     }
 }
 ```
-
+This is the third message in the original interaction.
 
 Bob sends to Alice:
 ```json
@@ -189,3 +190,4 @@ Bob sends to Alice:
     }
 }
 ```
+This is the fourth and last message in the original interaction.
