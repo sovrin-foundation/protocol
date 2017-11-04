@@ -39,3 +39,6 @@
   "nonce": "<a nonce acting as request id>"
 }
 ```
+
+## Claim Notice
+When an issuer is making a change that affects its claim holders, it should let them know of the change. This could be because that the Issuer is updating its Claims to a new schema, or rotating its public keys, or some breach was detected and claims issued between a certain date period need to be reissued, or a particular claim was revoked (e.g, driver privileges suspended due to court order). This is done by sending the claim holder(s) a Claim Notice message.
