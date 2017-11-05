@@ -16,16 +16,21 @@ The framework provides the construct that both parties in an interaction could r
 ## Guiding Principles of this Protocol
 ### Distributed/Decentralized
 ### The Identity Owner is in control
-TODO: They hold the claims. They don't have to go back to the issuer to tweak their claims to be able to prove things on their claims.
+TODO: They hold the claims. They don't have to go back to the issuer to tweak their claims to be able to prove things on their claims. 
 
-No coordination needed between Issuer Relying Parties.
+No coordination needed between Issuer and Relying Parties.
+
+However, Sovrin supports "locked claims". To "use" a "locked claim", meaning to verify a proof generated from a "locked claim", the relying party needs to get an "unlocking code" from the issuer. This gives the issuer opportunities to charge a fee or track how often it's issued claim is used. 
 
 ### Privacy by design
 ##### Encrypted communications
-TODO: Encrypted only for the recipient
+TODO: Encrypted only for the recipient.
+Sovrin recommends the use of Public Key Authenticated Encryption (PKAE) for communication between 2 parties. Apart from providing secrecy (sent message looks garbage to anyone other than recipient), it also ensures the recipient of authenticity of the sent message. However the use of PKAE does not provide non-repudiation but digital signatures are supported when needed.
+
 ##### Selective Disclosure
 ###### True Selective Disclosure requires pairwise identifiers
-TODO
+TODO: Sovrin recommends that identity owners generate a different identifier for each party they communicate (share or ask for information). This prevents multiple parties to collude and infer more information about the identity owner than the identity owner wanted to share with them in the first place. eg. If Alice want to disclose only her age to Bob and only her address to Carol but uses the same identifier `a90f..` with both Bob and Carol during the disclosure then if Bob and Carol collude, they both know Alice's age and address. Thus Alice ended up disclosing more than she needed to Bob and Carol. 
+
 ###### True Selective Disclosure requires ZKP
 There are levels of selective disclosure. An example of selective disclosure might be to share just my birthdate from my driver license when I need to prove I'm over the age of 18. My birthdate can be used with other information about me shared or inferred to strongly identify me. We can do better.
 
@@ -40,7 +45,9 @@ Sovrin claims allow the identity holder to prove arbitrary predicates. My driver
 Even for (especially for) service providers.
 
 ##### Non-correlating
-TODO Requires pairwise and ZKP
+TODO Requires pairwise identifiers and ZKP.
+The use of pairwise identifiers by the identity owner prevents multiple relying parties to collude and corelate the identity owner. But even a single relying party can build a corelation between different interactions of the identity owner if the identity owner was sharing the actual attribute than a proof over the attribute, like sharing the SSN rather than sharing the proof of possession of a valid SSN. In another scenario, if the identity owner was sharing the actual attribute with multiple relying parties, the relying parties can collude and correlate that it is the same identity owner even when the identity owner was using different identifier with each of the RPs, like if Alice shared her SSN with Bob and Carol, Bob and Carol can know that they have interacted with the same person b colluding even when Alice used different identifiers with them.  
+
 ##### Minimize dependency on the ledger.
 ### Security by design
 ##### Keys at the edge
@@ -61,7 +68,7 @@ TODO Requires pairwise and ZKP
 
 ## What's on the Ledger?
 The protocol stores the following Public Objects on the ledger:
-1. Public DIDs and DID Documents (inluding public keys and addressable endpoints)
+1. Public DIDs and DID Documents (including public keys and addressable endpoints)
 2. Schema
 3. Claim Definitions (references a Schema and includes an Issuer's public keys)
 4. Revocation Registries (references a Claim Definition)
