@@ -1,0 +1,23 @@
+@startuml
+actor Issuer as i
+actor "ID Owner" as ido
+actor "Relying Party" as rp
+== Issuer Setup ==
+i -> i : generate **locking_secret**\n""new_locking_secret()""
+== Issuing ==
+i -> ido : CLAIM_OFFER
+i <- ido : CLAIM_REQUEST
+i -> i : generate **claim*
+i -> i : generate **locked_claim**\n""lock(claim, locking_secret)""
+i -> ido : locked_claim
+== Proving ==
+ido -> rp : request access
+ido <- rp : PROOF_REQUEST
+ido -> ido : generate **locked_proof** \n""generate(locked_claim, ...)""
+ido -> rp: locked_proof
+i <- rp : UNLOCK_REQUEST(locked_token)
+i -> i : generate **unlocked_token** from \n""unlock(locked_token, locking_secret)""
+i -> rp: unlocked_token
+rp -> rp: ""verify(proof, unlocked_token)""
+
+@enduml
