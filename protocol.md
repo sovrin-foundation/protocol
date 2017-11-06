@@ -55,10 +55,9 @@ Some may argue that Relying Parties will simply ask for enough information to un
 ### Security by design
 ##### Keys at the edge
 ##### Private keys never shared
-##### Every actor is authorized
-##### Minimal authorization of keys
-##### Minimal risk of impersonation by service providers
-##### Zero-trust architecture
+##### Every actor is authorized and every communication verified (zero-trust)
+##### Principle of least privilege/authorization (zero-trust)
+##### Minimal risk and impact of impersonation (service providers)
 ### Financially accessible to all
 ##### Minimize writes to the ledger.
 ### Functionally accessible
