@@ -23,12 +23,10 @@ No coordination needed between Issuer and Relying Parties.
 ### Privacy by design
 ##### Encrypted communications
 TODO: Encrypted only for the recipient.
-Sovrin recommends the use of Public Key Authenticated Encryption (PKAE) for communication between 2 parties. Apart from providing secrecy (sent message looks garbage to anyone other than recipient), it also ensures the recipient of authenticity of the sent message. However the use of PKAE does not provide non-repudiation but digital signatures are supported when needed.
+cover use of PKAE
+When signing should and should not be used
 
 ##### Selective Disclosure
-###### True Selective Disclosure requires pairwise identifiers
-TODO: Sovrin recommends that identity owners generate a different identifier for each party they communicate (share or ask for information). This prevents multiple parties to collude and infer more information about the identity owner than the identity owner wanted to share with them in the first place. eg. If Alice want to disclose only her age to Bob and only her address to Carol but uses the same identifier `a90f..` with both Bob and Carol during the disclosure then if Bob and Carol collude, they both know Alice's age and address. Thus Alice ended up disclosing more than she needed to Bob and Carol. 
-
 ###### True Selective Disclosure requires ZKP
 There are levels of selective disclosure. An example of selective disclosure might be to share just my birthdate from my driver license when I need to prove I'm over the age of 18. My birthdate can be used with other information about me shared or inferred to strongly identify me. We can do better.
 
@@ -42,9 +40,16 @@ Sovrin claims allow the identity holder to prove arbitrary predicates. My driver
 
 Even for (especially for) service providers.
 
-##### Non-correlating
-TODO Requires pairwise identifiers and ZKP.
-The use of pairwise identifiers by the identity owner prevents multiple relying parties to collude and corelate the identity owner. But even a single relying party can build a corelation between different interactions of the identity owner if the identity owner was sharing the actual attribute than a proof over the attribute, like sharing the SSN rather than sharing the proof of possession of a valid SSN. In another scenario, if the identity owner was sharing the actual attribute with multiple relying parties, the relying parties can collude and correlate that it is the same identity owner even when the identity owner was using different identifier with each of the RPs, like if Alice shared her SSN with Bob and Carol, Bob and Carol can know that they have interacted with the same person b colluding even when Alice used different identifiers with them.  
+###### True Selective Disclosure prohibits sharing identifiers and signatures across relationships
+This concept is also known as Correlation Privacy.
+
+Using the same identifier for multiple relationships allows the other partyies in those relationships to share information with each other in a very efficient way. If I share my identifier and attribute x with party A, and I share that same identifier and attribute y and z with party B, then A and B have an easy way to horse-trade data about me, create a collective identity record for me. This shadow identity record would be under their control, not mine.
+
+Zero-knowledge proofs mentioned above are also required to combat another correlation point. Hashes and traditional digital signatures are by design universally unique. If I use a digital signature from an Issuer to prove attribute w and x to relying party A, and I use the same digital signature to prove attribute x and y to relying party B, then that signature serves as a unique identifier. ZKP allows for proving attributes without sharing the unique digital signatures from the issuers.
+
+Facebook is a centralized service, but even they realized this correlation risk in their SSO product and shifted to using unique identifiers for you when you authenticated for different Relying Parties.
+
+Some may argue that Relying Parties will simply ask for enough information to uniquely identify you anyway, so its no use. But until a system that allows for true selective disclosure and privacy from correlation is in use, legislatures won't prescribe its concepts, and people won't know its possible. Sovrin claims come with this built in. When Relying Parties realize they can have strong authentication without collecting excessive toxic PII, they'll stop asking for so much of it. When people get used to sharing less PII with so many Relying Parties, they will become warry of those Relying Parties that ask for too much.
 
 ##### Minimize dependency on the ledger.
 ### Security by design
