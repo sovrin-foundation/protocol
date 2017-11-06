@@ -16,11 +16,9 @@ The framework provides the construct that both parties in an interaction could r
 ## Guiding Principles of this Protocol
 ### Distributed/Decentralized
 ### The Identity Owner is in control
-TODO: They hold the claims. They don't have to go back to the issuer to tweak their claims to be able to prove things on their claims. 
+TODO: They hold the claims. They don't have to go back to the issuer to tweak their claims to be able to prove things on their claims.
 
 No coordination needed between Issuer and Relying Parties.
-
-However, Sovrin supports "locked claims". To "use" a "locked claim", meaning to verify a proof generated from a "locked claim", the relying party needs to get an "unlocking code" from the issuer. This gives the issuer opportunities to charge a fee or track how often it's issued claim is used. 
 
 ### Privacy by design
 ##### Encrypted communications
