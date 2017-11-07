@@ -93,8 +93,6 @@ As an example, Alice is an issuer and she offers a claim to Bob.
 * Alice establishes a Topic ID, 7.
 * Alice sends a CLAIM_OFFER, `tid`=7, `mid`=0. 
 * Bob responded with a CLAIM_REQUEST, `tid`=7, `mid`=0, `lmid`=0.
-* **Alice sends a PROOF_REQUEST, `tid`=11, `ptid`=7, `mid`=0.**
-* **Bob sends a PROOF, `tid`=11,`mid`=0, `lmid`=0.**
 * Alice sends a CLAIM, `tid`=7, `mid`=1, `lmid`=0.
 * Bob responds with an ACK, `tid`=7, `mid`=1, `lmid`=1.
 
