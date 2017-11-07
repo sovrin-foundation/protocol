@@ -99,7 +99,7 @@ As an example, Alice is an issuer and she offers a claim to Bob.
 ### Nested interactions
 Sometimes there are interactions that need to occur with the same party, while an existing interaction is in-flight.
 
-When an interaction is nested within another, the initiator of a new interaction can include a Parent Topic ID (`ptid`). This signals the other party that this is a topic that is branching off of an existing interaction.
+When an interaction is nested within another, the initiator of a new interaction can include a Parent Topic ID (`ptid`). This signals to the other party that this is a topic that is branching off of an existing interaction.
 
 ### Nested Example
 As before, Alice is an issuer and she offers a claim to Bob. This time, she wants a bit more information before she is comfortable providing a claim.
@@ -112,17 +112,17 @@ As before, Alice is an issuer and she offers a claim to Bob. This time, she want
 * Alice sends a CLAIM, `tid`=7, `mid`=1, `lmid`=0.
 * Bob responds with an ACK, `tid`=7, `mid`=1, `lmid`=1.
 
-All the steps are the same, except the the two bolded steps that are part of a nested interaction.
+All of the steps are the same, except the two bolded steps that are part of a nested interaction.
 
 ### Topic object
 A topic object has the following fields discussed above:
 
-* `tid`: A mutually agreed identifier for the Interaction.  
+* `tid`: A mutually agreed identifier for the interaction.  
 * `mid`: A message ID unique to the `tid` and sender.  
 * `ptid`: An optional parent `tid`. Used when branching or nesting a new interaction off of an existing one.  
 * `lmid`: A reference to the last message the sender received from the receiver. (Missing if it is the first message in an interaction.)  
 
-The topic object can be attached to a message in one of two way.
+The topic object can be associated with a message in one of two way.
 
 ### Wrapping Method
 In this method, the original message is wrapped as the `msg` element of a new object, along with a `topic` object:
@@ -163,9 +163,10 @@ Structure:
   forwarded: <encrypted msg for edge>
 }
 ```
+This is useful when the recipient of a message is to forward a message on, but needs to have some information about the message. This is a common requirement with Agents, where the Agent needs to know that the message is a Claim Offer, but doesn't need to know the details of the Claim itself.
 
 ## Encrypted Messages
-There are two basic types of encrypted messages.
+There are three basic types of encrypted messages.
 1. authenticated encryption: `pkae` 
 1. anonymous encryption: `anoncrypt`
 1. self-contained authenticated encryption: `authcrypt` 
@@ -175,7 +176,7 @@ Public Key Authenticated Encryption (PKAE) is a method where an elliptic curve d
 
 The PKAE function takes the recipient's verkey and a one-time nonce:
 ```
-pkae(msg, recipient_verkey, nonce)
+pkae_encrypt(msg, recipient_verkey, nonce)
 ```
 
 ### Anoncrypt Messages
@@ -197,7 +198,7 @@ Structure:
               HINT
               recipient_verkey)),
   "msg": base64url(
-           pkae(
+           pkae_encrypt(
              MSG,
              recipient_verkey,
              <nonce1>))
@@ -211,13 +212,69 @@ Structure:
 }
 ```
 
-Bob wants Alice to share the topic info and type info with his Agent.
-
-
 To open a combo_box:
+1. Decode the Base64URL hint.
+1. Decrypt the 
 decrypt the sealedbox, and use the from and nonce from the sealed_box to decrypt the pkae_box:
 
 pkae_decrypt(ciphertext, from, nonce)
+
+
+## Alternate construction
+
+Internal message structure:
+```json
+{
+  "from": "<sender's ver_key>",
+  "sig":"<sender's ephemeral pub_key signed by sender>",
+  "msg":"msg"
+}
+```
+
+### Construction
+Sender...
+1. Generates a new ephemeral keypair.
+1. Signs the ephmeral public key.
+1. Constructs a JSON object like so:
+    ```json
+    {
+      "from": "<sender's ver_key>",
+      "sig": "<signature over sender's ephemeral pub_key>",
+      "msg": "<msg>"
+    }
+    ```
+1. Encrypts the object using the ephemeral private key.
+1. Vigorously discards the ephemeral private key as it should only be used once.
+1. Encodes the ciphertext in BASE64URL and adds it to a JSON object along with the the ephemeral public key.
+    ```json
+    {
+      "lock_box_key": "<BASE64URL(sender's ephemeral pub_key)>",
+      "ciphertext": "<BASE64URL(ciphertext)>"
+    }
+    ```
+
+### Deconstruction
+Recipient...
+1. Decodes the lock_box_key.
+1. Decodes the ciphertext.
+1. Uses the lock_box_key and its own private key to decrypt the ciphertext.
+1. Verifies the signature is a signature over the `lock_box_key` using the `from` ver_key in the "from".
+
+At this point, the recipient has a message it knows was encrypted by the sender and was not tampered with. The message is still repudiable
+
+
+#### Issues to overcome with libsodium
+Sealed_box generates the keypair in the encryption operation. The contents of the message contains the ephemeral public key, so this won't work for us. We could deconstruct the sealed_box logic, but this would defeat one of the purposes of sealed_box.
+ 
+Crypto_box could work, but it requires a nonce. A nonce is not needed with an ephemeral key authenticated encryption, because the ephemeral key is used only once. Maybe we could use crypto_box with a static nonce, say 0x00. But using the nonce is extra work that's not necessary.
+
+So neither are great for what we want to do. but I would think Crypto_box with a static nonce is the easiest approach.
+
+
+# Scratchpad below this point
+Bob wants Alice to share the topic info and type info with his Agent.
+
+
 
 Result: you have an authenticated message.
 
