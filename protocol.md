@@ -5,13 +5,15 @@ The Sovrin Network is a pioneer in Self-Sovereign Identity (SSI). This style of 
 The framework provides the construct that both parties in an interaction could require human input. Additionally, either party may require time to consider either party's terms. These terms could be complex or simple. These terms could have short or long term implications. Because of this, it's important that either party have time to consider what is being negotiated. Asynchronous message allows either party time to respond to messages.
 
 ## Guiding Principles of SSI
-1. Distributed/Decentralized
+TODO reconcile and reference "Sovereign Privacy by Design" document.
 1. The Identity Owner is in control
+    1. Distributed/Decentralized
 1. Privacy by design
 1. Security by design
-1. Financially accessible to all (basic identity should be free or very low cost)
-1. Functionally accessible (great experience for all users, including low latency)
-1. Scales to work for every person, org, or thing
+1. Accessible for all
+    1. Financially accessible to all (basic identity should be free or very low cost)
+    1. Functionally accessible (great experience for all users, including low latency)
+    1. Scales to work for every person, org, or thing
 
 ## Guiding Principles of this Protocol
 ### Distributed/Decentralized
