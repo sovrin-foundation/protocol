@@ -1,0 +1,89 @@
+@startuml
+title Abstract Negotiation Pattern Sequence
+actor Intiator as a
+actor Other as b
+
+note over a,b
+A proposal from A to B has two parts:
+
+(1) what party A commits to do
+(2) what A wants B to do in exchange
+
+An acceptance from B is a
+commitment. If B accepts, then the
+proposal with the acceptance
+together become a binding
+agreement.
+
+A proposal includes:
+(1) Party A's DID
+(2) Party B's DID
+(3) A's precondition (optional)
+(4) B's precondition (optional)
+(5) A's deliverables (array)
+(6) B's deliverables (array)
+(7) Sequencing and timing of deliverables
+(8) Relief for A in case of B's breach
+(9) Relief for B in case of A's breach
+(10) arbitrating authority in case of
+    breach and relief not delivered
+
+Proposals can be pairwise, or they
+can be published in a public way
+such that anyone can accept.
+
+An acceptance needs an
+acknowledgement. TODO: when do the
+ACKs end? when published on a ledger?
+end note
+
+a -> b : <font color=green><b>PROPOSAL
+note left
+end note
+
+alt if proposal is unacceptable...
+opt can reject it
+a <-- b : <font color=green><b>REJECT
+else or counter it with a new proposal
+a <-- b : <font color=green><b>PROPOSAL
+note over a,b
+At this point, the other party becomes
+the Initiator, and the original Initiator
+follows this "alt" box.
+end note
+
+else or ignore the proposal altogether
+b --> b : do nothing
+end
+else if proposal is OK...
+a <-- b : <font color=green><b>ACCEPT
+alt if agreement indicates\nInitiator goes first...
+a -> b : delivers on commitment
+a <- b : delivers on commitment
+else if agreement indicates Other party\ngoes first
+a <- b : delivers on commitment
+a -> b : delivers on commitment
+end
+end
+
+note over a,b
+It's expected that the Negotiation Pattern
+(Offer, Request, Matter, Ack) will fit
+nicely in this one. It's also expected
+that Connection protocol will also fit
+nicely in this one.
+end note
+
+== Example: Connection ==
+
+note over a,b
+A Connection Request is a Proposal with
+the following characteristics:
+
+TODO
+
+end note
+
+
+
+@enduml

@@ -1,5 +1,7 @@
 # Message Packaging
 
+TODO: Write about composable primitives.
+
 ## Typed Messages
 Messages are not self describing by themselves. They need some metadata to help describe what they are.
 
@@ -260,13 +262,13 @@ Recipient...
 1. Uses the lock_box_key and its own private key to decrypt the ciphertext.
 1. Verifies the signature is a signature over the `lock_box_key` using the `from` ver_key in the "from".
 
-At this point, the recipient has a message it knows was encrypted by the sender and was not tampered with. The message is still repudiable
+At this point, the recipient has a message it knows was encrypted by the sender and was not tampered with. The message is still repudiable.
 
 
 #### Issues to overcome with libsodium
 Sealed_box generates the keypair in the encryption operation. The contents of the message contains the ephemeral public key, so this won't work for us. We could deconstruct the sealed_box logic, but this would defeat one of the purposes of sealed_box.
  
-Crypto_box could work, but it requires a nonce. A nonce is not needed with an ephemeral key authenticated encryption, because the ephemeral key is used only once. Maybe we could use crypto_box with a static nonce, say 0x00. But using the nonce is extra work that's not necessary.
+Crypto_box could work, but it requires a nonce. A nonce is not needed with an ephemeral key authenticated encryption, because the ephemeral key is used only once. Maybe we could use crypto_box with a static nonce, say 0x01. But using the nonce is extra work that's not necessary.
 
 So neither are great for what we want to do. but I would think Crypto_box with a static nonce is the easiest approach.
 
