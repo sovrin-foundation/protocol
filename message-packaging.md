@@ -1,6 +1,8 @@
 # Message Packaging
 
-TODO: Write about composable primitives.
+Message delivery is complex. The hops in message delivery between two parties might vary according to whether agents are used, how much they are trusted, and how functional edge devices are. Likewise, the way encryption is applied may need dynamic adjustment.
+
+For this reason, the protocol does not prescribe a single encryption, a single format, a single routing strategy. Instead, it defines some primitives and some standard patterns for how these primitives are combined. By composing these primitives according to circumstances, a wide variety of use cases can be addressed by a sender, with predictable and modest handling effort by the receiver.
 
 ## Typed Messages
 Messages are not self describing by themselves. They need some metadata to help describe what they are.
