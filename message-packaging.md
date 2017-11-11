@@ -86,10 +86,10 @@ identified. This is done with Message ID (`mid`). The first
 message from each party has a `mid` of 0, 
 the second message sent from each party is 1, and 
 so forth. A message is uniquely identified in an 
-interaction by its `tid`, the sender DID, and the `mid`.
+interaction by its `tid`, the sender DID, and the `mid`. The combination of those three parts would be a way to uniquely identify a message.
 
 ### Last Message ID (`lmid`)
-To aid in understanding the last message the other party received, a Last Message ID or `lmid` can be included.
+In an interaction, it may be useful for the recipient of a message to know if their last message was received. A Last Message ID or `lmid` can be included to help detect missing messages.
 
 ### Example
 As an example, Alice is an issuer and she offers a claim to Bob.
@@ -147,96 +147,83 @@ A `@topic` member is included in the message object itself, as a peer to the roo
 }
 ```
 
-## Addressed Messages
+## Forward Messages
 A wrapper that includes an original message, plus a specific DID that is the intended recipient.
 
 Structure:
 ```json
 {
-  "to": <DID>,
+  "fwd": <DID>,
   "msg": <message>
 }
 ```
 
-## Shared Messages
+## Bundled Messages
+Sometimes, it's useful to send a collection of related messages.
 
 Structure:
 ```json
 {
-  disclosed: <msg for recipient in plaintext>,
-  forwarded: <encrypted msg for edge>
+  "bundled": [msg1, msg2],
 }
 ```
-This is useful when the recipient of a message is to forward a message on, but needs to have some information about the message. This is a common requirement with Agents, where the Agent needs to know that the message is a Claim Offer, but doesn't need to know the details of the Claim itself.
+
+This can be useful when the recipient of a message is to forward a message on, but needs to have some information about the message. This is a common requirement with Agents, where the Agent needs to know that the message is a Claim Offer, but doesn't need to know the details of the Claim itself.
+
+Example:
+```json
+{
+  "bundled": [
+    <msg for cloud agent>, 
+    {
+      "fwd": <DID>,
+      "msg": <msg for edge agent>
+    }
+  ]
+}
+```
 
 ## Encrypted Messages
 There are three basic types of encrypted messages.
-1. authenticated encryption: `pkae` 
-1. anonymous encryption: `anoncrypt`
-1. self-contained authenticated encryption: `authcrypt` 
+1. `anoncrypt`: public key anonymous encryption
+1. `authcrypt`: public key authenticated encryption
 
-### Authenticated Encryption
-Public Key Authenticated Encryption (PKAE) is a method where an elliptic curve diffie-hellman key exchange is used along with a nonce to compute a shared secret. This shared secret is used as a symmetric encryption key. The ciphertext can be decrypted, but only if the public key of the sender and the nonce used are communicated. Because extra information is required to decrypt, this does not result in a self-contained message.
-
-The PKAE function takes the recipient's verkey and a one-time nonce:
-```
-pkae_encrypt(msg, recipient_verkey, nonce)
-```
+### Public Key Authenticated Encryption
+Public Key Authenticated Encryption (PKAE) is a method where an elliptic curve diffie-hellman key exchange is used along with a nonce to compute a shared secret. This shared secret is used as a symmetric encryption key. The ciphertext can be decrypted, but only if the public key of the sender and the nonce used are communicated. The recipient knows the message is authentic because the symmetric key could only be known by the recipient and the sender. Authenticated Encryption is repudiable, meaning the recipient cannot prove to another party that the sender sent it. Because extra information is required to decrypt, this does not result in a self-contained message.
 
 ### Anoncrypt Messages
-`anoncrypt` messages use PKAE in conjunction with an ephemeral sender key pair to strongly encrypt a message to the intended recipient. The message is self-contained, in that the recipient can take an anoncrypt message and decrypt it without any other information.
+`anoncrypt` messages use PKAE in conjunction with an ephemeral sender key pair to strongly encrypt a message to an intended recipient.
 
-The anoncrypt function takes the recipient's verkey:
+The anoncrypt function takes the msg and the recipient's verkey as arguments. A nonce is used, but because the ephemeral key is used only once, it is deterministic.
+
 ```
 anoncrypt(msg, recipient_verkey)
 ```
 
+Anoncrypt messages can be decrypted.
+```
+deanoncrypt(msg, recipient_private_key)
+```
+
 ### Authcrypt Messages
-`authcrypt` messages combine PKAE with anoncrypt to make self-contained authenticated encryption. The public key and nonce needed to decrypt PKAE are supplied in an anoncrypt message. This allows an Authcrypt message to be sent over an untrusted network and still maintain the privacy requirements (i.e., the public key is not known).
-
-Structure:
-```json
-{
-  "hint": base64url(
-            anoncrypt(
-              HINT
-              recipient_verkey)),
-  "msg": base64url(
-           pkae_encrypt(
-             MSG,
-             recipient_verkey,
-             <nonce1>))
-}
-```
-...where `HINT` is...
-```json
-{
-  "from": <sender verkey>,
-  "nonce": <nonce1>
-}
-```
-
-To open a combo_box:
-1. Decode the Base64URL hint.
-1. Decrypt the 
-decrypt the sealedbox, and use the from and nonce from the sealed_box to decrypt the pkae_box:
-
-pkae_decrypt(ciphertext, from, nonce)
-
-
-## Alternate construction
+`authcrypt` messages are like `anoncrypt` in that they are constructed with an ephemeral key pair. The difference is there are two attributes included with the message that make it possible to authenticate the sender: (1) sender's ver_key, and (2) sender's ephemeral pub_key signed by the sender. The sender's ver_key cannot be trusted. In order to trust the ver_key, the recipient must verify the signature. The signature proves to the recipient that the sender (the holder of the private counterpart to the ver_key) sent the message. This encryption retains the repudiable characteristic, in that the recipient cannot prove that the sender sent the message. They can only prove the sender once used the ephemeral key, which doesn't prove anything of any importance. 
 
 Internal message structure:
 ```json
 {
   "from": "<sender's ver_key>",
-  "sig":"<sender's ephemeral pub_key signed by sender>",
-  "msg":"msg"
+  "sig": "<sender's ephemeral pub_key signed by sender>",
+  "msg": "msg"
 }
 ```
 
 ### Construction
-Sender...
+The sender calls...
+```
+authcrypt(msg, recipient_verkey, sender_private_key)
+```
+
+The authcrypt function...
 1. Generates a new ephemeral keypair.
 1. Signs the ephmeral public key.
 1. Constructs a JSON object like so:
@@ -249,31 +236,22 @@ Sender...
     ```
 1. Encrypts the object using the ephemeral private key.
 1. Vigorously discards the ephemeral private key as it should only be used once.
-1. Encodes the ciphertext in BASE64URL and adds it to a JSON object along with the the ephemeral public key.
-    ```json
-    {
-      "lock_box_key": "<BASE64URL(sender's ephemeral pub_key)>",
-      "ciphertext": "<BASE64URL(ciphertext)>"
-    }
-    ```
+1. Appends the ephemeral public key to the ciphertext
 
-### Deconstruction
-Recipient...
-1. Decodes the lock_box_key.
-1. Decodes the ciphertext.
-1. Uses the lock_box_key and its own private key to decrypt the ciphertext.
-1. Verifies the signature is a signature over the `lock_box_key` using the `from` ver_key in the "from".
+#### Deconstruction
+The recipient calls...
+```
+deauthcrypt(msg, recipient_private_key)
+```
 
-At this point, the recipient has a message it knows was encrypted by the sender and was not tampered with. The message is still repudiable.
+The deauthcrypt function...
 
+1. Removes the appended ephemeral public key
+1. Uses the ephemeral public key and its own private key to decrypt the ciphertext.
+1. Verifies the signature is a signature from the sender over the ephemeral public key.
 
-#### Issues to overcome with libsodium
-Sealed_box generates the keypair in the encryption operation. The contents of the message contains the ephemeral public key, so this won't work for us. We could deconstruct the sealed_box logic, but this would defeat one of the purposes of sealed_box.
- 
-Crypto_box could work, but it requires a nonce. A nonce is not needed with an ephemeral key authenticated encryption, because the ephemeral key is used only once. Maybe we could use crypto_box with a static nonce, say 0x01. But using the nonce is extra work that's not necessary.
-
-So neither are great for what we want to do. but I would think Crypto_box with a static nonce is the easiest approach.
-
+#### Implementation using libsodium
+Anoncrypt is simply the sealed_box in libsodium. Authcrypt is similar, in that it uses the same deterministic nonce, and appends the ephemeral public key to the ciphertext. The main difference is the ephemeral public key must be signed in the message. Authcrypt uses a libsodium crypto_box with a deterministic nonce = hash(ephemeral pub key, recipient pub key), the same approach that sealed_box takes.
 
 # Scratchpad below this point
 Bob wants Alice to share the topic info and type info with his Agent.
