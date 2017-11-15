@@ -1,0 +1,27 @@
+\section{Building a Proof}
+
+The ZkDirector, which is a class of the proof engine, coordinates the generation of a proof.
+In order to do so it uses the ZkModules that have been provided by the first layer (in particular, the 
+proof orchestration). 
+These modules expose an interface that encapsulates the functionality and allows the proof engine to be crypto-agnostic. 
+The proof engine will execute the following steps:
+\begin{itemize}
+\item Initialise a ZkBuilderProver object that will keep the proof state as well as provide access to necessary elements such as the system parameters or the secrets manager.
+\item Call the method \texttt{initializeModule();}  on all modules that it received as input
+
+
+\end{itemize}
+
+
+
+
+\section{Pedersen Representation}
+
+In the \emph{initializeModule()} method, which is called by the ZkDirector, all attributes of this representation are registered. 
+More concretely, we assume that we need  to prove knowledge of the representation:
+\begin{displaymath}
+C = \prod_i R_i m_i \pmod n .
+\end{displaymath}
+In this case, the building block registers the attributes $m_i$ specifying their bit length.
+If an attribute is on an external device, the building block will not be able to compute the corresponding contribution.
+Therefore, the attribute is registered as external attribute

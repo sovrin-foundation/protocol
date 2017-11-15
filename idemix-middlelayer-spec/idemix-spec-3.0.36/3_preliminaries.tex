@@ -1,0 +1,284 @@
+%!TEX root =  IdmxSpecification.tex
+
+\section{Preliminaries}
+\label{sec:prelim}
+
+We give some preliminaries necessary for the presentation of the protocols.
+In addition, we define commonly-used parameters that
+are necessary to have a mapping from this specification to the implementation 
+(i.e., Java).
+
+%NOTE (pbi): put naming conventions into idemixHowto.html
+ 
+\subsection{Notation and System Parameters}
+\label{sec:parameters}
+
+Let $H: \set{0,1}^* \to \set{0,1}^{\ell_{H}}$ be a cryptographic hash function.
+The current implementation uses SHA-256 \cite{nist93}. 
+Let ``$\|$'' denote the operator for concatenation of numbers or strings.
+By $\{0,1\}^\ell$ we denote the set of integers $\{0, \ldots, 2^\ell -1 \}$ and by
+$\pm \{0,1\}^\ell$ the set of integers $\{- 2^\ell + 1, \ldots, 2^\ell -1 \}$.
+There is no explicit relations between this notation and the number of bits
+needed to represent these integers.
+Having said this, the set $\{0,1\}^\ell$ can be mapped to the set of all bit
+strings with $\ell$ binary digits in a straightforward manner.  Note that,
+however,  $\{- 2^\ell + 1, \ldots, 2^\ell -1 \}$ does not so easily map to the set
+of all $\ell+1$ bit strings.  The notation $x \in_R S$ means $x$ is chosen
+uniformly at random from the set $S$, and $\#S$ denotes the number of elements
+in $S$.
+%The Tables~\ref{table:notation}, \ref{table:params} and \ref{table:constraints}
+%in Appendix~\ref{sec:app-notation} list the notation used in this document.  
+
+
+\subsection{Zero-Knowledge Proofs}
+
+When presenting protocols, we use the notation of Camenisch and Stadler \cite{camsta97b} to
+specify zero-knowledge~(ZK) proofs in an abstract way. 
+This allows the reader to quickly determine what the protocol will accomplish, before looking
+through the details of how it is accomplished. 
+For instance,
+\[
+  \mathit{PK}\{(\alpha,\beta,\delta): y=g^{\alpha}h^{\beta} \wedge
+    \tilde{y}=\tilde{g}^{\alpha}\tilde{h}^{\delta}\}
+\]
+denotes a ``{\em zero-knowledge Proof of Knowledge of integers $\alpha$, $\beta$, and 
+$\delta$ such that $y=g^{\alpha}h^{\beta}$ and $\tilde{y} = 
+\tilde{g}^{\alpha}\tilde{h}^{\delta}$ holds,}'' where $y,g,h,\tilde{y},\tilde{g},$ and
+$\tilde{h}$ are elements of some groups $G=\langle g\rangle=\langle h\rangle$ and 
+$\tilde{G}=\langle\tilde{g}\rangle=\langle\tilde{h}\rangle$ that have the same order.
+(Note, that some elements in the representation of $y$ and $\tilde{y}$ are
+equal.) 
+The convention is that values $(\alpha,\beta,\delta)$ denote quantities of which knowledge 
+is being proven (and which are kept secret), while all other values are known to the
+verifier.  
+For prime-order groups%, which include all groups we consider in this paper, 
+it is well-known
+that there exists a knowledge extractor which can extract these quantities from a successful
+prover.
+
+\label{section:context}
+All of the zero-knowledge proofs in the \idemix library are implemented as a common
+three-move ZK protocol, made non-interactive using the Fiat-Shamir heuristic~\cite{fiasha86}
+(three-move ZK protocols are similar to Schnorr signatures~\cite{schnor91} and are also 
+called sigma protocols).  
+The values in the first flow of the protocol (of the form $t=g^r$) will be referred to as
+``$t$-values'', while the responses computed in the third flow (of the form
+$s=r-c\alpha$) will be called ``$s$-values''.  
+The challenge, $c$, is computed has the hash of the $t$-values, common inputs, and also a
+common string we call the {\tt context} string, consisting of a list of all public 
+parameters and the issuer public key.  
+This prevents values generated during the proof from being re-used in some other context.
+%
+We refer to Appendix~\ref{app:zkprotocols} for more details.
+
+
+\subsection{The CL Signature Scheme}
+
+We recall this signature scheme (the CL signature scheme) and the related protocols here.
+
+\begin{description}
+\item[Key generation.]
+	On input $\ell_n$, choose an $\ell_n$-bit RSA modulus $n$  such that $n\asn pq$,
+	$p\asn 2p'+1$, $q\asn 2q'+1$, where $p$, $q$, $p'$, and $q'$ are primes.
+	Choose, uniformly at random, $R_0,\ldots,R_{L-1},S,Z \in \QR{n}$.
+	Output the public key $(n,R_0,\ldots,R_{L-1},S,Z)$ and the secret key $p$. 
+
+\item[Message space.]
+	Let $\ell_m$ be a parameter.  
+	The message space is the set \[
+	\{(m_0,\ldots,m_{L-1}) : m_i \in \pm\{0,1\}^{\ell_m}\}\enspace.
+	\]
+
+\item[Signing algorithm.]
+	On input $m_0,\ldots,m_{L-1}$ , 
+	choose a random prime number $e$ of length 
+	$\ell_e > \ell_m + 2$,
+	and a random number $v$ of length $\ell_v \asn \ell_n + \ell_m + \ell_r$,
+	where $\ell_r$ is a security parameter.  
+	Compute the value $A$ such 
+	that 
+	\[
+	A \asn \left(\frac{Z}{ R_0^{m_0}\ldots R_{L-1}^{m_{L-1}}S^v}\right)^{1/e}  \bmod{n}\enspace.
+	\]
+	The signature on the message  $(m_0,\ldots,m_{L-1})$ consists of $(A,e,v)$.
+\item[Verification algorithm.]
+	To verify that the tuple $(A,e,v)$ is a signature on message $(m_0,\ldots,m_{L-1}) $,
+	check that 
+	\begin{alignat*}{3}
+	Z &\equiv A^e R_0^{m_0}\ldots R_{L-1}^{m_{L-1}}S^v\pmod{n}\enspace, 
+	\quad &
+	m_i &\in \pm \{0,1\}^{\ell_m}, 
+	\;
+	\text{and} \; 
+	& 2^{\ell_e}> e > 2^{\ell_e-1}
+	\end{alignat*}
+	all holds.
+\end{description}
+
+\begin{theorem}[\cite{camlys02b}]
+The signature scheme is secure against adaptive chosen message attacks~\cite{gomiri88} 
+under the strong RSA assumption.
+\end{theorem}
+
+The original scheme considered messages in the interval $[0,2^{\ell_m}-1]$ .
+Here, however, we allow messages to be from $[-2^{\ell_m}+1,2^{\ell_m}-1]$.
+The only consequence of this is that we need to require that $\ell_e > \ell_m +2$ holds 
+instead of  $\ell_e > \ell_m +1$.
+
+
+\subsection{The CS Encryption Scheme}
+
+This text is taken from Camenisch-Shoup~\cite{camsho03} and is a variation of an
+encryption scheme put forth in~\cite{crasho02}.
+
+\subsubsection{Background}
+Let $p, q, p', q'$ be distinct odd primes with $p \asn 2p'+1$ and $q \asn 2q'+1$,
+and where $p'$ and $q'$ are both $\ell$ bits in length.
+Let $n \asn pq$ and $n' \asn p'q'$.
+Consider the group $\Z{n^2}^*$ and the subgroup $\PP$ of $\Z{n^2}^*$
+consisting of all $n$-th powers of elements in $\Z{n^2}^*$.
+
+Paillier's Decision Composite Residuosity (DCR) assumption~\cite{pailli99}
+is that given only $n$, 
+it is hard to distinguish random elements of
+$\Z{n^2}^*$ from random elements of $\PP$.
+
+To be completely formal, one should  specify a sequence of
+bit lengths $\ell(\lambda)$, parameterized by a security parameter 
+$\lambda \ge 0$, 
+and to generate an instance of the problem for security parameter $\lambda$,
+the primes $p'$ and $q'$ should be distinct, random primes of length
+$\ell \asn \ell(\lambda)$, such that $p \asn 2p'+1$ and $q \asn 2q'+1$
+are also primes.
+
+The primes $p'$ and $q'$ are called Sophie Germain primes and
+the primes $p$ and $q$ are called safe primes.
+It has never been proven that there are infinitely many
+Sophie Germain primes.
+Nevertheless, it is widely conjectured, and amply supported by
+empirical evidence, that the probability that a random $\ell$-bit 
+number is Sophie Germain prime is $\Omega(1/\ell^2)$.
+We shall assume that this conjecture holds, so that we can assume
+that problem instances can be efficiently generated.
+
+Note that Paillier did not make the restriction to safe primes
+in originally formulating the DCR assumption.
+As will become evident, we need to restrict ourselves to
+safe primes for technical reasons.
+However, it is easy to see that the DCR assumption without this
+restriction implies the DCR assumption with this restriction,
+assuming that safe primes are sufficiently dense, as we are here.
+
+We can decompose $\Z{n^2}^*$ as an internal direct product
+$$
+\Z{n^2}^* \equiv \GG_n \cdot  \GG_{n'} \cdot  \GG_2 \cdot \TT,
+$$
+where each group $\GG_\tau$ is a cyclic group of order $\tau$,
+and $\TT$ is the subgroup of $\Z{n^2}^*$ generated by $(-1 \bmod n^2)$.
+This decomposition is unique, except for the choice of $\GG_2$
+(there are two possible choices).
+For any $x \in \Z{n^2}^*$, we can express $x$ uniquely
+as $x \equiv x(\GG_n) x(\GG_{n'}) x(\GG_2) x(\TT)$,
+where for each $\GG_\tau$,
+$x(\GG_\tau) \in \GG_\tau$,
+and $x(\TT) \in \TT$.
+
+Note that the element $h \asn (1 + n \bmod n^2) \in \Z{n^2}^*$ has 
+order $n$, 
+i.e.,
+it generates $\GG_n$,
+and that $h^a \asn (1 + a n \bmod n^2)$ for $0 \le a < n$.
+%%
+Observe that $\PP \asn \GG_{n'} \GG_2 \TT$.
+
+\subsubsection{The Scheme}
+For a security parameter $\lambda \ge 0$, $\ell \asn \ell(\lambda)$
+is an auxiliary parameter.
+
+The scheme makes use of a keyed hash scheme $\hashscheme$ that uses a key 
+$\hashkey$, chosen at random from an appropriate key space associated
+with the security parameter $\lambda$;  the resulting hash function
+$\hash{\cdot}$ maps a triple $(u, e, L)$ to a number
+in the set $\range{2^{\ell}}$.
+We shall assume that $\hashscheme$ is collision resistant, i.e.,
+given a randomly chosen hash key $\hashkey$, it is
+computationally infeasible to find  two triples $(u,e,L) \ne (u', e', L')$
+such that $\hash{u,e,L} \equiv \hash{u',e',L'}$.
+
+Let $\abs : \Zs{n^2} \rightarrow \Zs{n^2}$ map $(a \bmod n^2)$,
+where $0 < a < n^2$, to $(n^2 - a \bmod n^2)$ if $a > n^2/2$,
+and to $(a \bmod n^2)$, otherwise.
+Note that $v^2 \equiv (\abs(v))^2$ holds for all $v \in \Zs{n^2}$.
+
+We now describe the key generation, encryption, and decryption
+algorithms of the encryption scheme, as they behave for
+a given value of the security parameter $\lambda$.
+
+\paragraph{Key Generation.}
+  Select two random $\ell$-bit Sophie Germain
+  primes $\mathsf{p}'$ and $\mathsf{q}'$, with $\mathsf{p}' \ne \mathsf{q}'$, and compute $\mathsf{p}\becomes (2\mathsf{p}'+1)$,
+  $\mathsf{q}\becomes (2\mathsf{q}'+1)$, $\mathsf{n}\becomes \mathsf{p}\mathsf{q}$, and $\mathsf{n}'\becomes \mathsf{p}'\mathsf{q}'$, where
+  $\ell \asn \ell(\lambda)$ is an auxiliary security parameter.
+  Choose random $x_1$, $x_2$, $x_3$ $\inR \rangefloor{\mathsf{n}^2/4}$,
+  choose a random $\mathsf{g}' \inR \Zs{\mathsf{n}^2}$, and compute $\mathsf{g} \becomes (\mathsf{g}')^{2\mathsf{n}}$,
+  $\mathsf{y}_1\becomes \mathsf{g}^{x_1}$, $\mathsf{y}_2\becomes \mathsf{g}^{x_2}$, and $\mathsf{y}_3 \becomes \mathsf{g}^{x_3}$.
+  Also, generate a hash key $\hashkey$ from the key space of the hash scheme
+  $\hashscheme$ associated with the security parameter $\lambda$.
+%%
+The public key is $(\hashkey, \mathsf{n}, \mathsf{g}, \mathsf{y}_1, \mathsf{y}_2, \mathsf{y}_3)$.
+%%
+The secret key is $(\hashkey, \mathsf{n}, x_1, x_2, x_3)$.
+
+In what follows, let $\mathsf{h} \asn (1 + \mathsf{n} \bmod \mathsf{n}^2) \in
+\Zs{\mathsf{n}^2}$, which as discussed above, is an element of order $n$.
+
+\paragraph{Encryption.}
+To encrypt a message $m \in \range{\mathsf{n}}$ with label $L \in \{0,1\}^*$
+under a public key as above, 
+choose a
+random $\mathsf{r}\inR \rangefloor{\mathsf{n}/4}$ and compute\\[-3ex]
+\begin{align*}
+\mathsf{u} &\becomes \mathsf{g}^\mathsf{r}\enspace, &
+\mathsf{e} &\becomes \mathsf{y}_1^\mathsf{r} \mathsf{h}^m\enspace, \quad \text{and}&
+\mathsf{v} &\becomes \abs\left( (\mathsf{y}_2 \mathsf{y}_3^{\hash{\mathsf{u},\mathsf{e},L}})^\mathsf{r} \right)\enspace.
+\end{align*}
+%%
+The ciphertext is $(\mathsf{u},\mathsf{e},\mathsf{v})$.
+
+\paragraph{Decryption.}
+To decrypt a ciphertext  $(\mathsf{u},\mathsf{e},\mathsf{v}) \in \Zs{\mathsf{n}^2} \times \Zs{\mathsf{n}^2} \times \Zs{\mathsf{n}^2}$
+with label $L$
+under a secret key as above,
+first check that $\abs(\mathsf{v}) \equiv \mathsf{v}$ and $\mathsf{u}^{2(x_2+
+\hash{\mathsf{u},e,L} x_3)} \equiv \mathsf{v}^2$.
+If this does not hold, then output $\reject$ and halt.
+%%
+Next, let $\mathsf{t} \asn 2^{-1} \bmod \mathsf{n}$,
+and
+compute $\hat{m} \becomes (\mathsf{e}/\mathsf{u}^{x_1})^{2\mathsf{t}}$.
+%%
+%%
+If $\hat{m}$ is of the form $\mathsf{h}^m$ for some $m \in \range{\mathsf{n}}$,
+then output $m$; otherwise, output $\reject$.
+
+
+\subsection{Integer Commitments} 
+\label{sec:commitments}
+
+We require integer commitments to implement protocol extensions such as Inequality
+proofs or to allow an issuer to make the issuance dependent on a credential
+proof. 
+Finally, integer commitments can be used to link to application level protocols.  
+As a commitment scheme we use the so-called Damg{\aa}rd-Fujisaki-Okamoto
+scheme~\cite{damfuj02}, which is essentially the Pedersen commitment scheme~\cite{peders91b}
+in a group of unknown order.
+
+Assuming $Z$, $S$, $n$ from the public key of an issuer generated as described
+above, committing to an \emph{arbitrarily large} integer $m$ is done by
+\begin{enumerate}
+  \item choosing a random  $r \inR [0,\lfloor{n}/4\rfloor]$ and
+  \item computing the commitment as  $C \becomes Z^{m} S^r \bmod{n}$. 
+\end{enumerate}
+We note that it is important that the committing entity is not privy of the
+factorization of $n$.  
+Thus, it is preferable to use the $Z$, $S$, $n$ from the public key of an issuer.

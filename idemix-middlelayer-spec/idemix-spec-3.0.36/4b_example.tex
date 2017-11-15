@@ -1,0 +1,798 @@
+%!TEX root =  IdmxSpecification.tex
+
+\newcommand{\NIZK}{\operatorname{NIZK}}
+
+\section{Example}
+In this section, we show an example how an ABC4Trust Presentation
+Token Description is transformed into a zero-knowledge proof specification.
+%
+In this example a user has two credentials: a passport and a credit card.
+The user's passport credential uses CL signature technology and is bound to a smartcard,
+while the credit card credential uses Brands signatures and is not bound to any smartcard.
+%
+Passport credentials contain the holder's name, his date of birth, and a serial number.
+Credit card credentials contain the card number, the holder's name, and the status of card holder in the
+credit card company's loyalty program (none, silver member, gold member, etc.).
+
+
+The user wishes to book a hotel room through an ABC4Trust-enabled booking agency.
+The policy of the booking agency requires the user to present a passport and a credit card.
+The holder's name on both credentials must match. The passport credential must certify that
+the user is over 18 years old. The booking agency also requests the user to reveal his status in
+the credit card's loyalty program (to benefit from some discount). The user must
+make his credit card number inspectable by a bank (with inspection grounds "payment"),
+so that the booking agency can get payed. Finally, the user must sign the terms and conditions of
+the booking agency in the proof.
+
+\subsection{Notation}
+By $\NIZK$ we denote a non-interactive zero-knowledge proof. In this section we only consider
+zero-knowledge proofs based on the Fiat-Shamir heuristic.
+We use a notation similar to the Camenisch-Stadler notation, except that we add a parameter
+to $\NIZK$ representing the context to which this proof is bound. In practice the context is added to the
+values to hash.
+We note that in the remainder of this document we distinguish D-values (delivered to the verifier)
+from N-values (values which the prover and verifier agree upon without the prover needing to
+deliver the value), both of which go into the context. The notation unfortunately does not
+distinguish between the two; but it should be clear from the surroundings which of the two in meant.
+Revealed attributes are similar to D-values, in that they are delivered to the verifier and
+part of the context, but they are treated separately in the hash computation.
+
+For example:
+\begin{align*}
+\NIZK\lbrace(\alpha, \beta):
+y = g^{ {\alpha}} \wedge z = g^{ {\beta}}h^{ {\alpha}}
+\rbrace(\emph{ctxt})
+\end{align*}
+is used for proving the knowledge of the discrete logarithm of $y$ to the
+base $g$, and the knowledge of a representation of $z$ to the bases $g$ and $h$ such that
+the $h$-part of this representation is equal to the discrete logarithm of
+$y$ to the base $g$. Furthermore the proof is bound to the context \emph{ctxt}.
+
+\subsection{Partial Zero-Knowledge Proof and Composition}
+The Proof Assembler uses Cryptogrphic Building Blocks to create so-called ZkModules (Zero Knowledge Modules),
+which can be thought of as \emph{partial} zero-knowledge proofs.
+The list of generated ZkModules are passed on to the Proof Engine, where \emph{conceptually} the partial zero-knowledge
+proofs are combined to form the overall proof. (In practice, the Proof Engine informs the ZkModules which of their
+attributes are revealed, and ensures that attributes that are equal are assigned the same R- and S-values. Otherwise
+ZkModule are allowed to interact only with their child ZkModules.)
+
+The rules for combining several partial zero-knowledge proofs are as follows:
+\begin{itemize}
+\item The context of the combined proof is the union of the contexts of the partial zero-knowledge proofs.
+(In the sequel, for
+simplicity, we sometimes do not show irrelevant values in the context, or chose to show different but related
+values; this is an abuse of notation.)
+\item The predicate is the logical-and of the predicates of all partial zero-knowledge proofs.
+\item The witnesses in the combined proof are the union of the witnesses in the partial proofs minus
+the revealed witnesses. That is, if an attribute appears as a witness in one partial proof and shows up
+as a revealed attribute in another partial proof, then in the combined proof that variable shows up as
+a revealed attribute only and not a witness.
+\end{itemize}
+
+\subsection{Credential Specification}
+The Credential Specifications for passport and credit card credentials, as used in our example, are the following:
+\subsubsection{Passport}
+{
+  \footnotesize
+  \lstinputlisting[language=xml]{exampleCSPassport.xml}
+}
+
+\subsubsection{Credit Card}
+{
+  \footnotesize
+  \lstinputlisting[language=XML]{exampleCSCreditCard.xml}
+}
+
+\subsection{Presentation Token Description}
+The Presentation Token Description used in our example is the following:
+{
+  \footnotesize
+  \lstinputlisting[language=XML]{examplePTD.xml}
+}
+
+\if 0
+\subsection{Stored Credentials}
+\subsubsection{Passport}
+(Idemix)
+Fullname = Bob (1114595843)
+DOB = 1984-12-29 (42000)
+Serial = 1234567890
+Secret reference: smartcard://bob
+Credential uid: cred://1234
+Issuer parameters: http://example.com/isk/passport.xml
+Credential spec: http://example.com/cs/passport.xml
+
+\subsubsection{Credit Card}
+(Uprove)
+Number = 4349600000000005
+Name = Bob (1114595843)
+Status = Gold (306812052484)
+credential uid: cred://0005
+Issuer parameters: http://example.com/isk/cc.xml
+Credential spec: http://example.com/cs/cc.xml
+\fi
+
+
+\subsection{Building Blocks and Top-Level ZkModules}
+The Presentation Token Description and the user's choice of credentials is passed to the
+Proof Assembler. The first task of the Proof Assembler is to gather Building Blocks
+and use the latter to generate Prover ZkModules for the Proof Engine.
+In our example, the Proof Assembler gathers the
+following top-level Building Blocks and generates the following ZkModules, in order:
+
+\begin{itemize}
+\item A Message Building Block.
+
+This block is used to generate a ZkModule identified by \texttt{msg:0} and initialized
+with the contents of the \texttt{<abc:Message>} element of the Presentation Token Description.
+
+Conceptually, if we denote the contents of the message element as $M$, the ZkModule represents
+the following partial zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(): \operatorname{true}\rbrace(M)
+\label{eq:ex:top:first}
+\end{align}
+
+\item A Signature Building Block for the passport.
+
+The user's passport credential
+is fetched from the Credential Manager. The Credential Specification and Issuer Public Key for that
+credential is fetched from the Key Manager. The implementation of the Building Block (here: Camenisch-Lysyanskaya)
+is selected based on the Issuer Public Key.
+
+A Credential Specification building Block is fetched from the Building Block Factory, and a ZkModule identified by
+\texttt{sig:0:cs} initialized with the Credential Specification is generated.
+This ZKModule represents
+the following partial zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(): \operatorname{true}\rbrace(\emph{cs})
+\end{align}
+
+Similarly an Issuer Parameter building block is fetched, and a ZkModule identified by
+\texttt{sig:0:ip} initialized with the Issuer Public Key is generated.
+This ZKModule represents
+the following partial zero-knowledge proof, where \emph{ip} stands for the Issuer Parameters:
+\begin{align}
+\NIZK\lbrace(): \operatorname{true}\rbrace(\emph{ip})
+\end{align}
+
+The privacy-ABC signature block uses the \emph{presentation} proof interface to generate a ZkModule
+identified by \texttt{sig:0} and initialized with the System and Verifier Parameters,
+the Issuer Public Key, the list of attributes values of the credential $(m_1, m_2, m_3)$, the privacy-ABC signature on the attributes \emph{sig},
+and an identifier of the Credential Specification $t_s$.
+Furthermore, the ZkModule receives a reference to the Building Block Factory, so that it may
+gather additional Building Blocks to create child ZkModules; and a reference to the External Secret Manager, so that it
+may delegate some computations to the smartcard.
+
+Conceptually, if we denote the Issuer Public Key (only the bases and modulus) as \emph{ipk},
+the external secret as $x$, and the attributes as $m_1$ to $m_3$,
+the ZkModule represents the following partial zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(m_1, m_2, m_3, x): \operatorname{Verify}(\emph{sig}, (m_1, m_2, m_3, x), t_s, \emph{ipk})\rbrace(\emph{ipk})
+\end{align}
+Here $t_s$ is treated as a revealed attribute, and therefore is implicitly part of the context.
+
+\item A Signature Building Block for the credit card.
+
+The
+credential, Credential Specification and Issuer Public Key are fetched similarly as above.
+The implementation of the Building Block (here: Uprove)
+is selected based on the Issuer Public Key.
+
+A Credential Specification building Block is fetched from the Building Block Factory, and a ZkModule identified by
+\texttt{sig:1:cs} is generated similarily as above.
+The partial zero-knowledge proof is:
+\begin{align}
+\NIZK\lbrace(): \operatorname{true}\rbrace(\emph{cs}')
+\end{align}
+
+Idem for the Issuer Parameter Building Block
+\texttt{sig:1:ip}:
+\begin{align}
+\NIZK\lbrace(): \operatorname{true}\rbrace(\emph{ip}')
+\end{align}
+
+The privacy-ABC signature Building Block uses the \emph{presentation} proof interface to generate a ZkModule
+identified by \texttt{sig:1} and initialized similarly as above.
+
+Conceptually, if we denote the Credential Specification as $\emph{cs}'$, the Issuer Public Key (only the bases and group definition) as $\emph{ipk}'$,
+the signature as $\emph{sig}'$, the identifier of the credential as $x_t$,
+and the attributes as $m_4$ to $m_6$,
+the ZkModule represents the following partial zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(m_4, m_5, m_6): \operatorname{Verify}(\emph{sig}', (m_4, m_5, m_6), x_t, \emph{ipk}')\rbrace(\emph{ipk}')
+\end{align}
+In the above, $x_t$ is considered a revealed attribute.
+
+\item A Reveal Attribute Building Block for the status of the credit card.
+
+This block generates a ZkModule which is initialized with the identifier of the attribute to reveal: \texttt{sig:1:2}.
+
+Conceptually, the ZkModule declares $m_6$ as a revealed attribute.
+
+\item An Inspection Building Block for the credit card number.
+
+The Inspector's Public Key is fetched from
+the Key Manager. The implementation of the Building Block (here: Camenisch-Shoup-03) is selected based on the
+Inspector Public Key.
+
+Similar to credentials, a Building Block for the inspector parameters \texttt{ins:1:0:inspectorKey} is added:
+\begin{align}
+\NIZK\lbrace(): \operatorname{true}\rbrace(\emph{ep})
+\end{align}
+
+
+This block uses the proof interface for \emph{verifiable encryption} to generate a
+ZkModule identified by \texttt{ins:1:0} and initialized with the System and Verifier
+Parameters, the Inspector Public Key and the identifier of the attribute to inspect: \texttt{sig:1:0}.
+The ZkModule also receives a reference to the Building Block Factory, so that it may
+gather additional Building Blocks to create child ZkModules.
+
+Conceptually, if we denote the ciphertext as \emph{ct}, the inspections grounds as $L$, and the Inspector Public Key as
+\emph{epk} (bases and modulus only), the ZkModule represents
+the following partial zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(m_4): \emph{ct} \in \operatorname{Encrypt}(m_4, L, \emph{epk})\rbrace(\emph{ct}, L,  \emph{epk})
+\end{align}
+The verifiable encryption block will internally do an integer commitment to $m_4$ and an
+inexact range proof that $m_4$ is between 0 and $2^{256}-1$ (inexact meaning that
+the proof only guarantees that $m_4$ is in some larger range, e.g., $-2^{256+2\cdot 80}$ to $2^{256+2\cdot 80}$).
+
+\item An Attribute Equality Building Block for the first predicate.
+
+This block generates a ZkModule that is initialized with the identifiers of the two attributes: \texttt{sig:0:0} and \texttt{sig:1:1}.
+
+Conceptually, the ZkModule represents
+the following partial zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(m_1, m_5): m_1 = m_5\rbrace()
+\end{align}
+\item A Constant Attribute for the second operand of the second predicate.
+
+This block generates a ZkModule that is initialized with the identifier of
+the constant: \texttt{constant:1:1} and the value: \texttt{45805} (1995-05-31 under the encoding ``since1870'').
+
+Conceptually, the ZkModule represents
+the following partial zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(\emph{rhs}): \emph{rhs} = 45805\rbrace()
+\end{align}
+and \emph{rhs} is marked as a revealed attribute.
+
+\item An Inequality Building Block for the second predicate.
+
+The Proof Assembler chooses the implementation of the Building Block (here: 4-squares)
+among the implementations supported by the verifier. The verifier included a list of
+supported implementations in the Verifier Parameters. The Proof Assembler records its choice in
+the Mechanism Specifications.
+
+This block generates a ZkModule identified by \texttt{ineq:1} and initialized with the System and Verifier Parameters,
+the identifiers of the two operands: \texttt{sig:0:1} and \texttt{constant:1:1}, and the operator: \texttt{LT}.
+The ZkModule also receives a reference to the Building Block Factory, so that it may
+gather additional Building Blocks to create child ZkModules.
+
+Conceptually, the ZkModule represents
+the following partial zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(m_2, \emph{rhs}): m_2 \leq \emph{rhs}\rbrace()
+\end{align}
+Note that the block is told whether $m_2$ originates from a group of known order or not.
+If it originates from a group of known order, the Inequality Building Block would additionally
+prove that $0\leq m_2$.
+
+\item A System Parameters Building Block.
+
+This block creates a ZkModule identified by \texttt{param:sp} and initialized with the System Parameters.
+
+Conceptually, if we denote the system parameters as \emph{sp}, the ZkModule represents
+the following partial zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(): \operatorname{true}\rbrace(\emph{sp})
+\end{align}
+
+\item A Verifier Parameters Building Block.
+
+This block creates a ZkModule identified by \texttt{param:vp} and initialized
+with the Verifier Parameters.
+
+Conceptually, if we denote the system parameters as \emph{vp}, the ZkModule represents
+the following partial zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(): \operatorname{true}\rbrace(\emph{vp})
+\end{align}
+
+\item A Presentation Token Description Building Block.
+
+This block creates a ZkModule identified by \texttt{param:pt} and initialized
+with the Presentation Token Description.
+
+Conceptually, if we denote the presentation token description as \emph{ptd}, the ZkModule represents
+the following partial zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(): \operatorname{true}\rbrace(\emph{ptd})
+\end{align}
+
+\item A Mechanism Specification Building Block.
+
+This block creates a ZkModule identified by \texttt{ms} and initialized with the
+Mechanism Specification that the Proof Assembler created while assembling this proof.
+(Recall that the Mechanism Specification
+contains, among others, the choices the Proof
+Assembler made while constructing the proof.)
+
+Conceptually, if we denote the system parameters as \emph{ms}, the ZkModule represents
+the following partial zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(): \operatorname{true}\rbrace(\emph{ms})
+\label{eq:ex:top:last}
+\end{align}
+
+\end{itemize}
+
+The job of the Proof Engine will be to combine the partial zero-knowledge proofs of Equations
+\ref{eq:ex:top:first} to
+\ref{eq:ex:top:last}, to obtain the desired zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(
+m_1, m_2, m_3, x, m_4
+):& \nonumber\\
+\operatorname{Verify}(&\emph{sig}, (m_1, m_2, m_3, x), t_s, \emph{ipk}) \quad \wedge \nonumber\\
+\operatorname{Verify}(&\emph{sig}', (m_4, m_1, m_6), x_t, \emph{ipk}') \quad \wedge \nonumber\\
+\emph{ct} &\in \operatorname{Encrypt}(m_4, L, \emph{epk}) \quad \wedge \nonumber\\
+m_2 &\leq 45805 \nonumber\\
+\rbrace(
+M, \emph{cs}, \emph{cs}', \emph{ip}, \emph{ip}', \emph{ipk}, \emph{ipk}', &L, \emph{ct}, \emph{ep}, \emph{epk}, \emph{sp}, \emph{vp}, \emph{ms}, \emph{ptd}
+)
+\end{align}
+Where $m_6$, $t_s$, $x_t$ and $45805$ are treated as revealed attributes.
+
+\iffalse
+\subsection{Child Building Blocks}
+The two Signature ZkModules, the Verifiable Encryption ZkModule, and the Inequality ZkModule all create child ZkModules
+based on Pedersen/Damgard-Fujisaki Building Blocks plus some structural Building Blocks.
+
+\begin{itemize}
+%-------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+\item The CL Signature Presentation ZkModule for the passport credential.
+
+This module is responsible for proving possession of a CL-credential (which is
+bound to an external secret).
+
+Let $\emph{ip} = (S, Z, R_0, R_1, R_2, R_3, R_s, n, \ell_e)$ be the Issuer Public Key
+(where $n$ is a safe RSA modulus, $S$, $Z$ and the $R$'s are generators of the
+signed quadratic residues modulo $n$, $\ell_e$ is the length of $e$). Let $t_s$ be the
+identifier of the Credential Specification.
+Let $x$ be the device secret, and $v_x$ be the credential secret on the device.
+Let $(A, e, v)$ be the signature on the credential. Let
+$(m_1, m_2, m_3)$ be the attributes on the credential. Let $e' = e - 2^{\ell_e-1}$.
+Conceptually, this ZkModule re-randomizes the signature to $(A', e, v')$
+and performs the following zero-knowledge proof:
+\begin{align}
+\label{eq:ex:cl:full}
+\NIZK\lbrace(e, x, m_1, m_2, m_3, v, v_x):& \nonumber\\
+Z = {A'}^e R_0^{x} R_1^{m_1}& R_2^{m_2} R_3^{m_3} R_s^{t_s} S^{v' + v_x} \pmod{n}
+\rbrace(A', t_s, \emph{ip})
+\end{align}
+
+At initialization time, this ZkModules chooses a random value $r$ of appropriate
+length, and re-randomizes the signature:
+$A' = AS^r$; $v' = v - er$.
+This ZkModule fetches the following Building Blocks from the Building Block Factory:
+Damgard-Fujisaki Representation, Attribute Equality, and Issuer Parameters.
+It uses these to create one Damgard-Fujisaki Representation ZkModule,
+one Issuer Parameter ZkModule, and several
+Attribute Equality ZkModules, as follows:
+
+\begin{itemize}
+\item It uses the Issuer Parameter Building Block to generate a ZkModule identified
+by \texttt{sig:0:ip} and initialized with the Issuer Parameters $\emph{ip}$.
+Conceptually, this defines the partial zero-knowledge proof:
+\begin{align}
+\label{eq:ex:cl:first}
+\NIZK\lbrace(): \operatorname{true}\rbrace(\emph{ip})
+\end{align}
+
+\item It uses the Damgard-Fujisaki Building Block to create a ZkModule identified by \texttt{sig:0:df} and initialized
+with the System and Verifier Parameters.
+The bases are set to $A'$, $R_0$ (hasExternalSecret=true), $R_1$, $R_2$, $R_3$, $S$ (externalRandomizerOffset=$v'$), the modulus is set to $n$.
+The identifier of the secret and the identifier of the credential for the
+secret are set appropriately.
+The ZkModule receives a reference to the Building Block Factory and the External Secret Manager.
+
+This ZkModule delegates the following proof to the External Secret Manager:
+\begin{align}
+\NIZK\lbrace(x, v_x):
+  F = R_0^x S^{v_x} \pmod{n}
+\rbrace
+\end{align}
+
+The ZkModule plays a ``man in the middle'' between the External Secret Manager and the
+verifier, and uses the value $F$, the T-value for $F$, and the S-values for $x$ and $v_x$,
+to perform the following partial zero-knowledge proof, without knowledge of $x$ or $v_x$:
+\begin{align}
+\NIZK\lbrace(&a_1, x, a_2, a_3, a_4, a_5, v_x): \nonumber\\
+T &= {A'}^{a_1}R_0^{x} R_1^{a_2}R_2^{a_3} R_3^{a_4} S^{a_5 + v_x} \pmod{n}
+\rbrace(A', T)
+\end{align}
+
+\item Because the difference in naming between the attributes of the Damgard-Fujisaki ZkModule and the attribute
+of the Signature ZkModule, it is necessary to use the Attribute Equality Building Block to generate
+ZkModules specifying that the following attributes are equal:
+  \begin{itemize}
+  \item \texttt{sig:0:0} and \texttt{sig:0:df:2} (this corresponds to $m_1$)
+  \item \texttt{sig:0:1} and \texttt{sig:0:df:3} (this corresponds to $m_2$)
+  \item \texttt{sig:0:2} and \texttt{sig:0:df:4} (this corresponds to $m_3$)
+  \end{itemize}
+  Conceptually, these define the zero-knowledge proofs:
+  \begin{align}
+  \label{eq:ex:cl:last}
+  &\NIZK\lbrace(m_1, a_2): m_1 = a_2\rbrace() \\
+  \mbox{and }\quad&\NIZK\lbrace(m_2, a_3): m_2 = a_3\rbrace() \\
+  \mbox{and }\quad&\NIZK\lbrace(m_3, a_4): m_3  = a_4\rbrace()
+  \end{align}
+\end{itemize}
+
+The prover sets the value for the attributes $(a_1, a_2, a_3, a_4, a_5)$ to
+$(e', m_1, m_2, m_3, v')$ in the collection phase of the
+zero-knowledge proof.
+
+The prover adds $t_s$ to the N-values.
+The verifier will recompute $T$ as
+$T = ZA^{-2^{\ell_e-1}}R_s^{-t_s}$.
+
+By merging the zero-knowledge proofs defined by Equations
+\ref{eq:ex:cl:first} to
+\ref{eq:ex:cl:last}
+and mandating that the verifier performs the check described in the previous paragraph,
+we obtain the zero-knowledge proof in Equation
+\ref{eq:ex:cl:full}, as desired.
+%-------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+
+\item The Uprove Signature Presentation ZkModule for the credit card credential.
+
+This module is responsible for proving possession of a Uprove credential.
+
+Let $\emph{ip}' = (g_0, g_1, g_2, g_3, g_t, g_p, p, \rho)$ be the Issuer Public Key (where
+$p$ is a prime, and the $g$'s are generators of a prime order subgroup modulo $p$ of order $\rho$).
+Let $x_t$ be the identifier of the Credential Specification. Let $\emph{ip}'$ be the Issuer
+Public Key.
+Let $(\bar a, h, z, c, s)$ be the signature on the credential (Uprove token), let $(m_4, m_5, m_6)$ be
+the attributes of the credential, and let $\alpha = -1/\bar a$.
+Conceptually, this module performs the following zero-knowledge proof:
+\begin{align}
+\label{eq:ex:uprove:full}
+\NIZK\lbrace (\alpha, m_4, m_5, m_6): &\quad
+g_0^{-1} = h^\alpha g_1^{m_4} g_2^{m_5} g_3^{m_6} g_t^{x_t} \pmod{p} \quad \wedge \nonumber\\
+\operatorname{Verify}(h, z, c, s) & \quad
+\rbrace(h, z, c, s, x_t, \emph{ip}')
+\end{align}
+
+(The predicate $\operatorname{Verify}$ is equivalent to checking the following proof:
+$$(c, s) = \NIZK\lbrace(y_0): g_0 = g_p^{y_0} \pmod{p} \wedge z = h^{y_0} \pmod{p}\rbrace(h, z)$$
+Note that this non-interactive proof was done by the issuer and uses a different challenge
+than the proof generated by the Proof Assembler, so it is handled separately.)
+
+At initialization time, this module fetches the following Building Blocks from the
+Building Block Factory: Pedersen Representation, Attribute Equality, and Issuer Parameters.
+It uses these to create one Pedersen Representation ZkModule,
+one Issuer Parameter ZkModule, and several
+Attribute Equality ZkModules, as follows:
+\begin{itemize}
+\item It uses the Issuer Parameter Building Block to generate a ZkModule identified
+by \texttt{sig:1:ip} and initialized with the Issuer Parameters $\emph{ip}'$.
+Conceptually, this defines the partial zero-knowledge proof:
+\begin{align}
+\label{eq:ex:uprove:first}
+\NIZK\lbrace(): \operatorname{true}\rbrace(\emph{ip}')
+\end{align}
+
+\item It uses the Pedersen Building Block to create a ZkModule identified by \texttt{sig:1:rep} and initialized
+with the System and Verifier Parameters.
+The bases are set to $h$, $g_1$, $g_2$, $g_3$, the modulus is set to $p$, the subgroup order is set
+to $\rho$.
+The ZkModule receives a reference to the Building Block Factory.
+(Since this ZkModule doesn't need to do computation with external secrets,
+the identifier of the secret, the identifier of the credential for secret, and the external secret manager reference are all set to null.)
+
+Conceptually, this defines the zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(\alpha, a_1, a_2, a_3): T = h^{\alpha} g_1^{a_1} g_2^{a_2} g_3^{a_3} \rbrace(T)
+\end{align}
+
+\item Because the difference in naming between the attributes of the Pedersen ZkModule and the attribute
+of the Signature ZkModule, it is necessary to use the Attribute Equality Building Block to generate
+ZkModules specifying that the following attributes are equal:
+  \begin{itemize}
+  \item \texttt{sig:1:0} and \texttt{sig:1:rep:1} (this corresponds to $m_4$)
+  \item \texttt{sig:1:1} and \texttt{sig:1:rep:2} (this corresponds to $m_5$)
+  \item \texttt{sig:1:2} and \texttt{sig:1:rep:3} (this corresponds to $m_6$)
+  \end{itemize}
+  Conceptually, these define the zero-knowledge proofs:
+  \begin{align}
+  \label{eq:ex:uprove:last}
+  &\NIZK\lbrace(m_4, a_1): m_4 = a_1\rbrace() \\
+  \mbox{and }\quad&\NIZK\lbrace(m_5, a_2): m_5 = a_2\rbrace() \\
+  \mbox{and }\quad&\NIZK\lbrace(m_6, a_3): m_6 = a_3\rbrace()
+  \end{align}
+\end{itemize}
+
+The prover sets the value for the attributes $(\alpha, m_4, m_5, m_6)$ in the collection phase of the
+zero-knowledge proof, and registers the values $(h, z, c, s)$ as D-values. It also registers $x_t$
+as an N-value.
+
+The verifier will re-compute $T$ as
+$T = g_0^{-1}g_t^{-x_t}$ and check that
+the signature
+$(h, z, c, s)$ is correct.
+
+By merging the zero-knowledge proofs defined by Equations
+\ref{eq:ex:uprove:first} to
+\ref{eq:ex:uprove:last}, registering $(h, z, c, s)$ as D-values,
+and mandating that the verifier performs the checks described in the previous paragraphs,
+we obtain the zero-knowledge proof in Equation
+\ref{eq:ex:uprove:full}, as desired.
+%-------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+
+\item The CS03 Verifiable Encryption ZkModule.
+
+This module is responsible for encrypting an attribute using Camenisch-Shoup-03 encryption,
+proving that the encryption was done properly, and delivering the
+ciphertext to the verifier.
+
+Let $\emph{ep} = (\bar n, \bar g, y_1, y_2, y_3)$ be the Inspector Public Key ($\bar n$ is a safe RSA modulus of
+unknown factorization, $\bar g$ is a generator of the subgroup
+of size $\varphi(\bar n)/4$ modulo $\bar n^2$, $y_1$ to $y_3$ are elements inside the subgroup generated by $\bar g$) and
+let $\operatorname{hash}(\cdot, \cdot, \cdot)$ be an appropriate hash function.
+Conceptually, given a message $\emph{pt}$ and a label $L$, the module chooses a random number $r$ of appropriate length and
+computes:
+\begin{align}
+u &= {\bar g}^r \pmod{\bar n^2} \nonumber\\
+\bar e &= (\bar n+1)^{\emph{pt}} y_1^r \pmod{\bar n^2} \nonumber\\
+\bar v &= \operatorname{abs}\big((y_2 y_3^{\operatorname{hash}(u, \bar e, L)})^r\big) \pmod{\bar n^2}
+\end{align}
+It then performs the following proof:
+\begin{align}
+\label{eq:ex:verenc:full}
+\NIZK\lbrace(\emph{pt}, r):\qquad
+u &= {\bar g}^r \pmod{\bar n^2} \quad\wedge \nonumber\\
+\bar e &= (\bar n+1)^{\emph{pt}} y_1^r \pmod{\bar n^2} \quad\wedge\nonumber\\
+\bar v &= \operatorname{abs}\big((y_2 y_3^{\operatorname{hash}(u, \bar e, L)})^r\big) \pmod{\bar n^2} \nonumber\\
+\rbrace(u, \bar e, \bar v)&
+\end{align}
+
+At initialization time, this ZkModule is not allowed to read out the value of its plaintext attribute.
+That value becomes available only during the first round of the zero-knowledge proof (when the Signature
+ZkModules have had the chance to provide the values of their attribute).
+
+At initialization time, it fetches the following Building Blocks from the Building Block Factory:
+ModNSquare Representation, Attribute Equality, Inspector Parameters. It uses these to create three ModNSquare ZkModules,
+one Inspector Parameter ZkModule, and
+several Attribute Equality ZkModules, as follows:
+
+\begin{itemize}
+\item It uses the Inspector Parameter Building Block to generate a ZkModule identified by \texttt{ins:1:0:ep} and initialized with the inspector public key \emph{ep}.
+Conceptually, this defines the partial zero-knowledge proof:
+\begin{align}
+\label{eq:ex:verenc:first}
+\NIZK\lbrace():\operatorname{true}\rbrace(\emph{ep})
+\end{align}
+
+\item It uses the ModNSquare Representation Building Block to create a ZkModule identified by \texttt{ins:1:0:u} and initialized
+with the System and Verifier Parameters. The base is set to $\bar g$ (choseExponentRandomly=true, order = NPRIME),
+n is set to $\bar n$.
+The flag ``takeAbsoluteValue'' is not set.
+The ZkModule receives a reference to the Building Block Factory.
+
+Conceptually, this defines the zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(r_1): \quad u &= {\bar g}^{r_1} \pmod{\bar n^2} \rbrace(u)
+\end{align}
+
+\item It uses the ModNSquare Building Block to create a ZkModule identified by \texttt{ins:1:0:e} and initialized
+with the System and Verifier Parameters. The bases are set to
+$\bar n+1$ (order = N) and $\bar g$ (order = NPRIME),
+n is set to $\bar n$.
+The flag ``takeAbsoluteValue'' is not set.
+The ZkModule receives a reference to the Building Block Factory.
+
+Conceptually, this defines the zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(a_1, a_2): \quad
+\bar e &= (\bar n+1)^{a_1} y_1^{a_2} \pmod{\bar n^2}
+\rbrace(e)
+\end{align}
+
+\item It uses the ModNSquare Building Block to create a ZkModule identified by \texttt{ins:1:0:v} and initialized
+with the System and Verifier Parameters. The base is
+left unspecified for now (set to the string \texttt{ins:1:0:v:0}, order=NPRIME),
+n is set to $\bar n$.
+The flag ``takeAbsoluteValue'' is set.
+The ZkModule receives a reference to the Building Block Factory.
+
+Conceptually, this defines the zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(a_3): \quad w &= \operatorname{abs}(T_w^{a_3}) \pmod{\bar n^2} \rbrace(w)
+\end{align}
+
+\item It uses the Attribute Equality Building Block to create ZkModules that specify that the following attributes are equal:
+  \begin{itemize}
+    \item \texttt{ins:1:0:u:0} and \texttt{ins:1:0:e:1} (this corresponds to $r$).
+    \item \texttt{ins:1:0:u:0} and \texttt{ins:1:0:v:0} (this corresponds to $r$).
+    \item \texttt{ins:1:0:e:0} and the identifier of the plaintext attribute (this corresponds to $\emph{pt}$).
+  \end{itemize}
+  Conceptually, these define the zero-knowledge proofs:
+  \begin{align}
+  \label{eq:ex:verenc:last}
+  &\NIZK\lbrace(r_1, a_2): r_1 = a_2\rbrace() \\
+  \mbox{and }\quad&\NIZK\lbrace(r_1, a_3): r_1 = a_3\rbrace() \\
+  \mbox{and }\quad&\NIZK\lbrace(a_1, \emph{pt}): a_1 = \emph{pt}\rbrace()
+  \end{align}
+
+\end{itemize}
+
+During the \emph{first round} of the zero-knowledge proof, the Verifiable Encryption ZkModule will
+begin by running the first two ModNSquare child ZkModules. It then recovers the value
+$u$ and $e$ from them, and sets $T_w$:
+$T_w = \operatorname{abs}(y_2 y_3^{\operatorname{hash}(u, \bar e, L)}) \pmod{\bar n^2}$. It then runs the third
+ModNSquare child ZkModule.
+
+The Verifiable Encryption ZkModule registers $u$, $e$ and $v$ as D-values.
+
+Observe that by
+setting $T_w$ to $\operatorname{abs}(y_2 y_3^{\operatorname{hash}(u, \bar e, L)})$, and merging the zero-knowledge
+proofs of Equations
+  \ref{eq:ex:verenc:first} to
+  \ref{eq:ex:verenc:last}, we obtain the zero-knowledge proof in Equation
+  \ref{eq:ex:verenc:full}, as desired.
+
+
+%-------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+\item The 4-Squares Inequality ZkModule.
+
+This ZkModule is responsible for proving that the difference $\delta$ between its
+right-hand-side attribute \texttt{constant:1:1} and its
+left-hand-side
+attribute \texttt{sig:0:1}
+is larger than zero.
+
+Conceptually, this module uses the Rabin-Shallit algorithm to find four integers $u_1, \ldots, u_4$ such
+that the sum of their squares is $\delta$: $\delta = \sum_{i=1}^4 u_i^2$.
+Let $(\hat n, g, h)$ be the values in the Verifier Parameters ($\hat n$ is a safe RSA modulus whose factorization
+is unknown to the prover, $g$ and $h$ are generators of the signed quadratic residues modulo $\hat n$).
+This block wants to perform the following proof of knowledge, for random
+values $r_1, \ldots, r_5$ of appropriate length, the value $r_6 = r_5 - \sum_{i=1}^4u_ir_i$,
+and delivered values $T_1, \ldots, T_5$:
+
+\begin{align}
+\label{eq:ex:rangeProof}
+\NIZK\lbrace(u_1, u_2, u_3, u_4, &\emph{lhs}, \emph{rhs}, r_1, r_2, r_3, r_4, r_5, r_6): \nonumber\\
+T_i &= g^{u_i} h^{r_i} \pmod{\hat n}\quad\mbox{for }i \in \lbrace1, \ldots,  4\rbrace \quad\wedge\nonumber\\
+T_5 &= g^{\emph{rhs}-\emph{lhs}} h^{r_5} \pmod{\hat n}\quad\wedge\nonumber\\
+T_5 &= \sum_{i=1}^4 T_i^{u_i} h^{r_6} \pmod{\hat n} \nonumber\\
+\rbrace(T_1, T_2, T_3, T_4, T_5)&
+\end{align}
+
+At initialization time, this ZkModule is not allowed to read out the values of its left- and right-hand-side
+arguments. These become available only during the first round of the zero-knowledge proof
+(when the Signature ZkModules have had the chance to provide the values of their attributes).
+
+At initialization time, it fetches the following Building Blocks from the Building Block Factory: Damgard-Fujisaki, Attribute Linear Combination, Attribute Equality.
+It uses these to create six Damgard-Fujisaki ZkModules, one Attribute Linear Combination ZkModule,
+and several Attribute Equality ZkModules, as follows:
+\begin{itemize}
+\item It uses the Linear Combination Building Block to create an attribute \texttt{ineq:1:delta}. That attribute
+is declared as being equal to the difference between the right-hand-side attribute (\texttt{constant:1:1}) and
+the left-hand-side attribute (\texttt{sig:0:1}).
+
+Conceptually, this defines the zero-knowledge proof:
+\begin{align}
+\label{eq:ex:rangeProof:partial:first}
+\NIZK\lbrace(\delta, \emph{lhs}, \emph{rhs}): \delta = \emph{rhs}-\emph{lhs}\rbrace()
+\end{align}
+
+\item It uses the Damgard-Fujisaki Building Block to create five ZkModules. The ZkModules are identified by
+\texttt{ineq:1:df:$i$} (for $i\in\lbrace1, \ldots, 5\rbrace$, and initialized with the System and Verifier Parameters.
+The bases are set to $g$ and $h$ (chooseExponentRandomly=true), the modulus to $\hat n$.
+All ZkModules receives a reference to the Building Block Factory.
+(Since these ZkModules don't need to do computation with external secrets
+the identifier of the secret, the identifier of the credential for secret, and the external secret manager reference are all set to null.)
+
+Conceptually, these define the zero-knowledge proofs (for $i \in \lbrace 1, \ldots, 5 \rbrace$):
+\begin{align}
+\NIZK\lbrace(a_i, r_i): T_i = g^{a_i} h^{r_i} \pmod{\hat n}\rbrace(T_i)
+\end{align}
+
+\item It uses the Damgard-Fujisaki Building Block to create a ZkModule identified by \texttt{ineq:1:df:6} and initialized
+with the System and Verifier Parameters. The first four bases are set
+to \texttt{ineq:1:df:$i$:C} for $i\in\lbrace1, \ldots, 4\rbrace$ (i.e., the not-yet-computed values of the commitments of the
+first four Damgard-Fujisaki ZkModules) and the fifth base is set to $h$, the modulus to $\hat n$.
+The ZkModule receives a reference to the Building Block Factory.
+(Since this ZkModule doesn't need to do computation with external secrets, the same comment as above applies.)
+
+Conceptually, this defines the zero-knowledge proof:
+\begin{align}
+\NIZK\lbrace(a_6, a_7, a_8, a_9, a_{10}): T_6 = T_1^{a_6} T_2^{a_7}T_3^{a_8}T_4^{a_9} h^{a_{10}} \pmod{\hat n}\rbrace(T_6)
+\end{align}
+
+\item It uses the Attribute Equality Building Block to create ZkModules that specify that the following attributes are equal:
+  \begin{itemize}
+    \item \texttt{ineq:1:df:1:0} and \texttt{ineq:1:df:6:0} (this corresponds to $u_1$).
+    \item \texttt{ineq:1:df:2:0} and \texttt{ineq:1:df:6:1} (this corresponds to $u_2$).
+    \item \texttt{ineq:1:df:3:0} and \texttt{ineq:1:df:6:2} (this corresponds to $u_3$).
+    \item \texttt{ineq:1:df:4:0} and \texttt{ineq:1:df:6:3} (this corresponds to $u_4$).
+    \item \texttt{ineq:1:df:5:0} and \texttt{ineq:1:delta} (this corresponds to $\delta$).
+  \end{itemize}
+  Conceptually, these define the zero-knowledge proofs (for $i\in\lbrace1,\ldots,4\rbrace$):
+  \begin{align}
+  &\NIZK\lbrace(a_i, a_{i+5}): a_i = a_{i+5}\rbrace() \\
+  \mbox{and }\quad&\NIZK\lbrace(\delta, a_{10}): \delta = a_{10}\rbrace()
+  \label{eq:ex:rangeProof:partial:last}
+  \end{align}
+\end{itemize}
+
+The Inequality ZkModule will provide the values of $u_1, u_2, u_3, u_4$ only in the \emph{first round}
+of the zero-knowledge proof: it is only then that the ZkModule is allowed to read the values of its left- and
+right-hand-side attributes. During the first round, it will also recover $r_1$ to $r_5$ as the randomizers of the
+first five Damgard-Fujisaki commitments, compute $r_6$, and provide the value of \texttt{ineq:1:df:6:4}
+corresponding to $r_6$.
+
+The prover registers $T_1$ to $T_5$ as D-values.
+The verifier re-computes $T_6$ from $T_5$.
+
+Observe that merging the partial zero-knowledge proofs shown in Equations
+\ref{eq:ex:rangeProof:partial:first} to
+\ref{eq:ex:rangeProof:partial:last}, setting
+$(a_1, a_2, a_3, a_4, a_{10})$ to
+$(u_1, u_2, u_3, u_4, r_6)$, and setting $T_6 = T_5$,
+we obtain the zero-knowledge range proof shown in Equation
+\ref{eq:ex:rangeProof}, as desired.
+
+\item In this document we will not write out the details for the two remaining range proofs,
+as they are similar to the one above.
+\end{itemize}
+
+%-------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+\noindent
+At this stage, the composition of all previous partial zero-knowledge proofs is the
+following:
+\begin{align}
+\label{eq:ex:fullproof}
+\NIZK\lbrace(&
+% witnesses
+e, x, m_1, m_2, m_3, v, v_x, \alpha, m_4, r, u_1, u_2, u_3, u_4, r_1, r_2, r_3, r_4, r_5, r_6
+): \\
+% predicates
+Z &= {A'}^e R_0^{x} R_1^{m_1} R_2^{m_2} R_3^{m_3} R_s^{t_s} S^{v' + v_x} \pmod{n} \quad\wedge\nonumber\\
+g_0^{-1} &= h^\alpha g_1^{m_4} g_2^{m_1} g_3^{m_6} g_t^{x_t} \pmod{p} \quad\wedge\nonumber\\
+&\operatorname{Verify}(h, z, c, s) \quad\wedge\nonumber \\
+u &= {\bar g}^r \pmod{\bar n^2} \quad\wedge \nonumber\\
+\bar e &= (\bar n+1)^{m_4} y_1^r \pmod{\bar n^2} \quad\wedge\nonumber\\
+\bar v^2 &= (y_2^2 y_3^{2\operatorname{hash}(u, \bar e, L)})^r \pmod{\bar n^2} \nonumber\\
+T_i &= g^{u_i} h^{r_i} \pmod{\hat n}\quad\mbox{for }i \in \lbrace1, \ldots,  4\rbrace \quad\wedge\nonumber\\
+T_5 &= g^{45805-m_2} h^{r_5} \pmod{\hat n}\quad\wedge\nonumber\\
+T_5 &= \sum_{i=1}^4 T_i^{u_i} h^{r_6} \pmod{\hat n} \wedge \nonumber\\
+0 &\leq m_4 < 2^{256} \textit{ (The latter expands to 12 representations and 20 attributes)}\nonumber\\
+\rbrace(&
+% context
+A', h, z, c, s, u, \bar e, \bar v, T_1, T_2, T_3, T_4, T_5,
+M, \emph{cs}, \emph{cs}', \emph{ip}, \emph{ip}', m_6, L, t_s, x_t, \emph{ep}, 45805, \emph{sp}, \emph{vp}, \emph{ms}
+) \nonumber
+\end{align}
+
+The Proof Engine can now use standard techniques inside the Pedersen, Damgard-Fujisaki, and ModNSquare Representation ZkModules
+to produce a zero-knowledge proof for Equation \ref{eq:ex:fullproof}.
+
+%------
+\fi
+
+\subsection{Final Comments}
+
+\paragraph{Checking Group Membership}
+Although not mentioned in this section, the verifier checks that all group elements that are supposed to be signed quadratic residues
+really are (note that only the verifiable encryption uses \emph{unsigned} quadratic residues).
+Similarly, all group elements that are supposed to be in a subgroup of prime order are checked for subgroup membership.

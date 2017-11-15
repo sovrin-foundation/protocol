@@ -1,0 +1,1092 @@
+%!TEX root =  IdmxSpecification.tex
+
+\section{Data Formats}
+\label{sec:dataFormats}
+
+Many of the data formats that the Idmx cryptographic library uses are taken from the AB4Trust specifications.
+The reason for this decision lies in the fact that the library must be compatible with the ABC engine and
+the re-use of these data formats enables us to be compatible with the communication formats in a simple manner.
+%
+While the ABC4Trust formats enforce functionality and compatibility using a stringent form, all our data formats 
+focus more on flexibility and extensibility a main goal of this library is to be modular and extensible with 
+further instantiations of pre-defined functionality.
+%
+Currently the formats do rely on the ABC4Trust namespace but they will be moved to their specific namespace to
+implement a separation of the Idmx crypto library from the higher level functionality added by the ABC4Trust 
+engine.
+%
+For that reason the elements themselves do not provide all information on which specific
+data is contained in an element but this information is available from Section~\ref{sec:api}.
+
+
+
+\subsection{General Parameters}
+
+Many of the elements that the cryptographic library requires make use of parameters.
+%
+To acknowledge this fact we provide a general notion of a parameter (see Fig.~\ref{fig:parameter}) that can be (1) used in all 
+elements when a parameter of 
+some sort is to be contained, and  (2) be extended to contain arbitrary information.
+%
+For the use of parameters you may refer to the private and public key element that contain a set of parameters in addition to 
+further specific elements (see Section~\ref{sec:keypair}).
+
+
+\begin{xml}
+{fig:parameter}
+{XML schema for a general parameter that can be extended.}
+<xs:element name="Parameter" type="Parameter" />
+
+<xs:complexType name="Parameter">
+  <xs:sequence>
+    <xs:element ref="FriendlyDescription" minOccurs="0" 
+      maxOccurs="unbounded" />
+  </xs:sequence>
+  <xs:attribute name="Name" type="xs:string" use="required" />
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent The elements of a Parameter es given in Figure~\ref{fig:parameter}:
+\begin{parameter}[/Parameter/FriendlyDescription]
+The friendly description provides human readable information about the parameter and should
+be added in the language understood by the developers of dependant code.
+\end{parameter}
+\begin{parameter}[/Parameter/@Name]
+The mandatory name of this parameter.
+\end{parameter}
+
+
+As an example we provide the details of extending the general parameter by adding a value element that 
+restricts the type of its content to be a string (see Fig.~\ref{fig:parameterString}).
+%
+Currently, the library contains the extensions of the general parameter  with the data types of 
+Strings, Integers, Big Integers and 
+URIs%
+% (see Fig.~\ref{fig:parameterInteger}, \ref{fig:parameterBigInteger}, and \ref{fig:parameterURI})
+.
+%Similarly, the library contains extensions in which the content type is restricted to be an integer, big integer, and 
+%URI.
+%
+Refer to the original XML schema for the detailed definitions.
+
+
+\begin{xml}
+{fig:parameterString}
+{XML schema of the parameter extension allowing for storing \emph{string} values.}
+<xs:element name="StringParameter" type="StringParameter" />
+
+<xs:complexType name="StringParameter">
+  <xs:complexContent>
+    <xs:extension base="Parameter">
+      <xs:sequence>
+        <xs:element name="Value" type="xs:string" />
+      </xs:sequence>
+    </xs:extension>
+  </xs:complexContent>
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent The elements of String Parameter es given in Figure~\ref{fig:parameterString}:
+\begin{parameter}[/StringParameter/Value]
+The required value of the parameter, which must be of type string.
+\end{parameter}
+
+
+% \begin{xml}
+% {fig:parameterInteger}
+% {XML schema of the parameter extension allowing for storing \emph{integer} values.}
+% <xs:element name="IntegerParameter" type="IntegerParameter" />
+% 
+% <xs:complexType name="IntegerParameter">
+%   <xs:complexContent>
+%     <xs:extension base="Parameter">
+%       <xs:sequence>
+%         <xs:element name="Value" type="xs:int" />
+%       </xs:sequence>
+%     </xs:extension>
+%   </xs:complexContent>
+% </xs:complexType>
+% \end{xml}
+% 
+% 
+% \begin{xml}
+% {fig:parameterBigInteger}
+% {XML schema of the parameter extension allowing for storing \emph{big integer} values.}
+% <xs:element name="BigIntegerParameter" type="BigIntegerParameter" />
+% 
+% <xs:complexType name="BigIntegerParameter">
+%   <xs:complexContent>
+%     <xs:extension base="Parameter">
+%       <xs:sequence>
+%         <xs:element name="Value" type="xs:integer" />
+%       </xs:sequence>
+%     </xs:extension>
+%   </xs:complexContent>
+% </xs:complexType>
+% \end{xml}
+% 
+% \begin{xml}
+% {fig:parameterURI}
+% {XML schema of the parameter extension allowing for storing \emph{big integer} values.}
+% <xs:element name="UriParameter" type="UriParameter" />
+% 
+% <xs:complexType name="UriParameter">
+%   <xs:complexContent>
+%     <xs:extension base="Parameter">
+%       <xs:sequence>
+%         <xs:element name="Value" type="xs:anyURI" />
+%       </xs:sequence>
+%     </xs:extension>
+%   </xs:complexContent>
+% </xs:complexType>
+% \end{xml}
+
+
+
+
+\subsection{Parameter Generation Elements}
+
+As described in the architecture overview (see Section~\ref{sec:arch:setup}) a set of parameters in general 
+and key pairs in particular are generated in a two step process.
+First, a template configured with default values can be retrieved and manually configured.
+Second, this configuration serves as input to the key generation process.
+
+
+\subsubsection{System and Verifier Parameter Templates}
+
+While the system parameter and the verifier parameter elements from the higher ABC4Trust layers are being used, 
+the system  and verifier parameter configuration template are defined within the Idmx cryptographic library.
+Their composition can be seen in Figure~\ref{fig:systemParameterTemplate} and 
+Figure~\ref{fig:verifierParameterTemplate}, respectively.
+
+\begin{xml}
+{fig:systemParameterTemplate}
+{XML schema of the configuration template used to setup the system parameters.}
+<xs:element name="SystemParametersTemplate" type="SystemParametersTemplate" />
+
+<xs:complexType name="SystemParametersTemplate">
+  <xs:sequence>
+    <xs:element ref="Parameter" maxOccurs="unbounded" />
+  </xs:sequence>
+  <xs:attribute name="SystemParametersId" type="xs:anyURI" use="required" />
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent The elements of a System Parameter Configuration Template es given in Figure~\ref{fig:systemParameterTemplate}:
+\begin{parameter}[/SystemParametersTemplate/Parameter]
+An unbounded number of parameters of the general parameter format that are required to 
+configure the system parameters.
+\end{parameter}
+\begin{parameter}[/SystemParametersTemplate/@SystemParametersId]
+This field will be used as a prefix to the 
+system parameter ID when setting up the system parameters. 
+To create the final ID, a random string will be appended to this input.
+\end{parameter}
+
+
+%TODO specific example?
+
+
+\begin{xml}
+{fig:verifierParameterTemplate}
+{XML schema of the template for configuring an issuer public key.}
+<xs:element name="VerifierParametersTemplate" type="VerifierParametersTemplate" />
+<xs:complexType name="VerifierParametersTemplate">
+  <xs:sequence>
+    <xs:element ref="Parameter" maxOccurs="unbounded" />
+  </xs:sequence>
+  <xs:attribute name="SystemParametersId" type="xs:anyURI"
+    use="required" />
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent The elements of a Verifier Parameter Configuration Template es given in Figure~\ref{fig:verifierParameterTemplate}:
+\begin{parameter}[/VerifierParametersTemplate/Parameter]
+An unbounded number of parameters of the general parameter format that are required to 
+configure the verifier parameters.
+\end{parameter}
+\begin{parameter}[/VerifierParametersTemplate/@SystemParametersId]
+The system parameter ID references the system parameters that will be used when setting up the 
+verifier parameters.
+\end{parameter}
+
+
+
+
+
+\subsubsection{Key Pair Templates}
+
+The key pair template contains all elements required to configure a new key pair.
+%
+The contents of those templates are the same for all entites, that is, for the issuer, revocation authroity, and the
+inspector.
+However, for clarity we use specific templates the different entities.
+%
+Figure~\ref{fig:issuerPKTemplate}%, \ref{fig:raPKTemplate}, and \ref{fig:inspectorPKTemplate}, 
+displays the structure 
+of the key pair templates for the issuer.
+
+
+\begin{xml}
+{fig:issuerPKTemplate}
+{XML schema of the template for configuring an issuer public key.}
+<xs:element name="IssuerPublicKeyTemplate" type="IssuerPublicKeyTemplate" />
+
+<xs:complexType name="IssuerPublicKeyTemplate">
+  <xs:sequence>
+    <xs:element ref="Parameter" maxOccurs="unbounded" />
+    <xs:element ref="FriendlyDescription" minOccurs="0"
+      maxOccurs="unbounded" />
+  </xs:sequence>
+  <xs:attribute name="Technology" type="xs:anyURI" use="required" />
+  <xs:attribute name="SystemParametersId" type="xs:anyURI" use="required" />
+  <xs:attribute name="PublicKeyPrefix" type="xs:anyURI" use="required" />
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent The elements of a Issuer Key Pair Template es given in Figure~\ref{fig:issuerPKTemplate}:
+\begin{parameter}[/IssuerPublicKeyTemplate/Parameter]
+An unbounded number of parameters of the general parameter format that are required by the
+used technology.
+\end{parameter}
+\begin{parameter}[/IssuerPublicKeyTemplate/FriendlyDescription]
+The friendly description provides human readable information about the issuer public key template
+helping the user of the library in correctly configuring the template.
+\end{parameter}
+\begin{parameter}[/IssuerPublicKeyTemplate/@Technology]
+The technology that should be used for the key pair generation process.
+\end{parameter}
+\begin{parameter}[/IssuerPublicKeyTemplate/@SystemParametersId]
+The system parameter ID references the system parameters that will be used when setting up the key pair.
+\end{parameter}
+\begin{parameter}[/IssuerPublicKeyTemplate/@PublicKeyPrefix]
+A prefix that will be used before the generated random string. The Idmx library creates unique public key
+ID and thus appends a freshly generated string after this prefix.
+\end{parameter}
+
+
+
+% \begin{xml}
+% {fig:raPKTemplate}
+% {XML schema of the template for configuring an revocation authority public key.}
+% <xs:element name="RevocationAuthorityPublicKeyTemplate" type="RevocationAuthorityPublicKeyTemplate" />
+% 
+% <xs:complexType name="RevocationAuthorityPublicKeyTemplate">
+%   <xs:sequence>
+%     <xs:element ref="Parameter" maxOccurs="unbounded" />
+%     <xs:element ref="FriendlyDescription" minOccurs="0" maxOccurs="unbounded" />
+%   </xs:sequence>
+%   <xs:attribute name="Technology" type="xs:anyURI" use="required" />
+%   <xs:attribute name="SystemParametersId" type="xs:anyURI" use="required" />
+%   <xs:attribute name="PublicKeyPrefix" type="xs:anyURI" use="required" />
+% </xs:complexType>
+% \end{xml}
+% 
+% 
+% \begin{xml}
+% {fig:inspectorPKTemplate}
+% {XML schema of the template for configuring an inspector public key.}
+% <xs:element name="InspectorPublicKeyTemplate" type="InspectorPublicKeyTemplate" />
+% 
+% <xs:complexType name="InspectorPublicKeyTemplate">
+%   <xs:sequence>
+%     <xs:element ref="Parameter" maxOccurs="unbounded" />
+%   </xs:sequence>
+%   <xs:attribute name="Technology" type="xs:anyURI" use="required" />
+%   <xs:attribute name="SystemParametersId" type="xs:anyURI" use="required" />
+%   <xs:attribute name="PublicKeyPrefix" type="xs:anyURI" use="required" />
+% </xs:complexType>
+% \end{xml}
+
+
+
+\subsubsection{Key Pairs}
+\label{sec:keypair}
+
+We leverage the similarity in key pairs for all entities to use a very lightweight XML schema and allow each technology 
+to set the appropriate 
+values without any implications on entities using a different technology. 
+%
+We first provide the XML schema for the key pair (Fig.~\ref{fig:keyPair}), public key (Fig.~\ref{fig:publicKey}), and
+private key (Fig.~\ref{fig:privateKey}) before providing an example of a specific key pair in 
+Figures~\ref{fig:issuerPublicKey} and \ref{fig:issuerPrivateKey}.
+
+
+\begin{xml}
+{fig:keyPair}
+{XML schema for the key pairs of all entities.}
+<xs:element name="KeyPair" type="KeyPair" />
+
+<xs:complexType name="KeyPair">
+  <xs:sequence>
+    <xs:element ref="PrivateKey" minOccurs="1" maxOccurs="1" />
+    <xs:element ref="PublicKey" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+\end{xml}
+
+
+\vspace{3pt}\noindent The elements of a Key Pair es given in Figure~\ref{fig:keyPair}:
+\begin{parameter}[/KeyPair/PrivateKey]
+Private key of this key pair.
+\end{parameter}
+\begin{parameter}[/KeyPair/PublicKey]
+Public key of this key pair.
+\end{parameter}
+
+
+
+\begin{xml}
+{fig:publicKey}
+{XML schema for public keys.}
+<xs:element name="PublicKey" type="PublicKey" />
+
+<xs:complexType name="PublicKey">
+  <xs:sequence>
+    <xs:element ref="Parameter" maxOccurs="unbounded" />
+    <xs:element ref="FriendlyDescription" minOccurs="0" maxOccurs="unbounded" />
+  </xs:sequence>
+  <xs:attribute name="Technology" type="xs:anyURI" use="required" />
+  <xs:attribute name="SystemParametersId" type="xs:anyURI" use="required" />
+  <xs:attribute name="PublicKeyId" type="xs:anyURI" use="required" />
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent The elements of a Public Key es given in Figure~\ref{fig:publicKey}:
+\begin{parameter}[/PublicKey/Parameter]
+An arbitrary (technology-specific) number of general parameters.
+\end{parameter}
+\begin{parameter}[/PublicKey/FriendlyDescription]
+Human readable description of the public key allowing to infer information about the entity holding
+this public key.
+\end{parameter}
+\begin{parameter}[/PublicKey/@Technology]
+The technology as defined through the configuration template.
+\end{parameter}
+\begin{parameter}[/PublicKey/@SystemParametersId]
+The system parameter ID referring to the set of parameters that have been used during the generation
+of this specific public key.
+\end{parameter}
+\begin{parameter}[/PublicKey/@PublicKeyId]
+The identifier of this public key, which consists of the public key prefix as defined in the 
+configuration template and a random string generated during the process of setting up this public key.
+\end{parameter}
+
+
+
+\begin{xml}
+{fig:privateKey}
+{XML schema for private keys.}
+<xs:element name="PrivateKey" type="PrivateKey" />
+
+<xs:complexType name="PrivateKey">
+  <xs:sequence>
+    <xs:element ref="Parameter" maxOccurs="unbounded" />
+  </xs:sequence>
+  <xs:attribute name="PublicKeyId" type="xs:anyURI" use="required" />
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent The elements of a Private Key es given in Figure~\ref{fig:privateKey}:
+\begin{parameter}[/PrivateKey/Parameter]
+An arbitrary (technology-specific) number of general parameters.
+\end{parameter}
+\begin{parameter}[/PrivateKey/@PublicKeyId]
+The identifier of the public key corresponding to this secret key. 
+\end{parameter}
+
+
+
+\begin{xml}
+{fig:issuerPublicKey}
+{XML of an issuer public key used for credentials using CL signatures. To improve readability, we omit 
+XML name spaces and shorten identifiers as well as big integer values.}
+<abc:PublicKey 
+    Technology="urn:idmx:3.0.0:block:sig:cl" 
+    SystemParametersId="8006149e-f6b3-490a-8fd3-7a1391a7f85b" 
+    PublicKeyId="urn:com.ibm.zurich:idmx[...]81ddea946704">
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="6410[...]3997" 
+    Name="urn:idmx:3.0.0:issuer:publicKey:base:0"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="1569[...]6163" 
+    Name="urn:idmx:3.0.0:issuer:publicKey:base:1"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="4631[...]4080" 
+    Name="urn:idmx:3.0.0:issuer:publicKey:base:2"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="1268[...]3257" 
+    Name="urn:idmx:3.0.0:issuer:publicKey:base:3"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="3539[...]0563" 
+    Name="urn:idmx:3.0.0:issuer:publicKey:base:4"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="7422[...]9875" 
+    Name="urn:idmx:3.0.0:issuer:publicKey:base:5"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="2152[...]8905" 
+    Name="urn:idmx:3.0.0:issuer:publicKey:base:6"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="2507[...]1651" 
+    Name="urn:idmx:3.0.0:issuer:publicKey:base:7"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="2296[...]5580" 
+    Name="urn:idmx:3.0.0:issuer:publicKey:base:8"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="1311[...]0692" 
+    Name="urn:idmx:3.0.0:issuer:publicKey:base:9"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="1083[...]1340" 
+    Name="urn:idmx:3.0.0:issuer:publicKey:base:10"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="1121[...]8075"  
+    Name="urn:idmx:3.0.0:issuer:publicKey:base:11"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="1676[...]2593"
+    Name="urn:idmx:3.0.0:issuer:publicKey:rsaModulus"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="1380[...]9436"  
+    Name="urn:idmx:3.0.0:issuer:publicKey:Z"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="1519[...]4287" 
+    Name="urn:idmx:3.0.0:issuer:publicKey:S"/>
+  <abc:Parameter xsi:type="abc:IntegerParameter" Value="12" 
+    Name="urn:idmx:3.0.0:issuer:publicKey:maxAtts"/>
+  <abc:Parameter xsi:type="abc:UriParameter" Value="urn[...]revAuth" 
+    Name="urn:idmx:3.0.0:issuer:publicKey:revauth"/>
+</abc:PublicKey>
+\end{xml}
+
+
+\begin{xml}
+{fig:issuerPrivateKey}
+{XML of an issuer private key corresponding to the public key shown in 
+Fig.~\ref{fig:issuerPublicKey}}
+<abc:PrivateKey PublicKeyId="urn:com.ibm.zurich:idmx[...]81ddea946704">
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="1676[...]2593" 
+    Name="urn:idmx:3.0.0:issuer:privateKey:rsaModulus"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="1102[...]0767" 
+    Name="urn:idmx:3.0.0:issuer:privateKey:p"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="1520[...]6079" 
+    Name="urn:idmx:3.0.0:issuer:privateKey:q"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="5514[...]5383" 
+    Name="urn:idmx:3.0.0:issuer:privateKey:pPrime"/>
+  <abc:Parameter xsi:type="abc:BigIntegerParameter" Value="7602[...]8039" 
+    Name="urn:idmx:3.0.0:issuer:privateKey:qPrime"/>
+</abc:PrivateKey>
+\end{xml}  
+
+
+
+
+
+% \begin{xml}
+% {fig:raKeyPair}
+% {XML of a key pari for a revocation authority.}
+% <abc:KeyPair xmlns:abc="http://abc4trust.eu/wp2/abcschemav1.0">
+%   <abc:PrivateKey PublicKeyId="urn:revocation:pk:c9a1[...]893c">
+%     <abc:Parameter xsi:type="abc:BigIntegerParameter" Name="rsaModulus">
+%       <abc:Value>7319[...]9189</abc:Value>
+%     </abc:Parameter>
+%     <abc:Parameter xsi:type="abc:BigIntegerParameter" Name="privateKey:p">
+%       <abc:Value>2429[...]3467</abc:Value>
+%     </abc:Parameter>
+%     <abc:Parameter xsi:type="abc:BigIntegerParameter" Name="privateKey:q">
+%       <abc:Value>3012[...]0767</abc:Value>
+%     </abc:Parameter>
+%     <abc:Parameter xsi:type="abc:BigIntegerParameter" Name="privateKey:pPrime">
+%       <abc:Value>1214[...]1733</abc:Value>
+%     </abc:Parameter>
+%     <abc:Parameter xsi:type="abc:BigIntegerParameter" Name="privateKey:qPrime">
+%       <abc:Value>1506[...]5383</abc:Value>
+%     </abc:Parameter>
+%   </abc:PrivateKey>
+%   <abc:PublicKey Technology="urn:idmx:3.0.0:block:revocation" 
+%     SystemParametersId="eeae1e60-6b49-4ff7-b32f-c3306282c45d" 
+%     PublicKeyId="urn:revocation:pk:c9a1[...]893c">
+%     <abc:Parameter xsi:type="abc:UriParameter" Name="nreReference">
+%       <abc:Value>non:revocation:evidence:reference</abc:Value>
+%     </abc:Parameter>
+%     <abc:Parameter xsi:type="abc:UriParameter" Name="nreUpdateReference">
+%       <abc:Value>non:revocation:evidence:update:reference</abc:Value>
+%     </abc:Parameter>
+%     <abc:Parameter xsi:type="abc:UriParameter" Name="revocationInformationReference">
+%       <abc:Value>revocation:information:reference</abc:Value>
+%     </abc:Parameter>
+%     <abc:Parameter xsi:type="abc:BigIntegerParameter" Name="rsaModulus">
+%       <abc:Value>7319[...]9189</abc:Value>
+%     </abc:Parameter>
+%     <abc:Parameter xsi:type="abc:BigIntegerParameter" Name="base:0">
+%       <abc:Value>1051[...]2678</abc:Value>
+%     </abc:Parameter>
+%     <abc:Parameter xsi:type="abc:BigIntegerParameter" Name="base:1">
+%       <abc:Value>2659[...]4060</abc:Value>
+%     </abc:Parameter>
+%   </abc:PublicKey>
+% </abc:KeyPair>
+% \end{xml}
+
+
+
+\subsection{Zero-knowledge Proof Elements}
+
+%   The crypto evidence of a presentation or issuance token contains the following two
+%   elements: a proof and a mechanism specification. We describe the format of both in this
+%   section.
+%     \subsubsection{Proof}
+%     The proof must be serializable as an XML. It contains the following:
+%       \begin{itemize}
+%         \item The challenge (as a BigInteger).
+%         \item The challenge-nonce (as binary data) if a secret (such as a smartcard) is being used.
+%         \item A list of field-value pairs for S-values. The field is the identifier of the attribute
+%           this S-value corresponds to (in case several attributes are equal: the lexicographically
+%           first identifier is used); the value is a BigInteger.
+%         \item A list of field-value pairs for revealed attributes. The field is the identifier of the attribute
+%           (in case several attributes are equal: the lexicographically
+%           first identifier is used); the value is a BigInteger.
+%         \item Optionally: a list of field-value pairs for T-values. The key is a string (understood
+%           by the relevant ZkModule); the value is a group element. (The presence of T-values is useful
+%           for debugging, but can be omitted from the proof to save space.)
+%         \item Optionally: a list of field-value pairs for N-values (context values). The key is a string (understood
+%           by the relevant ZkModule); the value is an octet string. (The presence of N-values is useful
+%           for debugging, but can be omitted from the proof to save space.)
+%         \item A list of field-value pairs for integer D-values (delivered values). The field is a string (understood
+%           by the relevant ZkModule); the value is a group element.
+%         \item A list of field-value pairs for non-integer D-values. The field is a string
+%           (understood by the relevant ZkModule); the value consists of (1) the serialized D-value
+%           in a format that is understandable by the relevant ZkModule, (2) the hash contribution of
+%           the D-value as binary data.
+%       \end{itemize}
+% 
+%       The challenge-without-nonce is computed from the following fields:
+%       \begin{itemize}
+%         \item The sorted (by name) list of T-values.
+%         \item The sorted list of N-values.
+%         \item The sorted list of D-values that are integers.
+%         \item The sorted list of hash contributions from non-integer D-values.
+%       \end{itemize}
+% 
+%       The challenge is computed from the following fields:
+%       \begin{itemize}
+%         \item The challenge-without-nonce
+%         \item The challenge-nonce
+%       \end{itemize}
+
+The zero-knowledge proof that is generated by the Idmx library needs to be communicated to the 
+verifying entity in the system. 
+To this end, we employ the format we detail in Figure~\ref{fig:zkProof}.
+Note that this format offers the flexibility to provide any proof within the current specification 
+but does not come with extension points as the format of the proofs is restricted by the library's 
+functionality.
+In this Section we discuss the proof format as well as the formats of the elements contained in 
+the proof.
+
+\begin{xml}
+{fig:zkProof}
+{XML schema of a zero-knowledge proof.}
+<xs:element name="ZkProof" type="ZkProof" />
+
+<xs:complexType name="ZkProof">
+  <xs:sequence>
+    <xs:element name="Module" type="ModuleInZkProof" minOccurs="0" 
+      maxOccurs="unbounded" />
+    <xs:element name="AttributeValue" type="ValueInZkProof" minOccurs="0" 
+      maxOccurs="unbounded" />
+    <xs:element name="Challenge" type="xs:integer" minOccurs="0" />
+    <xs:element name="SValue" type="ValueInZkProof" minOccurs="0" 
+      maxOccurs="unbounded" />
+    <xs:element name="AttributePartition" type="AttributePartition" 
+      minOccurs="0" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent The elements of a Zero-knowledge Proof are given in Figure~\ref{fig:zkProof}:
+\begin{parameter}[/ZkProof/Module]
+A list of the modules used in the generation of this proof.
+\end{parameter}
+\begin{parameter}[/ZkProof/AttributeValue]
+
+\end{parameter}
+\begin{parameter}[/ZkProof/Challenge]
+The value of the challenge used in this proof. This is an optional element to help with debugging.
+\end{parameter}
+\begin{parameter}[/ZkProof/SValue]
+The S-values (responses to the challenge, i.e., third message in a Sigma protocol) of the different 
+modules participating in this proof.
+\end{parameter}
+\begin{parameter}[/ZkProof/AttributePartition]
+The list of attribute representatives. Each attribute representative contains the set of attributes that are
+declared equal. This is an optional element to help with debugging.
+\end{parameter}
+
+
+
+\begin{xml}
+{fig:moduleinZkProof}
+{XML schema of the module elements in a zero-knowledge proof (see Fig.~\ref{fig:zkProof}).}
+<xs:complexType name="ModuleInZkProof">
+  <xs:sequence>
+    <xs:element name="HashContribution" type="xs:base64Binary"
+      minOccurs="0" />
+    <xs:element name="DValue" type="ValueWithHashInZkProof" minOccurs="0"
+      maxOccurs="unbounded" />
+    <xs:element name="RevealedAttribute" type="xs:string" minOccurs="0"
+      maxOccurs="unbounded" />
+    <xs:element name="NValue" type="ValueInZkProof" minOccurs="0"
+      maxOccurs="unbounded" />
+    <xs:element name="TValue" type="ValueInZkProof" minOccurs="0"
+      maxOccurs="unbounded" />
+    <xs:element name="SValue" type="ValueInZkProof" minOccurs="0"
+      maxOccurs="unbounded" />
+  </xs:sequence>
+  <xs:attribute name="Name" type="xs:string" use="required" />
+</xs:complexType>
+\end{xml}
+
+
+\vspace{3pt}\noindent The elements of a Module in a ZkProof object are given in Figure~\ref{fig:moduleinZkProof}:
+\begin{parameter}[/ZkProof/HashContribution]
+The hash contribution of this module. The hash contributions of all modules serve as input to the 
+final challenge value.
+\end{parameter}
+\begin{parameter}[/ZkProof/DValue]
+A list of values that are delivered to the verifier (i.e., values such as commitments that cannot be generated
+by the verifier but are needed for the verification of the proof).
+\end{parameter}
+\begin{parameter}[/ZkProof/RevealedAttribute]
+A list of attribute valued that are revealed to the verifier. This is an optional element to help with debugging.
+\end{parameter}
+\begin{parameter}[/ZkProof/NValue]
+The list of N-values (context values) used by this ZkModule. These values will be re-computed by the verifier.
+This is an optional element to help with debugging.
+\end{parameter}
+\begin{parameter}[/ZkProof/TValue]
+The list of T-values (first message in a Sigma protocol) used by this ZkModule. This is an optional
+element to help with debugging.
+\end{parameter}
+\begin{parameter}[/ZkProof/SValue]
+The S-values (third message of a Sigma protocol) of this module.
+\end{parameter}
+
+
+\begin{xml}
+{fig:valueinZkProof}
+{XML schema of the value elements (used for attribute values as well as for T, N, and S-values) in a 
+zero-knowledge proof (see Fig.~\ref{fig:zkProof}).}
+<xs:complexType name="ValueInZkProof">
+  <xs:simpleContent>
+    <xs:extension base="xs:base64Binary">
+      <xs:attribute name="Name" type="xs:string" use="required" />
+      <xs:attribute name="Type" type="xs:string" use="required" />
+    </xs:extension>
+  </xs:simpleContent>
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent The elements of a Value in a ZkProof object are given in Figure~\ref{fig:valueinZkProof}:
+\begin{parameter}[/ZkProof/@Name]
+The name of the value.
+\end{parameter}
+\begin{parameter}[/ZkProof/@Type]
+The type of the value.
+\end{parameter}
+
+\begin{xml}
+{fig:valueWithHashinZkProof}
+{XML schema of the value elements (used D-values) in a 
+zero-knowledge proof (see Fig.~\ref{fig:zkProof}).}
+<xs:complexType name="ValueWithHashInZkProof">
+  <xs:simpleContent>
+    <xs:extension base="xs:base64Binary">
+      <xs:attribute name="Name" type="xs:string" use="required" />
+      <xs:attribute name="Type" type="xs:string" use="required" />
+      <xs:attribute name="HashContribution" type="xs:base64Binary"
+        use="optional" />
+    </xs:extension>
+  </xs:simpleContent>
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent The elements of a Value containing a hash in a ZkProof object are given in Figure~\ref{fig:valueWithHashinZkProof}:
+\begin{parameter}[/ZkProof/@Name]
+The name of the value.
+\end{parameter}
+\begin{parameter}[/ZkProof/@Type]
+The type of the value.
+\end{parameter}
+\begin{parameter}[/ZkProof/@HashContribution]
+The hash contribution of this element. This is an optional parameter used for debugging.
+\end{parameter}
+
+
+\begin{xml}
+{fig:attributePartition}
+{XML schema of the attribute partition (used for attribute representatives) in a 
+zero-knowledge proof (see Fig.~\ref{fig:zkProof}).}
+<xs:element name="AttributePartition" type="AttributePartition" />
+
+<xs:complexType name="AttributePartition">
+  <xs:sequence>
+    <xs:element name="attributeName" type="xs:string"
+      maxOccurs="unbounded" />
+  </xs:sequence>
+  <xs:attribute name="representativeName" type="xs:string" />
+</xs:complexType>
+\end{xml}
+
+
+\vspace{3pt}\noindent The elements of an Attribute Partition in a ZkProof object are given in Figure~\ref{fig:attributePartition}:
+\begin{parameter}[/ZkProof/attributeName]
+List of attribute names that are declared to be equal.
+\end{parameter}
+\begin{parameter}[/ZkProof/@representativeName]
+Name of the representative for this set of attributes.
+\end{parameter}
+  
+  
+
+
+
+
+
+\subsection{Signatures}
+
+We inherit the format for credentials from the ABC4Trust specifications following the description provided 
+in~\cite{abc4trust:h22}.
+The signature elements, however, are provided by the Idmx library.
+
+\begin{xml}
+{fig:signature}
+{XML schema of the Signature that will be enclosed in the credential of a user.}
+<xs:element name="Signature" type="Signature" />
+
+<xs:complexType name="Signature">
+  <xs:sequence>
+    <xs:element name="canReuseToken" type="xs:boolean" />
+    <xs:element ref="SignatureToken" minOccurs="0" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent Details of the elements of the Signature as provided in Figure~\ref{fig:signature}:
+\begin{parameter}[/Signature/canReuseToken]
+Declares whether a token can be re-used in multiple verification operations without those presentations becoming linkable.
+More specifically, also tokens that specify \texttt{false} here can be re-used with all presentation being linkable
+to the same entity.
+\end{parameter}
+\begin{parameter}[/Signature/SignatureToken]
+The signature token containing the cryptographic values.
+\end{parameter}
+
+
+
+\begin{xml}
+{fig:signatureToken}
+{XML schema of the Signature Token as it is contained in the signature (see Fig.~\ref{fig:signature}).}
+<xs:element name="SignatureToken" type="SignatureToken" />
+<xs:complexType name="SignatureToken">
+  <xs:sequence>
+    <xs:element ref="Parameter" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent Details of the elements of the Signature Token as provided in Figure~\ref{fig:signatureToken}:
+\begin{parameter}[/SignatureToken/Parameter]
+List of parameters building the cryptographic signature. This set is dependent on the technology with which the 
+signature has been generated.
+\end{parameter}
+  
+  
+
+
+
+
+
+\subsection{Pseudonyms}
+
+Pseudonyms are needed when building a proof that relates to a previous interaction with a service provider.
+We separate the general fields pertaining to a pseudonym from the values that are specific to some
+use-cases.
+To that end, we provide an abstract pseudonym (Fig.~\ref{fig:abstractPseudonym})
+
+\begin{xml}
+{fig:abstractPseudonym}
+{XML schema of the abstract pseudonym.}
+<xs:element name="AbstractPseudonym" type="AbstractPseudonym" />
+
+<xs:complexType name="AbstractPseudonym">
+  <xs:sequence>
+    <xs:element name="value" type="xs:integer" />
+    <xs:element name="deviceUid" type="xs:anyURI" />
+    <xs:element name="scope" type="xs:anyURI" />
+  </xs:sequence>
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent Details of the elements of the Abstract Pseudonym as provided in Figure~\ref{fig:abstractPseudonym}:
+\begin{parameter}[/AbstractPseudonym/value]
+The value of the pseudonym.
+\end{parameter}
+\begin{parameter}[/AbstractPseudonym/deviceUid]
+UID of the device holding the secret underlying the pseudonym.
+\end{parameter}
+\begin{parameter}[/AbstractPseudonym/scope]
+Scope of the pseudonym.
+\end{parameter}
+  
+
+\begin{xml}
+{fig:standardPseudonym}
+{XML schema of the Standard Pseudonym extending the Abstract Pseudonym (see Fig.~\ref{fig:abstractPseudonym}).}
+<xs:element name="StandardPseudonym" type="StandardPseudonym" />
+
+<xs:complexType name="StandardPseudonym">
+  <xs:complexContent>
+    <xs:extension base="AbstractPseudonym">
+      <xs:sequence>
+        <xs:element name="openingInformation" type="xs:integer" />
+      </xs:sequence>
+    </xs:extension>
+  </xs:complexContent>
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent Details of the elements of the Standard Pseudonym as provided in Figure~\ref{fig:standardPseudonym}:
+\begin{parameter}[/StandardPseudonym/openingInformation]
+The opening information corresponding to the pseudonym value contained in the abstract pseudonym that builds the base 
+of this pseudonym.
+\end{parameter}
+
+
+
+\begin{xml}
+{fig:scopeExclusivePseudonym}
+{XML schema of the Scope Exclusive Pseudonym extending the Abstract Pseudonym (see Fig.~\ref{fig:abstractPseudonym}).}
+<xs:element name="ScopeExclusivePseudonym" type="ScopeExclusivePseudonym" />
+
+<xs:complexType name="ScopeExclusivePseudonym">
+  <xs:complexContent>
+    <xs:extension base="AbstractPseudonym">
+    </xs:extension>
+  </xs:complexContent>
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent A scope exclusive pseudonym (Figure~\ref{fig:scopeExclusivePseudonym}) does not contain a secret 
+randomness in addition to the secret that it is based on. 
+For that reason there are no elements in addition to the elements defined in the abstract pseudonym as given in 
+Figure~\ref{fig:abstractPseudonym}.
+
+
+
+
+
+\subsection{Additional Issuance Messages}
+ 
+In the issuance protocol flow there may be a need of additional communication rounds. 
+The additional issuance message to the issuer will in that case contain the identifier of the chosen implementation as a URI, 
+the identifier of the module as a String and a list of further parameters expected by the indicated implementation.
+The message to the recipient will contain the identifier of the module as well as a list of parameters required and defined 
+by the module.
+
+
+\begin{xml}
+{fig:issuanceExtraMessage}
+{XML schema of the additional issuance message.}
+<xs:element name="IssuanceExtraMessage" type="IssuanceExtraMessage" />
+<xs:complexType name="IssuanceExtraMessage">
+  <xs:sequence>
+    <xs:element ref="Parameter" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+\end{xml}
+
+\vspace{3pt}\noindent Details of the elements of the Additional Issuance Message as provided in Figure~\ref{fig:issuanceExtraMessage}:
+\begin{parameter}[/IssuanceExtraMessage/Parameter]
+Sequence of parameters required by the subsequent step of the respective other issuance party. 
+\end{parameter}
+
+
+
+\patrik{do we need this? it's really just a parameter list (which we should also define that way and then re-use...)}
+\patrik{<xs:element name="IssuanceAttributeList" type="IssuanceAttributeList" />
+<xs:complexType name="IssuanceAttributeList">
+  <xs:sequence>
+    <xs:element ref="Parameter" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>}
+  
+
+
+
+
+
+
+\subsection{Revocation Elements}
+
+Establishing credentials supporting issuer-driven revocation requires the revocation authority to interact with (1) the issuer during the issuance protocol, as well as (2) the verifier, and (3) the prover during the presentation protocol.
+To allow for such communication the following data formats are used.
+
+\begin{xml}
+{fig:revocationState}
+{XML schema of the Revocation State.}
+<xs:element name="RevocationState" type="RevocationState" />
+<xs:complexType name="RevocationState">
+  <xs:sequence>
+    <xs:element ref="Parameter" maxOccurs="unbounded"
+      minOccurs="0" />
+  </xs:sequence>
+</xs:complexType>
+\end{xml}
+
+
+
+\begin{xml}
+{fig:revocationEvent}
+{XML schema of the Revocation Event.}
+<xs:element name="RevocationEvent" type="RevocationEvent" />
+<xs:complexType name="RevocationEvent">
+  <xs:sequence>
+    <xs:element ref="Parameter" maxOccurs="unbounded"
+      minOccurs="0" />
+  </xs:sequence>
+</xs:complexType>
+\end{xml}
+
+
+\begin{xml}
+{fig:revocationHandle}
+{XML schema of the Revocation Handle.}
+<xs:element name="RevocationHandle" type="RevocationHandle" />
+<xs:complexType name="RevocationHandle">
+  <xs:sequence>
+    <xs:element ref="Parameter" maxOccurs="unbounded"
+      minOccurs="0" />
+    <xs:element ref="CryptoParams" minOccurs="0" />
+  </xs:sequence>
+</xs:complexType>
+\end{xml}
+
+
+\begin{xml}
+{fig:revocationHistoryIdmx}
+{XML schema of the Revocation History Idmx.}
+<xs:element name="RevocationHistoryIdmx" type="RevocationHistoryIdmx" />
+<xs:complexType name="RevocationHistoryIdmx">
+  <xs:sequence>
+    <xs:element ref="Parameter" maxOccurs="unbounded"
+      minOccurs="0" />
+  </xs:sequence>
+</xs:complexType>
+\end{xml}
+
+\begin{xml}
+{fig:nreUpdateMessage}
+{XML schema of the NRE Update Message.}
+<xs:element name="NreUpdateMessage" type="NreUpdateMessage" />
+<xs:complexType name="NreUpdateMessage">
+  <xs:sequence>
+    <xs:element ref="Parameter" maxOccurs="unbounded"
+      minOccurs="0" />
+  </xs:sequence>
+</xs:complexType>}
+\end{xml}
+
+
+% \subsection{Format of Non-Revocation-Evidence Update Messages}
+%     \subsubsection{NreUpdate Request Message}
+%     This message contains the following elements:
+%     \begin{itemize}
+%       \item A randomly chosen NreUpdate context as URI
+%       \item The revocation authority public key as URI
+%       \item The identifier of the chosen implementation as URI
+%       \item An optional field, specifying the version of the Nre that the requester currently has (as URI). The absence of this
+%             field indicates that the requester does not have any Nre.
+%       \item An optional field, specifying the desired version of the Nre (as URI). The absence of this field
+%             indicates that the requester wants the latest version.
+%       \item A list of field-value pairs that is implementation-specific. The fields are URIs, the values are Strings.
+%     \end{itemize}
+% 
+%     \subsubsection{NreUpdate Response Message}
+%     This message contains the following elements:
+%     \begin{itemize}
+%       \item The NreUpdate context as URI
+%       \item The version of the returned Nre (as URI).
+%       \item A list of field-value pairs that is implementation-specific. The fields are URIs, the values are Strings.
+%     \end{itemize}
+
+ 
+
+
+
+
+
+  
+
+
+
+
+
+\patrik{<xs:element name="MechanismSpecification" type="MechanismSpecification" />
+
+<xs:complexType name="MechanismSpecification">
+  <xs:sequence>
+    <xs:element ref="Parameter" maxOccurs="unbounded"
+      minOccurs="0" />
+  </xs:sequence>
+  <xs:attribute name="SystemParametersId" type="xs:anyURI"
+    use="required" />
+  <xs:attribute name="ProofSystem" type="xs:string" use="required" />
+</xs:complexType>}
+
+%     The prover generates a mechanism specification to inform the verifier of the choices of implementation that he made when
+%     generating the proof. This information is not present in the Presentation Token Description.
+  
+%  \paragraph{Mechanism Specification for presentation}
+%     The mechanism specification for presentation contains the following fields:
+%     \begin{itemize}
+%       \item URI of the system parameters to use.
+%       \item The identifier of the proof system used in the crypto engine (currently only Fiat-Shamir is supported) possibly with a version number.
+%       %\item For each credential in the presentation token description: the identifier of the implementation being used.
+%       \item For each pseudonym: the identifier of the implementation being used.
+%       %\item For each revocable credential: the identifier of the implementation being used.
+%       %\item For each inspectable attribute: the identifier of the implementation being used.
+%       \item For each predicate: the identifier of the implementation being used.
+%     \end{itemize}
+% 
+%     \paragraph{Mechanism Specification for carry-over presentation during issuance}
+%     The mechanism specification for advanced issuance contains the same fields are the one for presentation.
+%     %Additionally it contains:
+%     %\begin{itemize}
+%       %\item For the credential to generate: the identifier of the implementation being used.
+%     %\end{itemize}
+% 
+%     \paragraph{Mechanism Specification for proof of correct issuance}
+%     The mechanism specification for the proof of correct issuance contains the following fields:
+%     \begin{itemize}
+%       \item URI of the system parameters to use.
+%       \item The identifier of the proof system used in the crypto engine (currently only Fiat-Shamir is supported) possibly with a version number.
+%       %\item For the credential to generate: the identifier of the implementation being used.
+%       %\item For the revocation mechanism: the identifier of the implementation being used.
+%     \end{itemize}
+
+
+
+
+
+
+
+\subsection{Presentation Policy Alternatives and Issuance Policy}
+
+The Idmx library requires these elements to contain verifier parameters, which is reflected 
+in~\cite{abc4trust:h22}.
+
+
+
+% \subsection{Format of JointRandom Messages}
+%     \subsubsection{JointRandom Message to Issuer}
+%     This message contains the following elements:
+%     \begin{itemize}
+%     \item The identifier of the chosen implementation as URI
+%     \item The identifier of the module as a String
+%     \item A list of field-value pairs that is implementation-specific. The fields are URIs, the values are Strings.
+%     \end{itemize}
+% 
+%     \subsubsection{JointRandom Message to Recipient}
+%     This message contains the following elements:
+%     \begin{itemize}
+%     \item The identifier of the module as a String
+%     \item A list of field-value pairs that is implementation-specific. The fields are URIs, the values are Strings.
+%     \end{itemize}
+
+%   \subsection{Format of Proof Description}
+%   \robert{This format is still TBD. In a preliminary version, we could simply use a String. However this causes problems with internationalization,
+%   and may not be what is useful for the UI. Need to talk to Franz-Stefan what information he needs from the Crypto Engine in his UI.}
+

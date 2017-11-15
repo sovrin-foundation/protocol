@@ -1,0 +1,149 @@
+%!TEX root =  IdmxSpecification.tex
+
+\section{Introduction}
+\label{sec:introduction}
+
+The amount of our daily transactions that we perform electronically is increasing drastically.
+Many of us use the Internet on a daily basis for 
+purposes ranging from accessing information to electronic commerce and e-banking
+to interactions with government bodies. 
+Securing these transactions requires the use of strong authentication. 
+Electronic authentication tokens and mechanisms
+that provide authentication become common, not only for the use with the Internet. 
+Indeed, electronic identity cards, authentication by mobile phone,
+and RFID tokens are spreading fast. 
+
+
+These authentication mechanisms unfortunately
+have the shortcoming that they label users with a unique identifier.
+This is a risk to users' privacy because   
+transactions by the same user can be \emph{linked} together.
+This lack of privacy is typically not a problem for e-government
+applications. 
+However, a government-issued strong root of trust is very
+attractive for re-use by the commercial sector as it alleviates them from having to issue credentials themselves. 
+In this application area, unique identification is often inappropriate, attribute-based
+authentication desired and privacy important to make the services
+sustainable. 
+Therefore, these services and their authentication mechanisms should be
+built in a way that minimizes the disclosed personal information.
+A position paper issued in February 2009 by ENISA%
+\footnote{ENISA: European Network and Information Security Agency \url{http://www.enisa.europa.eu}} 
+on
+``Privacy Features of European eID Card Specifications'' underlines the need for
+``privacy-respecting use of unique identifiers'' in emerging European eID cards, and explicitly refers to the
+emerging anonymous credentials technologies (``privacy-enhanced PKI tokens'' in
+their terminology), as having significant potential in this arena.
+\includeThis{
+Indeed, over the past decades, the research community has come up with a
+large number of privacy-enhancing technologies that can be employed to 
+this end.}
+
+
+Anonymous credentials~\cite{brands95b,brands95c,camlys01a,chaum85,damgar88},
+allow an identity provider to issue a credential (also called certificate) to a user. 
+This credential contains attributes of a user such as her address or date of birth but
+also the user's rights or roles. 
+Using the credential, the user can later prove to a third party that she possesses 
+a credential containing a given
+attribute or role without revealing any other information stored in the
+credential. 
+For instance, the user could employ a government-issued anonymous ID
+credential to prove that she is of age, i.e., that she possesses a credential
+containing a date of birth attribute, which lies further than 21 years in the past. 
+Thus, anonymous credentials promise to be an important technology in protecting
+users' privacy in an electronic environment.
+In particular, even if she uses the same credential repeatedly, the different usages cannot be
+linked to each other.
+
+
+There is a large body of research on anonymous credential systems and a number of
+different methods or algorithms are described in the literature. 
+In addition to the basic functionality of an anonymous credential system, i.e., 
+to issue a credential and then later to selectively reveal attributes contained in 
+credentials, there are extensions proposed in the literature to
+meet the requirements of a real world deployment. 
+These extensions include the  revocation of
+credentials~\cite{brdede07,cakoso09,camlys04,nfhf09}, revocation of 
+anonymity~\cite{camlys01a}, encoding attributes pertaining to a finite set of values
+efficiently~\cite{camgro08}, or to verifiably encrypt attributes under some third
+party's encryption key~\cite{camdam00,camsho03}.
+Further, it has been demonstrated, that anonymous credentials can be used in practice 
+today - even on smart cards~\cite{bcgs09}.
+These important features were described independently, with different setup
+assumptions and trust models.
+
+
+Based on these papers we have implemented a unified system called the the {\em
+Identity Mixer Anonymous Credential System}, which takes the form of a
+cryptographic library.  
+Here we presents the full specification with all cryptographic details.  
+It is  similar to a cryptographic
+library that offers, for example, implementations of the RSA or DSA signature
+schemes: it offers all the functionalities required to establish a
+pseudonym, issue a credential containing different attributes to a pseudonym,
+and different ways of proving possession of a credential. 
+The ways to prove possession of a credential offered are the disclosure of a 
+selected subset of the
+attributes contained in the credential, to prove that an (integer) attribute
+lies in a given range, to prove that an attribute is verifiably encrypted under
+some third party's public key, or that a cryptographic commitment contains a
+specific attribute.  
+The source code of the new implementation of the Identity Mixer 
+library can be downloaded from \footnote{\url{https://abc4trust.eu/idemix/}}.
+
+
+\includeThis{
+The literature provides a number of cryptographic building blocks that (can be employed to) extend 
+this basic functionality, many of which are needed to meet the practical requirements of a modern public key infrastructure.
+These include:
+\begin{description}
+% \item[\normalfont\emph{Compact encoding}\hspace{-.5ex}] of attributes, \ie,  in case 
+% attributes take on only a few values, they can be encoded 
+% very efficiently representing each value as a unique prime~\cite{camgro08}.
+% Additionally, this representation allows for proving that an attribute is a 
+% member of a set;
+\item[\normalfont\emph{Property proofs}\hspace{-.5ex}] about attributes allow a 
+credential owner to prove properties about her attributes such as 
+that one attribute is larger than another one (even if they are contained in
+different credentials), which allows to prove, \eg, that her age 
+lies in a certain range~\cite{cachsh08}, or that
+an attribute is a member of a given set~\cite{camgro08}. 
+% \item[\normalfont\emph{Commitments to attributes}\hspace{-.5ex}] that can be used later 
+% on for application specific purposes.
+% For example, commitments allow a user to attain a credential on a value without the
+% issuer learning this value.
+% an issuer can ensure that a newly issued credential 
+% contains (some of) the same attributes as a credential that a user already possesses 
+% without the issuer of the new credential learning the attribute value;
+% \item[\normalfont\emph{Domain pseudonyms}\hspace{-.5ex}] ensure that a single 
+% user can only have one pseudonym per domain. 
+% Note that pseudonyms from different domains cannot be linked.
+\item[\normalfont\emph{Usage limitation}\hspace{-.5ex}] such as ensuring that a user can 
+show a 
+credential only a limited number of times (e.g., for e-cash)~\cite{caholy05} or a number 
+of times within some context~\cite{chklm06,caholy06}, \eg, twice per hour or once per 
+election.
+Furthermore, using domain specific pseudonyms allow to implement usage restriction 
+as it makes a user linkable within a given domain.
+\item[\normalfont\emph{Revocation of credentials}\hspace{-.5ex}] in case of leakage of 
+secret values of the credential can be implemented using dynamic 
+accumulators~\cite{cakoso09,camlys04} or
+a form of credential revocation lists~\cite{bonsha04,brdede07,nfhf09}.
+\item[\normalfont\emph{Revocation of anonymity}\hspace{-.5ex}] in case of abuse of (the 
+rights granted by) a credential~\cite{camlys01a}.
+\item[\normalfont\emph{Verifiable encryption}\hspace{-.5ex}] of attributes under some 
+third party's public key~\cite{camsho02}, which 
+can be seen as a generalization of anonymity revocation (the user's identity could be an 
+attribute encrypted for the party in charge of anonymity revocation) and allows to 
+control the dispersal of attributes.
+\end{description}
+These mechanisms can be combined in various ways and thereby they allow us
+to build various privacy-enhancing applications such as anonymous e-cash, petition
+systems, pseudonymous reputations systems, or anonymous and oblivious access control 
+systems. 
+The protocols of the resulting full-fledged anonymous credential system become complex
+and it is challenging to design an architecture and application interfaces for
+its implementation.
+}
+

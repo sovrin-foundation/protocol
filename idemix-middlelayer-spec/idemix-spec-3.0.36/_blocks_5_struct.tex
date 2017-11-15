@@ -1,0 +1,420 @@
+%!TEX root =  IdmxSpecification.tex
+
+  \subsection{Structural Building Blocks}
+  \label{sec:blocks:structural}
+  Structural building blocks do not implement a cryptographic
+  functionality, but are used used to indicate a relationship among
+  the attributes used in other building blocks, or to modify global
+  properties of the zero-knowledge proof (such as adding a message to
+  be signed to the proof). Like the helper building blocks, these
+  are \emph{concrete} classes.
+
+  These blocks may be used directly by the first layer of the crypto
+  engine, or may be used as ``subroutines'' by the major and helper building blocks.
+
+    \subsubsection{Attribute Equality}
+    \identifier{b:s:eq}
+
+    This block indicates that two different attributes are equal; in
+    a nutshell the proof engine will then handle these two attributes as if they were one
+    (except that individual ZkModules will still treat the attributes as separate
+    when computing the hash contribution).
+
+    This block has the following interfaces:
+    the one described in Section \ref{sec:intf:all};
+    and a proof interface (Section \ref{sec:intf:proof}).
+
+    We will now describe these interfaces in more detail.
+
+    \paragraph{Proof interface.}
+      \begin{method}
+      {ZkModuleProver}
+      {getZkModuleProver}
+      {
+        {@in URI lhsAttributeId}
+        {@in URI rhsAttributeId}
+      }
+      This method creates a new ZkModuleProver that tells the proof engine that
+      the two given attributes are the same.
+      \end{method}
+      \begin{method}
+      {ZkModuleVerifier}
+      {getZkModuleVerifier}
+      {
+        {@in URI lhsAttributeId}
+        {@in URI rhsAttributeId}
+      }
+      This method creates a new ZkModuleVerifier that tells the proof engine that
+      the two given attributes are the same.
+      \end{method}
+      %\begin{method}
+      %{ZkModuleDescriber}
+      %{getZkModuleDescriber}
+      %{
+        %{@in URI lhsAttributeId}
+        %{@in URI rhsAttributeId}
+      %}
+      %This method creates a new ZkModuleDescriber object that will know how to
+      %describe that the two given attributes are equal.
+      %\end{method}
+
+    \subsubsection{Reveal Attribute}
+    \identifier{b:s:reveal}
+
+    This block indicates that a given attribute should be revealed.
+    The value of that attribute will then be transmitted in the proof.
+
+    This block has the following interfaces:
+    the one described in Section \ref{sec:intf:all};
+    and a proof interface (Section \ref{sec:intf:proof}).
+
+    We will now describe these interfaces in more detail.
+
+    \paragraph{Proof interface.}
+      \begin{method}
+      {ZkModuleProver}
+      {getZkModuleProver}
+      {
+        {@in URI attributeId}
+      }
+      This method creates a new ZkModuleProver that tells the proof engine that
+      the given attribute is to be revealed.
+
+      The ZkModuleProver that is created must implement the following additional methods:
+      \begin{itemize}
+        \item BigInteger getValue()---returns the value of the attribute in the proof.
+                This method may be called only after the proof is done.
+      \end{itemize}
+      \end{method}
+      \begin{method}
+      {ZkModuleVerifier}
+      {getZkModuleVerifier}
+      {
+        {@in URI attributeId}
+        {@in @Nullable BigInteger expectedValue}
+      }
+      This method creates a new ZkModuleVerifier that tells the proof engine that
+      the given attribute is to be revealed.
+      If expectedValue is not null, then the module will check that it is equal
+      to the value transmitted in the proof.
+
+      The ZkModuleVerifier that is created must implement the following additional methods:
+      \begin{itemize}
+        \item BigInteger getValue()---returns the value of the attribute from the proof.
+                This method may be called only after the proof has been verified.
+      \end{itemize}
+      \end{method}
+      %\begin{method}
+      %{ZkModuleDescriber}
+      %{getZkModuleDescriber}
+      %{
+        %{@in URI attributeId}
+      %}
+      %This method creates a new ZkModuleDescriber that will describe that
+      %the given attribute is revealed, and report the value of that attribute.
+      %\end{method}
+
+    \subsubsection{Constant Attribute}
+    \identifier{b:s:constant}
+
+    This block adds a revealed attribute with a given value to the proof. This
+    attribute is intended to be used together with inequality or not-equal
+    block that require constants.
+
+    This block has the following interfaces:
+    the one described in Section \ref{sec:intf:all};
+    and a proof interface (Section \ref{sec:intf:proof}).
+
+    We will now describe these interfaces in more detail.
+
+    \paragraph{Proof interface.}
+      \begin{method}
+      {ZkModuleProver}
+      {getZkModuleProver}
+      {
+        {@in URI attributeId}
+        {@in BigInteger value}
+      }
+      This method creates a new ZkModuleProver that creates a new revealed
+      attribute with the given attribute value.
+
+      This module \emph{sets} the attribute value for that newly created attribute in the \emph{initialization} phase.
+      \end{method}
+      \begin{method}
+      {ZkModuleVerifier}
+      {getZkModuleVerifier}
+      {
+        {@in URI attributeId}
+        {@in BigInteger value}
+      }
+      This method creates a new ZkModuleVerifier that checks for the presence of
+      a revealed attribute with the given attribute value.
+      \end{method}
+      %\begin{method}
+      %{ZkModuleDescriber}
+      %{getZkModuleDescriber}
+      %{
+        %{@in URI attributeId}
+        %{@in BigInteger value}
+        %{@in @Nullable String humanFriendlyValue}
+      %}
+      %This method creates a new ZkModuleDescriber that will describe the creation of a new revealed
+      %attribute with the given attribute value.
+      %\end{method}
+
+    \subsubsection{Attribute Linear Combination}
+    \identifier{b:s:linear}
+
+    This block is used for defining a new attribute whose value is equal to
+    a linear combination of other attribute values.
+
+    This block has the following interfaces:
+    the one described in Section \ref{sec:intf:all};
+    and a proof interface (Section \ref{sec:intf:proof}).
+
+    We will now describe these interfaces in more detail.
+
+    \paragraph{Proof interface.}
+      \begin{method}
+      {ZkModuleProver}
+      {getZkModuleProver}
+      {
+        {@in URI identifierOfModule}
+        {@in URI lhsAttributeId}
+        {@in BigInteger constant}
+        {@in List<URIAndBigInteger> rhsTerms}
+      }
+      This method creates a new ZkModuleProver that creates a new
+      attribute lhsAttributeId whose value is equal to a linear combination of the
+      attributes specified in rhsTerms plus the constant.
+      $$\textit{lhsAttribute} = \textit{constant} + \sum_i{\textit{rhsTerm}[i]\textit{.attribute} * \textit{rhsTerm}[i]\textit{.value}}$$
+
+      This module \emph{provides} the attribute value for that newly created attribute in the \emph{collect} phase,
+      and \emph{requires} the attribute values of all attributes in rhsTerms.
+
+      \end{method}
+      \begin{method}
+      {ZkModuleVerifier}
+      {getZkModuleVerifier}
+      {
+        {@in URI identifierOfModule}
+        {@in URI lhsAttributeId}
+        {@in BigInteger constant}
+        {@in List<URIAndBigInteger> rhsTerms}
+      }
+      This method creates a new ZkModuleVerifier that checks that the value of
+      lhsAttribute is equal to the linear combination of the attributes
+      specified in rhsTerms plus the constant.
+
+      \end{method}
+      %\begin{method}
+      %{ZkModuleDescriber}
+      %{getZkModuleDescriber}
+      %{
+        %{@in URI identifierOfModule}
+        %{@in URI lhsAttributeId}
+        %{@in BigInteger constant}
+        %{@in List<URIAndBigInteger> rhsTerms}
+      %}
+      %This method creates a new ZkModuleDescriber that describes the creation of an
+      %attribute lhsAttributeId whose value is equal to a linear combination of the
+      %attributes specified in rhsTerms plus the constant.
+      %\end{method}
+
+    \subsubsection{Message}
+    \identifier{b:s:msg}
+
+    This block is used for integrating a message into the
+    challenge of the proof. The message itself will not be transmitted
+    with the proof (only the hash of the message will).
+
+    This block has the following interfaces:
+    the one described in Section \ref{sec:intf:all};
+    and a proof interface (Section \ref{sec:intf:proof}).
+
+    We will now describe these interfaces in more detail.
+
+    \paragraph{Proof interface.}
+      \begin{method}
+      {ZkModuleProver}
+      {getZkModuleProver}
+      {
+        {@in URI identifierOfModule}
+        {@in byte[] message}
+      }
+      This method creates a new ZkModuleProver that tells the proof engine to
+      integrate the given message into the proof as an N-value.
+      \end{method}
+      \begin{method}
+      {ZkModuleVerifier}
+      {getZkModuleVerifier}
+      {
+        {@in URI identifierOfModule}
+        {@in byte[] message}
+      }
+      This method creates a new ZkModuleVerifier that checks whether the
+      given message was integrated into the proof.
+      \end{method}
+      %\begin{method}
+      %{ZkModuleDescriber}
+      %{getZkModuleDescriber}
+      %{
+        %{@in URI identifierOfModule}
+        %{@in byte[] message}
+      %}
+      %This method creates a new ZkModuleProver that describes the integration of
+      %the given message into the proof.
+      %\end{method}
+
+    \subsubsection{Parameters}
+    \identifier{b:s:param:sp} --- for system parameters\\
+    \identifier{b:s:param:vp} --- for verifier parameters\\
+    \identifier{b:s:param:ip} --- for issuer public keys\\
+    \identifier{b:s:param:ep} --- for inspector public keys\\
+    \identifier{b:s:param:rp} --- for revocation authority public keys
+
+    These blocks are used for integrating parameters or public keys into the
+    challenge of the proof. 
+    The parameters/public keys themselves will not be transmitted
+    with the proof (only the hash will).
+
+    This block has the following interfaces:
+    the one described in Section \ref{sec:intf:all};
+    and a proof interface (Section \ref{sec:intf:proof}).
+
+    We will now describe these interfaces in more detail.
+
+    \paragraph{Proof interface.}
+      \begin{method}
+      {ZkModuleProver}
+      {getZkModuleProver}
+      {
+        {@in URI identifierOfModule}
+        {@in Map<Field, Value> parameters}
+      }
+      This method creates a new ZkModuleProver that tells the proof engine to
+      integrate the given parameters/public keys into the proof as an N-value.
+      \end{method}
+      \begin{method}
+      {ZkModuleVerifier}
+      {getZkModuleVerifier}
+      {
+        {@in URI identifierOfModule}
+        {@in Map<Field, Value> parameters}
+      }
+      This method creates a new ZkModuleVerifier that checks whether the
+      given parameters/public keys were integrated into the proof.
+      \end{method}
+      %\begin{method}
+      %{ZkModuleDescriber}
+      %{getZkModuleDescriber}
+      %{
+        %{@in URI identifierOfModule}
+        %{@in Map<Field, Value> parameters}
+      %}
+      %This method creates a new ZkModuleProver that describes the integration of
+      %the given parameters/public keys into the proof.
+      %\end{method}
+
+    \subsubsection{Mechanism Specification}
+    \identifier{b:s:ms}
+
+    This block is used for integrating the mechanism specification into the
+    challenge of the proof.
+
+    This block has the following interfaces:
+    the one described in Section \ref{sec:intf:all};
+    and a proof interface (Section \ref{sec:intf:proof}).
+
+    We will now describe these interfaces in more detail.
+
+    \paragraph{Proof interface.}
+      \begin{method}
+      {ZkModuleProver}
+      {getZkModuleProver}
+      {
+        {@in URI identifierOfModule}
+        {@in MechanismSpecification mechSpec}
+      }
+      This method creates a new ZkModuleProver that tells the proof engine to
+      integrate the given mechanism specification into the proof as an N-value.
+      \end{method}
+      \begin{method}
+      {ZkModuleVerifier}
+      {getZkModuleVerifier}
+      {
+        {@in URI identifierOfModule}
+        {@in MechanismSpecification mechSpec}
+      }
+      This method creates a new ZkModuleVerifier that checks whether the
+      given mechanism specification was integrated into the proof.
+      \end{method}
+      %\begin{method}
+      %{ZkModuleDescriber}
+      %{getZkModuleDescriber}
+      %{
+        %{@in URI identifierOfModule}
+        %{@in MechanismSpecification mechSpec}
+      %}
+      %This method creates a new ZkModuleProver that describes the integration of
+      %the given mechanism specification into the proof.
+      %\end{method}
+
+    \subsubsection{Credential Specification}
+    \identifier{b:s:cs}
+
+    This block is used for integrating a credential specification into the
+    challenge of the proof.
+
+    This block has the following interfaces:
+    the one described in Section \ref{sec:intf:all};
+    a proof interface (Section \ref{sec:intf:proof});
+    and a method for extracting the unique identifier
+    of the Credential Specification.
+
+    We will now describe these interfaces in more detail.
+
+    \paragraph{Proof interface.}
+      \begin{method}
+      {ZkModuleProver}
+      {getZkModuleProver}
+      {
+        {@in URI identifierOfModule}
+        {@in CredentialSpecification credSpec}
+      }
+      This method creates a new ZkModuleProver that tells the proof engine to
+      integrate the given credential specification into the proof as an N-value.
+      \end{method}
+      \begin{method}
+      {ZkModuleVerifier}
+      {getZkModuleVerifier}
+      {
+        {@in URI identifierOfModule}
+        {@in CredentialSpecification credSpec}
+      }
+      This method creates a new ZkModuleVerifier that checks whether the
+      given credential specification was integrated into the proof.
+      \end{method}
+      %\begin{method}
+      %{ZkModuleDescriber}
+      %{getZkModuleDescriber}
+      %{
+        %{@in URI identifierOfModule}
+        %{@in CredentialSpecification credSpec}
+      %}
+      %This method creates a new ZkModuleProver that describes the integration of
+      %the given credential specification into the proof.
+      %\end{method}
+
+    \paragraph{Extract Identifier.}
+      \begin{method}
+      {BigInteger}
+      {getIdentifier}
+      {
+        {@in Map<Field, Value> systemParameters}
+        {@in Map<Field, Value> issuerPublicKey}
+        {@in CredentialSpecification credSpec}
+      }
+      This method extracts or computes the unique identifier of the credential specification
+      (and possibly issuer public key).
+      \end{method}

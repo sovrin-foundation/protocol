@@ -1,0 +1,173 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{BCD{\etalchar{+}}13}
+
+\bibitem[BCD{\etalchar{+}}13]{abc4trust:h22}
+Patrik Bichsel, Jan Camenisch, Maria Dubovitskaya, Robert~R. Enderlein, Ioannis
+  Krontiris, Anja Lehmann, Gregory Neven, Janus Nielsen, Christian Paquin,
+  Franz-Stefan Preiss, Kai Rannenberg, Michael Stausholm, and Harald
+  Zwingelberg.
+\newblock H2.2 - abc4trust architecture for developers.
+\newblock \emph{ABC4Trust Heartbeat Document} \emph{H2.2}, ABC4Trust, November
+  2013.
+
+\bibitem[BCGS09]{bcgs09}
+Patrik Bichsel, Jan Camenisch, Thomas Gro{\ss}, and Victor Shoup.
+\newblock Anonymous credentials on a standard {J}ava {C}ard.
+\newblock pages 600--610, Chicago, IL, USA, November 2009.
+
+\bibitem[BDD07]{brdede07}
+Stefan Brands, Liesje Demuynck, and Bart~De Decker.
+\newblock A practical system for globally revoking the unlinkable pseudonyms of
+  unknown users.
+\newblock volume 4586 of {\em Lecture Notes in Computer Science}, pages
+  400--415, Townsville, Australia, July 2007. Springer-Verlag.
+
+\bibitem[BP10]{brapaq10}
+Stefan Brands and Christian Paquin.
+\newblock {U-Prove} cryptographic specification v1.0.
+\newblock Technical report, Microsoft Research, March 2010.
+
+\bibitem[Bra95a]{brands95b}
+Stefan Brands.
+\newblock Restrictive blinding of secret-key certificates.
+\newblock Technical Report CS-R9509, CWI, September 1995.
+
+\bibitem[Bra95b]{brands95c}
+Stefan Brands.
+\newblock Secret-key certificates.
+\newblock Technical Report CS-R9510, CWI, September 1995.
+
+\bibitem[Bra99]{brands99}
+Stefan Brands.
+\newblock {\em Rethinking Public Key Infrastructure and Digital Certificates---
+  Building in Privacy}.
+\newblock PhD thesis, Eindhoven Institute of Technology, Eindhoven, The
+  Netherlands, 1999.
+
+\bibitem[CD00]{camdam00}
+Jan Camenisch and Ivan Damg{\aa}rd.
+\newblock Verifiable encryption, group encryption, and their applications to
+  group signatures and signature sharing schemes.
+\newblock volume 1976 of {\em Lecture Notes in Computer Science}, pages
+  331--345. Springer-Verlag, 2000.
+
+\bibitem[CG08]{camgro08}
+Jan Camenisch and Thomas Gro{\ss}.
+\newblock Efficient attributes for anonymous credentials.
+\newblock pages 345--356, Alexandria, VA, USA, November 2008.
+
+\bibitem[Cha85]{chaum85}
+David Chaum.
+\newblock Security without identification: Transaction systems to make big
+  brother obsolete.
+\newblock {\em Communications of the ACM}, 28(10):1030--1044, October 1985.
+
+\bibitem[CKS09]{cakoso09}
+Jan Camenisch, Markulf Kohlweiss, and Claudio Soriente.
+\newblock An accumulator based on bilinear maps and efficient revocation for
+  anonymous credentials.
+\newblock volume 5443 of {\em Lecture Notes in Computer Science}, pages
+  481--500, Irvine, CA, USA, March 2009. Springer-Verlag.
+
+\bibitem[CL01]{camlys01a}
+Jan Camenisch and Anna Lysyanskaya.
+\newblock Efficient non-transferable anonymous multi-show credential system
+  with optional anonymity revocation.
+\newblock volume 2045 of {\em Lecture Notes in Computer Science}, pages
+  93--118, Innsbruck, Austria, March 2001. Springer-Verlag.
+
+\bibitem[CL02]{camlys02a}
+Jan Camenisch and Anna Lysyanskaya.
+\newblock Dynamic accumulators and application to efficient revocation of
+  anonymous credentials.
+\newblock volume 2442 of {\em Lecture Notes in Computer Science}, pages 61--76,
+  Santa Barbara, CA, USA, August 2002. Springer-Verlag.
+
+\bibitem[CL03]{camlys02b}
+Jan Camenisch and Anna Lysyanskaya.
+\newblock A signature scheme with efficient protocols.
+\newblock volume 2576 of {\em Lecture Notes in Computer Science}, pages
+  268--289, Amalfi, Italy, September 2003. Springer-Verlag.
+
+\bibitem[CL04]{camlys04}
+Jan Camenisch and Anna Lysyanskaya.
+\newblock Signature schemes and anonymous credentials from bilinear maps.
+\newblock volume 3152 of {\em Lecture Notes in Computer Science}, pages 56--72,
+  Santa Barbara, CA, USA, August 2004. Springer-Verlag.
+
+\bibitem[CS97]{camsta97b}
+Jan Camenisch and Markus Stadler.
+\newblock Efficient group signature schemes for large groups.
+\newblock volume 1296 of {\em Lecture Notes in Computer Science}, pages
+  410--424. Springer-Verlag, 1997.
+
+\bibitem[CS02]{crasho02}
+Ronald Cramer and Victor Shoup.
+\newblock Universal hash proofs and a paradigm for adaptive chosen ciphertext
+  secure public-key encryption.
+\newblock volume 2332 of {\em Lecture Notes in Computer Science}, pages 45--64.
+  Springer-Verlag, 2002.
+
+\bibitem[CS03]{camsho03}
+Jan Camenisch and Victor Shoup.
+\newblock Practical verifiable encryption and decryption of discrete
+  logarithms.
+\newblock volume 2729 of {\em Lecture Notes in Computer Science}, pages
+  126--144, Santa Barbara, CA, USA, August 2003. Springer-Verlag.
+
+\bibitem[Dam90]{damgar88}
+Ivan~Bjerre Damg{\aa}rd.
+\newblock Payment systems and credential mechanism with provable security
+  against abuse by individuals.
+\newblock volume 403 of {\em Lecture Notes in Computer Science}, pages
+  328--335. Springer-Verlag, 1990.
+
+\bibitem[DF02]{damfuj02}
+Ivan Damg{\aa}rd and Eiichiro Fujisaki.
+\newblock An integer commitment scheme based on groups with hidden order.
+\newblock volume 2501 of {\em Lecture Notes in Computer Science}, pages
+  125--142, Queenstown, New Zealand, December 2002. Springer-Verlag.
+
+\bibitem[FS87]{fiasha86}
+Amos Fiat and Adi Shamir.
+\newblock How to prove yourself: Practical solutions to identification and
+  signature problems.
+\newblock volume 263 of {\em Lecture Notes in Computer Science}, pages
+  186--194. Springer-Verlag, 1987.
+
+\bibitem[GMR88]{gomiri88}
+Shafi Goldwasser, Silvio Micali, and Ronald Rivest.
+\newblock A digital signature scheme secure against adaptive chosen-message
+  attacks.
+\newblock {\em SIAM Journal on Computing}, 17(2):281--308, April 1988.
+
+\bibitem[{Nat}93]{nist93}
+{National Institute of Standards and Technology}.
+\newblock {NIST FIPS PUB 180}: Secure hash standard, May 1993.
+
+\bibitem[NFHF09]{nfhf09}
+Toru Nakanishi, Hiroki Fujii, Yuta Hira, and Nobuo Funabiki.
+\newblock Revocable group signature schemes with constant costs for signing and
+  verifying.
+\newblock volume 5443 of {\em Lecture Notes in Computer Science}, pages
+  463--480, Irvine, CA, USA, March 2009. Springer-Verlag.
+
+\bibitem[Pai99]{pailli99}
+Pascal Paillier.
+\newblock Public-key cryptosystems based on composite residuosity classes.
+\newblock volume 1592 of {\em Lecture Notes in Computer Science}, pages
+  223--239. Springer-Verlag, 1999.
+
+\bibitem[Ped92]{peders91b}
+Torben~P. Pedersen.
+\newblock Non-interactive and information-theoretic secure verifiable secret
+  sharing.
+\newblock volume 576 of {\em Lecture Notes in Computer Science}, pages
+  129--140, Santa Barbara, CA, USA, August 1992. Springer-Verlag.
+
+\bibitem[Sch91]{schnor91}
+Claus~P. Schnorr.
+\newblock Efficient signature generation for smart cards.
+\newblock {\em Journal of Cryptology}, 4(3):161--174, 1991.
+
+\end{thebibliography}

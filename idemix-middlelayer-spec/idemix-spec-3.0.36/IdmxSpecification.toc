@@ -1,0 +1,167 @@
+\select@language {british}
+\contentsline {section}{\numberline {1}Introduction}{5}{section.1}
+\contentsline {section}{\numberline {2}Overview of an Anonymous Credential System}{6}{section.2}
+\contentsline {section}{\numberline {3}Preliminaries}{7}{section.3}
+\contentsline {subsection}{\numberline {3.1}Notation and System Parameters}{7}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Zero-Knowledge Proofs}{7}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}The CL Signature Scheme}{8}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}The CS Encryption Scheme}{8}{subsection.3.4}
+\contentsline {subsubsection}{\numberline {3.4.1}Background}{9}{subsubsection.3.4.1}
+\contentsline {subsubsection}{\numberline {3.4.2}The Scheme}{9}{subsubsection.3.4.2}
+\contentsline {paragraph}{Key Generation.}{9}{section*.2}
+\contentsline {paragraph}{Encryption.}{10}{section*.3}
+\contentsline {paragraph}{Decryption.}{10}{section*.4}
+\contentsline {subsection}{\numberline {3.5}Integer Commitments}{10}{subsection.3.5}
+\contentsline {section}{\numberline {4}Architecture Overview}{10}{section.4}
+\contentsline {subsection}{\numberline {4.1}Parameter Generation}{12}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Presentation}{13}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Verification}{14}{subsection.4.3}
+\contentsline {subsection}{\numberline {4.4}Issuance}{15}{subsection.4.4}
+\contentsline {subsubsection}{\numberline {4.4.1}Issuer: Create Issuance Policy}{15}{subsubsection.4.4.1}
+\contentsline {subsubsection}{\numberline {4.4.2}Recipient: Generate Issuance Token}{15}{subsubsection.4.4.2}
+\contentsline {subsubsection}{\numberline {4.4.3}Issuer: Create Signature}{16}{subsubsection.4.4.3}
+\contentsline {subsubsection}{\numberline {4.4.4}Recipient: Complete Signature}{17}{subsubsection.4.4.4}
+\contentsline {section}{\numberline {5}Example}{18}{section.5}
+\contentsline {subsection}{\numberline {5.1}Notation}{18}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Partial Zero-Knowledge Proof and Composition}{18}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}Credential Specification}{19}{subsection.5.3}
+\contentsline {subsubsection}{\numberline {5.3.1}Passport}{19}{subsubsection.5.3.1}
+\contentsline {subsubsection}{\numberline {5.3.2}Credit Card}{19}{subsubsection.5.3.2}
+\contentsline {subsection}{\numberline {5.4}Presentation Token Description}{20}{subsection.5.4}
+\contentsline {subsection}{\numberline {5.5}Building Blocks and Top-Level ZkModules}{20}{subsection.5.5}
+\contentsline {subsection}{\numberline {5.6}Final Comments}{24}{subsection.5.6}
+\contentsline {paragraph}{Checking Group Membership}{24}{section*.5}
+\contentsline {section}{\numberline {6}Application Programming Interface (API)}{24}{section.6}
+\contentsline {subsection}{\numberline {6.1}Dependencies}{24}{subsection.6.1}
+\contentsline {subsubsection}{\numberline {6.1.1}User's Crypto Engine}{24}{subsubsection.6.1.1}
+\contentsline {subsubsection}{\numberline {6.1.2}Verifier's Crypto Engine}{25}{subsubsection.6.1.2}
+\contentsline {subsubsection}{\numberline {6.1.3}Issuer's Crypto Engine}{25}{subsubsection.6.1.3}
+\contentsline {subsubsection}{\numberline {6.1.4}Inspector's Crypto Engine}{25}{subsubsection.6.1.4}
+\contentsline {subsubsection}{\numberline {6.1.5}Revocation Authority's Crypto Engine}{25}{subsubsection.6.1.5}
+\contentsline {subsection}{\numberline {6.2}External API}{26}{subsection.6.2}
+\contentsline {subsubsection}{\numberline {6.2.1}User's Crypto Engine}{26}{subsubsection.6.2.1}
+\contentsline {paragraph}{Recipient Crypto Engine}{26}{section*.6}
+\contentsline {paragraph}{Prover Crypto Engine}{26}{section*.7}
+\contentsline {subsubsection}{\numberline {6.2.2}Verifier's Crypto Engine}{27}{subsubsection.6.2.2}
+\contentsline {subsubsection}{\numberline {6.2.3}Issuer's Crypto Engine}{28}{subsubsection.6.2.3}
+\contentsline {subsubsection}{\numberline {6.2.4}Inspector's Crypto Engine}{29}{subsubsection.6.2.4}
+\contentsline {subsubsection}{\numberline {6.2.5}Revocation Authority's Crypto Engine}{29}{subsubsection.6.2.5}
+\contentsline {section}{\numberline {7}Building Blocks}{30}{section.7}
+\contentsline {subsection}{\numberline {7.1}Common Interfaces}{30}{subsection.7.1}
+\contentsline {subsubsection}{\numberline {7.1.1}Interface for all building blocks}{31}{subsubsection.7.1.1}
+\contentsline {subsubsection}{\numberline {7.1.2}Interface for all implementation building blocks}{31}{subsubsection.7.1.2}
+\contentsline {subsubsection}{\numberline {7.1.3}System parameter generator}{31}{subsubsection.7.1.3}
+\contentsline {subsubsection}{\numberline {7.1.4}Key pair generator}{31}{subsubsection.7.1.4}
+\contentsline {subsubsection}{\numberline {7.1.5}Verifier parameter generator}{32}{subsubsection.7.1.5}
+\contentsline {subsubsection}{\numberline {7.1.6}Proof Interface}{32}{subsubsection.7.1.6}
+\contentsline {subsubsection}{\numberline {7.1.7}ZkModules}{33}{subsubsection.7.1.7}
+\contentsline {paragraph}{ZkModuleProver}{33}{section*.8}
+\contentsline {paragraph}{ZkModuleVerifier}{36}{section*.9}
+\contentsline {subsection}{\numberline {7.2}Major Building Blocks}{38}{subsection.7.2}
+\contentsline {subsubsection}{\numberline {7.2.1}Global System Parameter Generator}{38}{subsubsection.7.2.1}
+\contentsline {paragraph}{System parameter generator.}{38}{section*.10}
+\contentsline {subsubsection}{\numberline {7.2.2}Privacy-ABC Signatures}{38}{subsubsection.7.2.2}
+\contentsline {paragraph}{Key pair generator.}{38}{section*.11}
+\contentsline {paragraph}{Proof interface for presentation.}{38}{section*.12}
+\contentsline {paragraph}{Proof interface for carry-over.}{40}{section*.13}
+\contentsline {paragraph}{Interface for issuance.}{42}{section*.14}
+\contentsline {subsubsection}{\numberline {7.2.3}Inspection}{45}{subsubsection.7.2.3}
+\contentsline {paragraph}{Key pair generator.}{45}{section*.15}
+\contentsline {paragraph}{Proof interface for verifiable encryption.}{45}{section*.16}
+\contentsline {paragraph}{Proof interface for verifiable decryption.}{47}{section*.17}
+\contentsline {paragraph}{Decryption.}{47}{section*.18}
+\contentsline {subsubsection}{\numberline {7.2.4}Revocation}{47}{subsubsection.7.2.4}
+\contentsline {paragraph}{Key pair generator.}{48}{section*.19}
+\contentsline {paragraph}{Proof interface for issuance.}{48}{section*.20}
+\contentsline {paragraph}{Proof interface for proof of non-revocation.}{49}{section*.21}
+\contentsline {paragraph}{Extra interfaces for users/verifiers.}{49}{section*.22}
+\contentsline {paragraph}{Extra interfaces for revocation authority.}{50}{section*.23}
+\contentsline {subsubsection}{\numberline {7.2.5}Pseudonyms}{51}{subsubsection.7.2.5}
+\contentsline {paragraph}{Proof interface for presentation.}{51}{section*.24}
+\contentsline {paragraph}{Create a new Pseudonym.}{52}{section*.25}
+\contentsline {subsubsection}{\numberline {7.2.6}Not-Equal Proofs}{52}{subsubsection.7.2.6}
+\contentsline {paragraph}{Proof interface.}{52}{section*.26}
+\contentsline {subsubsection}{\numberline {7.2.7}Inequality Proof}{53}{subsubsection.7.2.7}
+\contentsline {paragraph}{Proof interface.}{53}{section*.27}
+\contentsline {subsubsection}{\numberline {7.2.8}Set Membership Proof}{54}{subsubsection.7.2.8}
+\contentsline {paragraph}{Proof interface.}{54}{section*.28}
+\contentsline {subsubsection}{\numberline {7.2.9}Jointly-Random Attributes}{54}{subsubsection.7.2.9}
+\contentsline {paragraph}{Preliminary communication.}{55}{section*.29}
+\contentsline {paragraph}{Proof interface.}{55}{section*.30}
+\contentsline {subsection}{\numberline {7.3}Concrete implementations of major building blocks}{56}{subsection.7.3}
+\contentsline {subsubsection}{\numberline {7.3.1}Global System Parameter Generator}{56}{subsubsection.7.3.1}
+\contentsline {subsubsection}{\numberline {7.3.2}Privacy-ABC Signatures}{56}{subsubsection.7.3.2}
+\contentsline {subsubsection}{\numberline {7.3.3}Inspection}{59}{subsubsection.7.3.3}
+\contentsline {subsubsection}{\numberline {7.3.4}Revocation}{61}{subsubsection.7.3.4}
+\contentsline {subsubsection}{\numberline {7.3.5}Pseudonyms}{63}{subsubsection.7.3.5}
+\contentsline {subsubsection}{\numberline {7.3.6}Not-Equal Proofs}{63}{subsubsection.7.3.6}
+\contentsline {subsubsection}{\numberline {7.3.7}Inequality Proof}{64}{subsubsection.7.3.7}
+\contentsline {subsubsection}{\numberline {7.3.8}Set Membership Proof}{64}{subsubsection.7.3.8}
+\contentsline {subsubsection}{\numberline {7.3.9}Jointly-Random Attributes}{64}{subsubsection.7.3.9}
+\contentsline {subsection}{\numberline {7.4}Helper Building Blocks}{64}{subsection.7.4}
+\contentsline {subsubsection}{\numberline {7.4.1}Datastructure for bases in Representation Building Blocks}{64}{subsubsection.7.4.1}
+\contentsline {subsubsection}{\numberline {7.4.2}Pedersen Representation}{66}{subsubsection.7.4.2}
+\contentsline {paragraph}{Proof interface.}{66}{section*.31}
+\contentsline {subsubsection}{\numberline {7.4.3}Damg\r a{}rd-Fujisaki Representation}{67}{subsubsection.7.4.3}
+\contentsline {paragraph}{Proof interface.}{67}{section*.32}
+\contentsline {subsubsection}{\numberline {7.4.4}ModNSquare Representation}{69}{subsubsection.7.4.4}
+\contentsline {paragraph}{Proof interface.}{69}{section*.33}
+\contentsline {subsection}{\numberline {7.5}Structural Building Blocks}{70}{subsection.7.5}
+\contentsline {subsubsection}{\numberline {7.5.1}Attribute Equality}{70}{subsubsection.7.5.1}
+\contentsline {paragraph}{Proof interface.}{71}{section*.34}
+\contentsline {subsubsection}{\numberline {7.5.2}Reveal Attribute}{71}{subsubsection.7.5.2}
+\contentsline {paragraph}{Proof interface.}{71}{section*.35}
+\contentsline {subsubsection}{\numberline {7.5.3}Constant Attribute}{72}{subsubsection.7.5.3}
+\contentsline {paragraph}{Proof interface.}{72}{section*.36}
+\contentsline {subsubsection}{\numberline {7.5.4}Attribute Linear Combination}{72}{subsubsection.7.5.4}
+\contentsline {paragraph}{Proof interface.}{72}{section*.37}
+\contentsline {subsubsection}{\numberline {7.5.5}Message}{73}{subsubsection.7.5.5}
+\contentsline {paragraph}{Proof interface.}{73}{section*.38}
+\contentsline {subsubsection}{\numberline {7.5.6}Parameters}{73}{subsubsection.7.5.6}
+\contentsline {paragraph}{Proof interface.}{73}{section*.39}
+\contentsline {subsubsection}{\numberline {7.5.7}Mechanism Specification}{74}{subsubsection.7.5.7}
+\contentsline {paragraph}{Proof interface.}{74}{section*.40}
+\contentsline {subsubsection}{\numberline {7.5.8}Credential Specification}{74}{subsubsection.7.5.8}
+\contentsline {paragraph}{Proof interface.}{74}{section*.41}
+\contentsline {paragraph}{Extract Identifier.}{75}{section*.42}
+\contentsline {section}{\numberline {8}Detailed Design of Major Components of Crypto Engine}{75}{section.8}
+\contentsline {subsection}{\numberline {8.1}Building Block Factory}{75}{subsection.8.1}
+\contentsline {subsection}{\numberline {8.2}State Storage (issuance)}{75}{subsection.8.2}
+\contentsline {subsection}{\numberline {8.3}Proof Assembler (prover)}{75}{subsection.8.3}
+\contentsline {subsection}{\numberline {8.4}Proof Assembler (verifier)}{79}{subsection.8.4}
+\contentsline {subsection}{\numberline {8.5}Issuance Orchestration (recipient)}{82}{subsection.8.5}
+\contentsline {subsubsection}{\numberline {8.5.1}Initialize issuance}{82}{subsubsection.8.5.1}
+\contentsline {subsubsection}{\numberline {8.5.2}First phase, first round: joint-random attributes}{83}{subsubsection.8.5.2}
+\contentsline {subsubsection}{\numberline {8.5.3}First phase, subsequent rounds: joint-random attributes}{83}{subsubsection.8.5.3}
+\contentsline {subsubsection}{\numberline {8.5.4}Second phase: presentation proof for carry-over}{84}{subsubsection.8.5.4}
+\contentsline {subsubsection}{\numberline {8.5.5}Third phase round 1: interactive signing of new credential}{85}{subsubsection.8.5.5}
+\contentsline {subsubsection}{\numberline {8.5.6}Third phase additional rounds}{86}{subsubsection.8.5.6}
+\contentsline {subsubsection}{\numberline {8.5.7}Extract credential}{87}{subsubsection.8.5.7}
+\contentsline {subsection}{\numberline {8.6}Issuance Orchestration (issuer)}{87}{subsection.8.6}
+\contentsline {subsubsection}{\numberline {8.6.1}First phase, first round: joint-random attributes}{88}{subsubsection.8.6.1}
+\contentsline {subsubsection}{\numberline {8.6.2}First phase, subsequent rounds: joint-random attributes}{88}{subsubsection.8.6.2}
+\contentsline {subsubsection}{\numberline {8.6.3}Second phase: presentation proof for carry-over}{89}{subsubsection.8.6.3}
+\contentsline {subsubsection}{\numberline {8.6.4}Third phase: interactive signing of new credential}{91}{subsubsection.8.6.4}
+\contentsline {subsection}{\numberline {8.7}Proof Engine (prover)}{91}{subsection.8.7}
+\contentsline {subsubsection}{\numberline {8.7.1}Terminology}{92}{subsubsection.8.7.1}
+\contentsline {subsubsection}{\numberline {8.7.2}zkBuilder}{92}{subsubsection.8.7.2}
+\contentsline {subsubsection}{\numberline {8.7.3}zkDirector}{93}{subsubsection.8.7.3}
+\contentsline {subsection}{\numberline {8.8}Proof Engine (verifier)}{94}{subsection.8.8}
+\contentsline {subsubsection}{\numberline {8.8.1}zkVerifier}{94}{subsubsection.8.8.1}
+\contentsline {subsubsection}{\numberline {8.8.2}zkDirector}{95}{subsubsection.8.8.2}
+\contentsline {subsection}{\numberline {8.9}Computation of the challenge}{96}{subsection.8.9}
+\contentsline {subsubsection}{\numberline {8.9.1}Preliminaries}{96}{subsubsection.8.9.1}
+\contentsline {subsubsection}{\numberline {8.9.2}Computation of the Hash Contribution of a ZkModule}{96}{subsubsection.8.9.2}
+\contentsline {subsubsection}{\numberline {8.9.3}Computation of the challenge for a proof}{96}{subsubsection.8.9.3}
+\contentsline {section}{\numberline {9}Data Formats}{97}{section.9}
+\contentsline {subsection}{\numberline {9.1}General Parameters}{97}{subsection.9.1}
+\contentsline {subsection}{\numberline {9.2}Parameter Generation Elements}{98}{subsection.9.2}
+\contentsline {subsubsection}{\numberline {9.2.1}System and Verifier Parameter Templates}{98}{subsubsection.9.2.1}
+\contentsline {subsubsection}{\numberline {9.2.2}Key Pair Templates}{99}{subsubsection.9.2.2}
+\contentsline {subsubsection}{\numberline {9.2.3}Key Pairs}{100}{subsubsection.9.2.3}
+\contentsline {subsection}{\numberline {9.3}Zero-knowledge Proof Elements}{103}{subsection.9.3}
+\contentsline {subsection}{\numberline {9.4}Signatures}{106}{subsection.9.4}
+\contentsline {subsection}{\numberline {9.5}Pseudonyms}{107}{subsection.9.5}
+\contentsline {subsection}{\numberline {9.6}Additional Issuance Messages}{108}{subsection.9.6}
+\contentsline {subsection}{\numberline {9.7}Revocation Elements}{108}{subsection.9.7}
+\contentsline {subsection}{\numberline {9.8}Presentation Policy Alternatives and Issuance Policy}{108}{subsection.9.8}

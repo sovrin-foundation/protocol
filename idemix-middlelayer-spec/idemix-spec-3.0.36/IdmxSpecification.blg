@@ -1,0 +1,108 @@
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: IdmxSpecification.aux
+The style file: alpha.bst
+Database file #1: repageba.bib
+Database file #2: biche.bib
+Warning--string name "asiacrypt00" is undefined
+--line 1878 of file biche.bib
+Warning--string name "crypto97" is undefined
+--line 2257 of file biche.bib
+Warning--string name "eurocrypt02" is undefined
+--line 3033 of file biche.bib
+Warning--string name "crypto88" is undefined
+--line 3318 of file biche.bib
+Warning--string name "crypto86" is undefined
+--line 3733 of file biche.bib
+Warning--string name "eurocrypt99" is undefined
+--line 6148 of file biche.bib
+Warning--string name "acmccs09" is undefined
+--line 8406 of file biche.bib
+Warning--string name "acmver" is undefined
+--line 8410 of file biche.bib
+Warning--string name "acmver" is undefined
+--line 8991 of file biche.bib
+Warning--string name "acisp07" is undefined
+--line 9507 of file biche.bib
+Warning--string name "acmccs08" is undefined
+--line 9524 of file biche.bib
+Warning--string name "acmver" is undefined
+--line 9528 of file biche.bib
+Warning--string name "pkc09" is undefined
+--line 9549 of file biche.bib
+Warning--string name "eurocrypt01" is undefined
+--line 9581 of file biche.bib
+Warning--string name "crypto02" is undefined
+--line 9595 of file biche.bib
+Warning--string name "scn02" is undefined
+--line 9609 of file biche.bib
+Warning--string name "crypto04" is undefined
+--line 9623 of file biche.bib
+Warning--string name "crypto03" is undefined
+--line 9650 of file biche.bib
+Warning--string name "asiacrypt02" is undefined
+--line 9757 of file biche.bib
+Warning--string name "pkc09" is undefined
+--line 9906 of file biche.bib
+Warning--string name "crypto91" is undefined
+--line 9940 of file biche.bib
+Warning--empty booktitle in bcgs09
+Warning--empty booktitle in brdede07
+Warning--empty booktitle in camdam00
+Warning--empty booktitle in camgro08
+Warning--empty booktitle in cakoso09
+Warning--empty booktitle in camlys01a
+Warning--empty booktitle in camlys02a
+Warning--empty booktitle in camlys02b
+Warning--empty booktitle in camlys04
+Warning--empty booktitle in camsta97b
+Warning--empty booktitle in crasho02
+Warning--empty booktitle in camsho03
+Warning--empty booktitle in damgar88
+Warning--empty booktitle in damfuj02
+Warning--empty booktitle in fiasha86
+Warning--empty booktitle in nfhf09
+Warning--empty booktitle in pailli99
+Warning--empty booktitle in peders91b
+You've used 27 entries,
+            2543 wiz_defined-function locations,
+            1087 strings with 22536 characters,
+and the built_in function-call counts, 13136 in all, are:
+= -- 1398
+> -- 512
+< -- 46
++ -- 176
+- -- 170
+* -- 962
+:= -- 1968
+add.period$ -- 96
+call.type$ -- 27
+change.case$ -- 171
+chr.to.int$ -- 26
+cite$ -- 45
+duplicate$ -- 578
+empty$ -- 944
+format.name$ -- 205
+if$ -- 2832
+int.to.chr$ -- 2
+int.to.str$ -- 0
+missing$ -- 21
+newline$ -- 138
+num.names$ -- 81
+pop$ -- 186
+preamble$ -- 1
+purify$ -- 198
+quote$ -- 0
+skip$ -- 506
+stack$ -- 0
+substring$ -- 818
+swap$ -- 200
+text.length$ -- 46
+text.prefix$ -- 9
+top$ -- 0
+type$ -- 216
+warning$ -- 18
+while$ -- 131
+width$ -- 31
+write$ -- 378
+(There were 39 warnings)

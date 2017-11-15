@@ -1,0 +1,1129 @@
+%!TEX root =  idmxArch.tex
+\newpage
+\appendix
+
+% \section{Notation}
+% \vspace{-9pt}
+% 
+% % \label{table:convention}
+% 
+% \label{sec:app-notation}
+% Table~\ref{table:notation} lists the notation used in this document.
+% Table \ref{table:params} lists recommended sizes for system parameters, and lists the constraints between parameters.
+% 
+% \begin{table}\begin{center}
+% \begin{tabular}{|c|p{7cm}|c|}
+% \hline
+% Symbol	    & Description						& Defined \\\hline
+% $n$	        & RSA modulus for CL signatures				& p. \pageref{notation:n} \\
+% $p,q$	    & prime factors of $n$					& p. \pageref{notation:pq} \\
+% $QR_n$	    & group of quadratic residues mod $n$			& p. \pageref{notation:QR_n} \\
+% $pk_B,sk_B$ & public key, secret key of entity $B$			& p. \pageref{notation:pk,sk} \\
+% $S,Z,R_i$   & part of the issuer's public key (for CL sigs.)		& p. \pageref{notation:S,Z,R_i}\\
+% \hline
+% $\Gamma$    & modulus of the commitment group				& p. \pageref{notation:Gamma}\\
+% $\rho$	    & prime order of a large subgroup of $\Z{\Gamma}^*$	& p. \pageref{notation:rho}\\
+% $b$	        & cofactor of $\Gamma-1$					& p. \pageref{notation:b} \\
+% $g,h$	    & generators of the order $\rho$ subgroup of $\Z{\Gamma}^*$ & p. \pageref{notation:g,h}\\
+% \hline
+% $l$	    & total number of attributes in a certificate 
+% 		(bases in the issuer's CL public key)			& p. \pageref{notation:l}\\
+% $m_1$	    & the master secret					        & p.  \pageref{notation:m_1},  \pageref{notation:m_1c} \\
+% $\Attributes$	    & ordered set of attributes	        & p. \pageref{notation:A} \\
+% $(m_1,\ldots,m_l)$  & attributes in $A$					& p. \pageref{notation:m_i} \\
+% $\AttributesKnown$  & indices of attributes which are public during a certificate issue
+% & p. \pageref{notation:A_known} \\ 
+% $\AttributesHidden$ & indices of attributes which are hidden/committed during an issue & p.
+% \pageref{notation:A_hidden} \\ 
+% $\AttributesRevealed$ & indices of attributes revealed during a proof & p.
+% \pageref{notation:A_revealed} \\
+% \hline
+% $c_i$	    &	commitment of attribute $i$, i.e. $\comm(m_i)$		& p. \pageref{notation:c_i}\\
+% \hline
+% $\mathsf{n}, \mathsf{g}, \mathsf{y}_1, \mathsf{y}_2, \mathsf{y}_3$    &  Verifiable encryption public key		& ---\\
+% $\mathsf{n}, x_1, x_2, x_3$    &  Verifiable encryption private key	& ---\\
+% $\mathsf{h}$ & Ver. enc. param. $\mathsf{h} = (1 + \mathsf{n} \bmod \mathsf{n}^2) \in \Zs{\mathsf{n}^2}$ & --- \\
+% \hline
+% \end{tabular}
+% \caption{\label{table:notation} Notation used in this document. The ``Defined'' column gives the page number where the symbol is defined.
+% (The source code may refer to this table as {\tt table:notation}.)}
+% \end{center}
+% \end{table}
+% 
+% 
+% \begin{table}\begin{center}
+% \begin{tabular}{|c|p{7cm}|c|} \hline
+% Parameter & Description						& Bitlength\\ \hline
+% $\ell_n$	    & size of RSA modulus			& 2048 \\
+% $\ell_{\Gamma}$	    & size of the commitment group modulus	& 1632 \\
+% $\ell_{\rho}$	    & size of the prime order subgroup of $\Gamma$ & 256 \\
+% $\ell_m$	    & size of attributes			& 256 \\
+% %%Jan: we do no longer need this $\ell'_m$	    & size of first attribute, the master secret& $\ell_\rho$ \\
+% $\lres$		    & number reserved attributes in a certificate& 1$^\dagger$ \\
+% $\ell_e$	    & size of $e$ values of certificates	& 597  \\
+% $\ell'_e$	    & size of the interval the $e$ values are taken from & 120 \\
+% $\ell_v$	    & size of the $v$ values of the certificates & 2724  \\
+% $\lszk$  & security parameter that governs the statistical zero-knowledge property (source name {\tt l\_statzk})  & 80 \\
+% $\ell_k$	    & security parameter			& 160 \\
+% $\ell_H$	    & domain of the hash function $H$ used for the Fiat-Shamir heuristic & 256 \\
+% $\ell_r$	    & security parameter required in the proof of security of the credential system & 80 \\
+% $\ell_{pt}$	    & prime number generation returns composites with probability $1-1/2^{\ell_{pt}}$ & 80$^\dagger$ \\
+%  $\ell_\mathrm{enc}$ & security parameter for the CS encryption scheme, bit length of $\sqrt{\mathsf{n}}$ & 1500 \\
+% \hline
+% \end{tabular}
+% \caption{\label{table:params} System parameter sizes (in bits) used in idemix. (Source code may refer to this table as {\tt table:params}.)
+% ($\dagger$ This value is an integer, not a bit length.)}
+% \end{center}
+% \end{table}
+% 
+% %Note that attributes can be from the interval $[-2^{\ell_m}+1, 2^{\ell_m}-1]$, including 
+% %the attribute holding the user's master secret.  
+% 
+% \begin{table}
+% \begin{center}
+% \begin{tabular}{|l|l|}
+% \hline
+% Number & Constraint \\\hline
+% 1 &$\ell_e>\lszk+\ell_H+\max\{\ell_m+4, \ell'_e+2\}$ \\ 
+% 2 &$\ell_v > \ell_n+\lszk+\ell_H+\max\{\ell_m+\ell_r+3, \lszk+2\}$ \\
+% 3 &$\ell_H \geq \ell_k$ \\
+% 4 & $\rho \nmid b$ \\
+% 5 & $\ell_H < \ell_e$\\
+% 6 & $\ell_e' < \ell_e - \lszk -\ell_H - 3$ \\
+% 7 & $\ell_\rho \leq \ell_m$ \\
+% \hline
+% \end{tabular}
+% \caption{\label{table:constraints} Constraints which parameter choices must satisfy to ensure security and soundness. (Source code may refer to this table as {\tt table:constraints}.)}
+% \end{center}
+% \end{table}
+
+
+
+\section{Cryptographic Assumptions}
+\label{Cryptographic Assumptions and Handy Facts}
+
+The protocols discussed in this section
+rely on the strong RSA and the decisional Diffie-Hellman assumptions. 
+We state then briefly for completeness.
+
+\begin{assumption}[Strong RSA Assumption]\index{Strong RSA Assumption}
+The strong RSA (SRSA) assumption states that it is computational infeasible, 
+on input a random RSA modulus
+$n$ and a random element $u \in \Zs{n}$, to compute values $e > 1$ and $v$
+such that $v^e \equiv u \pmod{n}$.  
+\end{assumption}
+
+The tuple $(n,u)$ generated as above is called an \emph{instance} of
+the \emph{flexible} RSA problem.
+
+\begin{assumption}[DDH Assumption]\index{Decisional Diffie-Hellman Assumption}
+Let $\Gamma$ be an $\ell_\Gamma$-bit prime and $\rho$ is an $\ell_\rho$-bit prime 
+such that $\rho | \Gamma-1$. 
+Let $\gamma \in \Zs{\Gamma}$ be an element of order $\rho$.
+Then, for sufficiently large values of $\ell_\Gamma$ and $\ell_\rho$, 
+the distribution $\{(\delta, \delta^a, \delta^b, \delta^{ab}) \}$ 
+is computationally indistinguishable from the
+distribution $\{ (\delta, \delta^a, \delta^b, \delta^{c}) \}$, 
+where $\delta$ is a random element from $\langle \gamma \rangle$,
+and $a$, $b$, and $c$ are random elements from $[0,\rho-1]$ 
+\end{assumption}
+
+
+The following theorem will turn out to be handy in some of our analyses. 
+\begin{theorem}\cite{camsho03}
+\label{thm:strong-rsa}
+Under the strong RSA assumption, given a modulus $n$
+(distributed as above), along with random elements $g, h \in (\Z{n}^*)^2$,
+it is hard to compute an element $w \in \Z{n}^*$ and integers $a, b, c$
+such that
+\begin{equation}
+\label{eqn:strong-rsa}
+w^c \equiv g^a h^b \pmod{n} \ \ \mbox{and  $c$ does not divide $a$ or $b$}.
+\end{equation}
+\end{theorem}
+Intuitively, computing such a $w$ and  integers $a$, $b$, and $c$ such that
+$c$ does not divide $a$ and $b$ seems to require knowledge of the group's order:
+One computes $w$ as $g^xh^y$ for some $x$ and $y$ and then raises both sides
+to the power of $c$. 
+Now if $c$ should not divide $a$, then one seems to need reducing $xc$ modulo the order
+of the group.
+However, this is not possible as the order is not known and so it seems 
+impossible to compute such an $a$ that is not divisible by $c$.
+
+
+\section{Protocols to Prove Knowledge of and Relations among Discrete Logarithms}
+\label{app:zkprotocols}
+\index{proof of knowledge}
+\index{zero knowledge proof of knowledge}
+\index{PK}
+
+In the following we will use various protocols to prove knowledge of and relations 
+among discrete logarithms.
+To describe these protocols, we use  notation introduced by Camenisch and
+Stadler~\cite{camsta97b} for various proofs of knowledge of discrete
+logarithms and proofs of the validity of statements about discrete logarithms.
+For instance,
+\[\textit{PK}
+\{ (\alpha,\beta,\gamma): y = g^\alpha h^\beta \ \wedge \ \tilde{y} =
+\tilde{g}^\alpha \tilde{h}^\gamma \ \wedge \ ( v < \alpha < u) \}
+\]
+denotes a ``\textit{zero-knowledge \emph{P}roof of \emph{K}nowledge of
+  integers $\alpha$, $\beta$, and $\gamma$ such that $y = g^\alpha h^\beta$
+  and $\tilde{y} = \tilde{g}^\alpha \tilde{h}^\gamma$ holds, with $ v <
+  \alpha < u$},'' where $y,g,h,\tilde{y},\tilde{g}$, and $\tilde{h}$ are
+elements of some groups $G = \langle g\rangle = \langle h\rangle$ and
+$\tilde{G} = \langle \tilde{g}\rangle = \langle \tilde{h} \rangle$.  
+The
+convention is that Greek letters denote the quantities the knowledge of which is
+being proved, while all other parameters are known to the verifier. 
+More precisely, the property of ``proof of knowledge'' means that there exists a
+\emph{knowledge extraction} 
+\index{knowledge extraction}
+algorithm who can 
+extract the Greek quantities from a successful prover if given rewinding and
+reset access to the prover.
+Thus, using this
+notation, a proof protocol can be described by just pointing out its aim while
+hiding the protocols realization details.
+
+
+In the following we will first explain how such protocols can be constructed.
+Unless otherwise stated, we assume a group $G = \langle g \rangle$ of prime order
+$q$.
+
+\subsection{Schnorr's Identification Scheme}
+\label{Schnorr's Identification Scheme}
+\index{Schnorr's identification scheme}
+\index{proving knowledge of a discrete logarithm}
+
+\begin{figure}[tb]
+\begin{center}
+\begin{tabular}{p{11em}cp{11em}}
+\fbox{\ Prover\ } & & \hfill\fbox{\ Verifier\ }\\[1ex]
+$(g,q,y,x)$ & & \hfill$(g,q,y)$\\
+\hspace{1.5em}$\downarrow$ & & \hfill$\downarrow$\makebox[1.5em]{}\\[-1.6ex]\hline\\
+%
+$r_\alpha \in_R \Z{q}$\\[0.2ex]
+$t := g^{r_\alpha}$& \LRarrow[15]{$t$}  & \\[-.5ex]
+& & \hfill $c \in_R \{0,1\}^k$ \\[-.5ex]
+& \LLarrow[15]{$c$} \\[-.5ex]
+$s_\alpha := r_\alpha - c x \bmod{q}$ \\[-.5ex]
+  & \LRarrow[15]{$s_\alpha$} \\[-.5ex]
+&& \hfill $t \stackrel{?}{=} g^{s_\alpha} y^{c} $ \\[1ex]\hline\\[-3.8ex]
+&& \hfill$\downarrow$\makebox[1.5em]{}\\
+&&\hfill $(\mathtt{yes}/\mathtt{no})$ \\
+\end{tabular}
+\end{center}
+\caption{
+  The protocol denoted  $\textit{PK}\{(\alpha): y = g^\alpha \}$.
+ The prover's input to the protocol is $(g,q,y,x)$ and the verifier's input 
+is $(g,q,y)$. 
+The prover has no output; the verifier's output is either $\mathtt{yes}$ or
+$\mathtt{no}$, depending on whether or not he accepts the protocols, i.e., 
+whether or not $t = g^{s_\alpha} y^{c} $ holds.
+}
+
+\label{fig:schnorr_id}
+
+\end{figure}
+
+
+The probably simplest is case is the protocol  
+denoted $\textit{PK}\{(\alpha): y = g^\alpha \}$, where $y \in G$, and is depicted in Figure~\ref{fig:schnorr_id}.
+This protocol is also known as Schnorr's identification protocol~\cite{schnor91}.
+As the first step in the protocol,
+the prover chooses a random integer $r_\alpha$, 
+computes the \emph{protocol commitment}
+\index{protocol commitment}
+$t:= g^{r_\alpha}$ and sends it to the verifier.
+The verifier replies with a random \emph{protocol challenge}
+\index{protocol challenge}
+ $c$. 
+Next, the prover computes the \emph{protocol response} 
+\index{protocol response} 
+$s := r - cx \bmod{q}$ and sends it
+to the verifier. 
+Finally, the verifier accepts the protocol if the \emph{verification equation}
+\index{verification equation}
+$t = g^{s_\alpha} y ^c$ holds.
+
+The protocol is a proof of knowledge of the discrete logarithm $\log_g y$ 
+with cheating probability (knowledge error) of $2^{-k}$.
+The protocol is also zero-knowledge against an honest verifier.
+
+To achieve zero-knowledge against any verifier, one  needs to choose
+$k$ logarithmic in the security parameter and repeat the protocols sufficiently 
+many times to make the knowledge error small enough, losing some efficiency
+by this repetition.
+Reasonable parameters seem to be $k=10$ and repeating the protocol $8$ times to achieve an
+overall cheating probability of $2^{-80}$.
+Luckily, one can alternatively use one of the many known constructions to achieve zero-knowledge
+that retain efficiency, e.g.,~\cite{damgar00}.
+We note that this discussion holds for all the protocols we consider in this section.
+
+
+From the protocol just discussed, one can derive the Schnorr signature scheme,
+\index{Schnorr signature scheme}\index{SPK}
+denoted  $\textit{SPK}\{(\alpha): y = g^\alpha \}(m)$, by
+using the Fiat-Shamir heuristic \cite{fiasha86,poiste96a}, i.e., by
+replacing the verifier by a call to a hash function $\mathcal{H}$ and 
+thus computing the challenge as $c = \mathcal{H}(g\|y\|t\|m)$,
+where $m \in \zo^*$ is the message that is signed.
+The signature of $m$ consists of the pair $(s,c)$.
+The verification equation of the signature scheme entails
+computing $\hat{t} := g^s y^{c}$ and then verifying 
+whether $c = \mathcal{H}(g\|y\|\hat{t}\|m)$ holds.
+This signature scheme can be shown secure in the so-called random oracle 
+model~\cite{belrog93}. 
+
+
+
+\subsection{Proving Knowledge of a Representation}
+\label{Proving Knowledge of a Representation}
+\index{proving knowledge of a representation}
+
+One generalization of Schnorr's identification scheme is to use, say, $\ell$ bases
+$g_1, \ldots, g_\ell$  with $g_i \in G $.
+That is, the protocol denoted $\textit{PK}\{(\alpha_1,\ldots, \alpha_\ell): y = 
+\prod_{i =1}^{\ell}g_i^{\alpha_i}  \}$
+is a proof of knowledge of the representation of $y \in G$ w.r.t.\ the bases $g_i$.
+It is constructed as follows.
+The inputs of the prover and the verifier consist of $y$, $g_1$, $\ldots$, $g_\ell$,  the order $q$
+of the group, and the system parameter $k$.
+The secret input of the prover consists of $x_i$'s  such that
+$y = \prod_{i =1}^{\ell}g_i^{x_i}$.
+Thus, each $x_i$ corresponds to an $\alpha_i$.
+Now, to compute the 
+first message of the protocol, the prover chooses $\ell$ random
+integers $r_{\alpha_i} \in \Z{q}$,
+computes $t := \prod_{i =1}^{\ell}g_i^{r_{\alpha_i}}$, and 
+sends $t$ to the verifier.
+The verifier replies with a  $c$ chosen as in the protocol above, i.e., randomly
+from $\{0,1\}^k$.
+Next, the prover computes
+$s_{\alpha_i}  := r_{\alpha_i} - c x_{i} \bmod{q}$ and sends the resulting
+$s_{\alpha_1},\ldots,s_{\alpha_\ell}$ to the verifier.
+The verifier will accept the protocol if the equation 
+$t = y^{c} \prod_{i =1}^{\ell}g_i^{s_{\alpha_i}}$
+holds.
+This protocol can be shown to be a proof of knowledge of values
+$\alpha_i$ such that $ y =  \prod_{i =1}^{\ell}g_i^{\alpha_i}$
+with knowledge error $2^{-k}$ and to be honest-verifier
+zero-knowledge.
+
+\subsection{Combining Different Proof Protocols}
+\label{Combining Different Proof Protocols}
+
+One can combine different instances of the protocol described so far.
+The simplest combination is a protocol denoted  
+\[
+\textit{PK}\{(\alpha_1,\ldots, \alpha_\ell, \beta_1,\ldots, \beta_{\ell'} ): y = \prod_{i =1}^{\ell} g_i^{\alpha_i} 
+\ \wedge \ z = \prod_{i =1}^{\ell'} h_i^{\beta_i}  \}
+\]
+with $g_i,h_i,y,z \in G$.
+It is obtained by running the two protocols 
+\[\textit{PK}\{(\alpha_1,\ldots, \alpha_\ell,  ): y = \prod_{i =1}^{\ell} g_i^{\alpha_i}  \}
+\quad \text{and} \quad
+\textit{PK}\{(\beta_1,\ldots, \beta_{\ell'} ): 
+ z = \prod_{i =1}^{\ell'} h_i^{\beta_i}  \}
+\]
+in parallel as sub-protocols as follows. 
+First, the prover computes and  sends to the verifier
+the commitment messages of both protocols at the same time.
+Next, the verifier chooses and sends back a \emph{single} challenge message,
+i.e., the verifier chooses the same challenge message for both protocols.
+Finally, the verifier will accept the overall protocol only if the
+verification equations of both (sub-)protocols hold.
+
+In the same way one constructs a protocol that involves several terms (i.e., representations
+of several values)
+by just running the protocol for each term in parallel and by letting the 
+challenge to be the same for each of these protocols.
+So, for instance, the protocol
+$\textit{PK}\{(\alpha, \beta, \gamma ): y = g^{\alpha} 
+\ \wedge \ z =  h^\beta \ \wedge \ w = g^\gamma \}$
+is obtained by running the three sub-protocols
+$\textit{PK}\{(\alpha): y = g^{\alpha}  \}$,
+$\textit{PK}\{( \beta ): z =  h^\beta  \}$, 
+and 
+$\textit{PK}\{(\gamma ):  w = g^\gamma \}$
+in parallel in as just described.
+
+\subsection{Proving Equality of Discrete Logarithms}
+\label{Proving Equality of Discrete Logarithms}
+\index{proving equality of discrete logarithms}
+
+
+
+Another useful combination of the protocols discusses so far is one where,
+ in addition to prove knowledge of discrete logarithms or representations, 
+the prover can show that
+some discrete logarithms are equal.
+Such protocols are in principle also obtained from running the 
+basic protocol for each term in parallel.
+However, now not only are the challenges the same for each of these
+protocols but also some of random choices of the prover as well as some 
+of the response messages of the protocols needs to be the same.
+In general, when we compose protocols for arbitrary terms,
+the prover is to use the same random $r_\alpha$ in all the protocols
+that involve $\alpha$ in their term.
+Let us consider the protocol 
+$\textit{PK}\{(\alpha,\beta): y = g^{\alpha} h^\beta \ \wedge \ z =  h^\alpha \}$
+as an example.
+The verifier's and the prover's common input to the protocol consists
+of $y,z,g,h,q$ and the prover's secret input consists of
+$x_\alpha$ and $x_\beta$ such that 
+$y := g^{x_\alpha} h^{x_\beta}$ and  $z :=  h^{x_\alpha}$.
+To compute the commitment message, the prover chooses  random
+$r_\alpha$ and $r_\beta$ from $\Z{q}$ and computes
+$t_y := g^{r_\alpha} h^{r_\beta}$ and
+$t_z := h^{r_\alpha}$.
+Upon receiving the commitment messages $t_y$ and $t_z$, the verifier 
+replies with a single  random challenge message $c \in_R \{0,1\}^k$. 
+Next, the prover computes the response messages as
+$s_\alpha := r_\alpha + c x_\alpha \bmod{q}$
+and
+$s_\beta := r_\beta + c x_\beta \bmod{q}$.
+Having received $s_\alpha$ and $s_\beta$, the 
+verifier will accept the protocol if 
+the two verification equations
+$t_y = y^c g^{s_\alpha} h^{s_\beta} $
+and 
+$t_z =  z^c h^{s_\alpha}$
+hold.
+
+Let us explain why the verifier should be convinced 
+that $\log_h z$ equals the first element in the representation 
+of $y$ w.r.t.\  $g$ and $h$.
+Using standard rewinding techniques, one can obtain from 
+a successful prover commitment and response messages 
+for different challenge messages but the same commitment messages,
+i.e., two tuples $(t_y,t_z,c,s_\alpha,s_\beta)$
+and $(t'_y,t'_z,c',s'_\alpha,s'_\beta)$ with
+$(t_y,t_z) = (t'_y,t'_z)$ and $c\neq c'$.
+From the verification equations one can thus conclude that
+\[
+ y^{c-c'} =  g^{s'_\alpha-s_\alpha} h^{s'_\beta- s_\beta } 
+\quad \text{and }\quad
+ z^{c-c'} =  h^{s'_\alpha-s_\alpha}\enspace.
+\]
+Now we can set $\hat{x}_\alpha := (s'_\alpha-s_\alpha) (c-c')^{-1} \bmod{q}$
+and $\hat{x}_\beta := (s'_\beta-s_\beta) (c-c')^{-1} \bmod{q}$
+and thus we have
+\[
+ y =  g^{\hat{x}_\alpha} h^{\hat{x}_\beta } 
+\quad \text{and }\quad
+ z =  h^{\hat{x}_\alpha}\enspace,
+\]
+i.e., we see that indeed $\log_h z$ equals the first element in the representation 
+of $y$ w.r.t.\  $g$ and $h$.
+
+From what we have now seen, we are able to construct protocols
+that fall into the class denoted
+\begin{multline*}
+\mathit{PK}\{(\alpha_1, \ldots \alpha_{\ell_\alpha}):
+y_1 = \prod_{i \in I_1 } g_i^{\alpha_{f_1(i)}}
+\ \wedge\ \
+y_2 = \prod_{i \in I_2 } g_i^{\alpha_{f_2(i)}}
+\ \wedge\ \ \\
+\cdots
+\ \wedge\ \
+y_{\ell_y} = \prod_{i \in I_{\ell_y} } g_i^{\alpha_{f_{\ell_y}(i)}}
+\}\enspace,
+\end{multline*}
+where 
+\begin{itemize}
+\item $\ell_\alpha$, $\ell_g$, and  $\ell_y$ are parameters denoting 
+the number of secrets $\alpha_i$, of bases $g_i$, and of elements $y_i$, respectively,
+\item the $y_i$'s and $g_i$'s can be arbitrary elements of $G$ and do not necessarily be
+distinct or can be a product of other (given) elements, e.g., $y_3 = y_5 g_2^3 / y_2$, 
+\item the sets $I_j$ define which bases are used for the $j$-th
+term and the functions $f_j$ define which secret $\alpha_k$ is used
+for a particular base in the term.
+\end{itemize}
+The protocol is depicted in Figure~\ref{fig:combinded-protocol}.
+We note that the protocol has the property that from a successful prover
+one can extract values $\alpha_1, \ldots, \alpha_{\ell_\alpha}$
+such that the equations
+\[
+y_1 = \prod_{i \in I_1 } g_i^{\alpha_{f_1(i)}}, \quad
+y_2 = \prod_{i \in I_2 } g_i^{\alpha_{f_2(i)}}, \quad
+\cdots, \quad 
+y_{\ell_y} = \prod_{i \in I_{\ell_y} } g_i^{\alpha_{f_{\ell_y}(i)}}
+\]
+all hold.
+That is, it is an honest-verifier zero-knowledge proof of knowledge of the values $\alpha_1, \ldots, \alpha_{\ell_\alpha}$
+with knowledge error $2^{-k}$.
+
+
+Let us finally consider some example instances of this general protocol.
+The protocol denoted
+$\mathit{PK}\{(\alpha,\beta): y_1 = g^{\alpha} \wedge y_2 = g^{\beta} 
+\wedge y_3 = y_1^{\beta}\}$
+proves that 
+$\log_g y_3$ is the product of $\log_g y_1$ and $\log_g y_2$,
+the protocol denoted 
+$\mathit{PK}\{(\alpha): y_1 = g^{\alpha} \wedge y_2 = y_1^{\alpha}\}$
+proves that $\log_g y_2 = (\log_g y_1)^2$,
+and 
+the protocol denoted
+$\mathit{PK}\{(\alpha,\beta): g = y^{\alpha} h^{\beta}\}$
+proves that the first element of the representation of $y$
+that the prover knows w.r.t.\ $g$ and $h$ is non-zero, provided that the prover is not privy
+to $log_g h$
+(in case the prover knows $log_g h$, he is able to compute $q$ different 
+representations of $y$ w.r.t.\ $g$ and $h$, otherwise he can only know one).
+
+
+
+\begin{figure}[tb]
+\begin{center}
+\begin{tabular}{p{11em}cp{11em}}
+\fbox{\ Prover\ } & & \hfill\fbox{\ Verifier\ }\\[1ex]
+$(g_1,\ldots,g_{\ell_g},
+y_1,\ldots,y_{\ell_y},
+$ & & \hfill
+$(g_1,\ldots,g_{\ell_g},
+y_1,\ldots,y_{\ell_y},
+$
+\\
+$I_1,\ldots,I_{\ell_y},
+f_1,\ldots,f_{\ell_y},
+$ & & \hfill$
+I_1,\ldots,I_{\ell_y},
+f_1,\ldots,f_{\ell_y},
+$
+\\
+$
+x_1,\ldots,x_{\ell_\alpha},
+q)$ & & \hfill$
+q)$
+\\
+\hspace{1.5em}$\downarrow$ & & \hfill$\downarrow$\makebox[1.5em]{}\\[-1.6ex]\hline\\
+%
+$r_{\alpha_1},\ldots,r_{\alpha_{\ell_\alpha}} \in_R \Z{q}$\\[0.2ex]
+For $j = 1, \ldots, \ell_y$ do: \\
+\mbox{}\hfill 
+$t_{y_j} := \prod_{i \in I_j } g_i^{r_{\alpha_{f_j(i)}}} $
+& \LRarrow[15]{$t_{y_1},\ldots,t_{y_{\ell_y}}$}  & \\[-.5ex]
+& & \hfill $c \in_R \{0,1\}^k$ \\[-.5ex]
+& \LLarrow[15]{$c$} \\[-.5ex]
+$s_{\alpha_i} := r_{\alpha_i} - c x_i \bmod{q}$ \\[-.5ex]
+  & \LRarrow[15]{$s_{\alpha_1},\ldots,s_{\alpha_{\ell_\alpha}}$} \\[-.5ex]
+&& For $j = 1, \ldots, \ell_y$ check: \\
+&& \hfill 
+$t_{y_j} \stackrel{?}{=} y_j ^{c} \prod_{i \in I_j } g_i^{s_{\alpha_{f_j(i)}}}  $ \\[1ex]\hline\\[-3.8ex]
+&& \hfill$\downarrow$\makebox[1.5em]{}\\
+&&\hfill $(\mathtt{yes}/\mathtt{no})$ \\
+\end{tabular}
+\end{center}
+\caption{
+The protocol
+denoted $\mathit{PK}\{(\alpha_1, \ldots \alpha_{\ell_\alpha}):
+y_1 = \prod_{i \in I_1 } g_i^{\alpha_{f_1(i)}}
+\ \wedge\ \
+y_2 = \prod_{i \in I_2 } g_i^{\alpha_{f_2(i)}}
+\ \wedge\ \
+\cdots
+\ \wedge\ \
+y_{\ell_y} = \prod_{i \in I_{\ell_y} } g_i^{\alpha_{f_{\ell_y}(i)}}
+\}$.
+}
+
+\label{fig:combinded-protocol}
+
+\end{figure}
+
+
+
+%\work{\subsection{Linear Equations }
+%\label{Linear Equations }
+%
+%We note that we can also add constants, i.e., the protocol 
+%$\mathit{PK}\{(\alpha): y_1 = g_1^{\alpha} \wedge y_2 = g_2^{3\alpha}\}$
+%is obtained by interpreting the second base as $g_2^3$, i.e.,  
+%$\mathit{PK}\{(\alpha): y_1 = g_1^{\alpha} \wedge y_2 = (g_2^3)^{\alpha}\}$.
+%}
+
+
+\subsection{The Schnorr Protocol Modulo a Composite}  
+\label{The Schnorr Protocol Modulo a Composite.}  
+\label{sec:proto}
+\index{unkown order}
+
+So far we have considered proof protocols for a group of prime order where the order is
+known to both the prover and the verifier.
+However, often one would like to use these kind of protocols in groups
+where the order is not known to all parties as is for instance the case
+in RSA-groups.
+\index{RSA group}
+RSA groups are subgroups of $\Zs{n}$, where $n$ is the product of two primes.
+Thus, if one does not know the factorization of $n$, one does in general
+not know the order of a subgroup generated by a random element of $\Zs{n}$.
+
+In particular, let $n$ be the product of two safe primes, i.e., primes $p$ and $q$ such that
+$p'=(p-1)/2$ and $q'=(q-1)/2$ are also primes.\index{safe prime product}
+Let $g$ be a generator of the quadratic residues modulo $n$ (so, $g$ will have order
+$p'q'$).\index{quadratic residue}
+In this case, knowing the order $p'q'$ of $g$ is equivalent to knowing the factorization of $n$.
+Let $y=g^x$ with $x \in \{0,1\}^\ell$ for some $\ell$.
+Now consider the protocol denoted $\textit{PK}\{(\alpha): y = g^\alpha \pmod{n}\}$, where 
+at least the prover is assumed not to be  privy to the factorization of $n$.
+The prover and verifier's common inputs are $(y,g,n,\ell_n)$ and the prover's additional input is
+$x = \log_g y$, where $\ell_n = \lceil \log_2 n \rceil$ (i.e., the length of $n$ in bits). 
+We may assume that $x \in [0,n]$.
+The protocol is as follows.
+\begin{enumerate}
+\item The prover chooses uniformly at random $r_\alpha  \in_R \{0,1\}^{\ell_n+\ell_c + \ell_\varnothing}$,
+computes $t_y := g^r \bmod{n}$, and sends $t$ to the verifier.
+\item The verifier chooses a random $c \in_R \{0,1\}^{\ell_c}$ and sends that to the 
+prover.
+\item The prover replies with $s_\alpha := r_\alpha - xc$.
+\item The verifier checks whether $t_y \stackrel{?}{\equiv} y^c g^{s_\alpha} \pmod{n}$ holds.
+\end{enumerate}
+
+The difference to the protocol in the case the order of the group $\langle g \rangle$ 
+is known is
+that here, as she does not know the order of the group,
+the prover can no longer choose $r_\alpha$ randomly from the integers modulo this 
+order and can no longer reduce $s_\alpha$ modulo this order.
+So, the prover needs to choose $r_\alpha$ some how differently
+such that nevertheless $s_\alpha$ and $t_y$ 
+do not reveal information about $x$, i.e., such that
+the protocol remains zero-knowledge.
+Thus if $x  \in [0,n]$ and the prover chooses $r_\alpha \in_R \{0,1\}^{\ell_n+\ell_c + \ell_\varnothing}$,
+then, for any  $c \in \{0,1\}^{\ell_c}$ and sufficiently large $\ell_\varnothing$ (e.g., 80), 
+the value $s_\alpha := r_\alpha - xc$ is 
+distributed statistically close to the uniform distribution 
+over $\{0,1\}^{\ell_n+\ell_c + \ell_\varnothing}$.
+Also, the value $t_y := g^r \bmod{n}$ is distributed statistically close to uniform 
+over $\langle g \rangle$.
+Therefore, provided that $y \in  \langle g \rangle$, the protocol is  statistical honest-verifier zero-knowledge 
+for sufficiently large $\ell_\varnothing$ (e.g., $\ell_\varnothing = 80 $).
+
+
+
+Now, this protocol is only a proof of knowledge of $\log_g y$ if $\ell_c$ equals
+$1$ and if repeated sufficiently many, say $k$, times.
+Let us investigate this.
+Assume we are given a prover that can successfully run the protocol for given
+$y$, $g$, and $n$.
+By standard rewinding techniques, one can extract two triples
+$(t,c,s)$ and $(t',c',s')$ from the prover such that 
+$t=t'$, $c \neq c'$, and $t \equiv y^c g^s  \equiv y^{c'} g^{s'} \pmod{n}$
+holds. 
+W.l.o.g.\ we may assume that $c'>c$.
+From the last equation we can derive that
+$y^{c'-c} \equiv g^{s-s'} \pmod{n}$.
+
+If $\ell_c =1$, we must have $c' = 1$ and $c=0$ and
+hence $y \equiv g^{s-s'} \pmod{n}$, i.e., $s-s'$ is a discrete logarithm
+of $y$ to the base $g$ and hence the protocol is indeed a proof of knowledge.
+
+If  $\ell_c > 1 $, we are stuck with the equation $y^{c'-c} \equiv g^{s-s'} \pmod{n}$, i.e., we seem to need to compute a $(c'-c)$-th root of  $g^{s-s'}$ modulo $n$ which 
+is assumed to be hard without knowledge of $g$'s order.
+Unfortunately,  Theorem~\ref{thm:strong-rsa} provides a way out.
+\index{Strong RSA assumption}
+That is, under the strong RSA assumption, we will have that 
+$(c'-c) | (s-s')$. 
+Let $u$ be such that $(c'-c) u = (s-s')$.
+Then $y \equiv b g^u \pmod{n}$ for some 
+$b$ such that $b^{c'-c} \equiv 1 \pmod{n}$.
+Assuming that $2^\ell_c < \min(p',q')$, it must be 
+that $b = \pm 1$ or  $\gcd(b \pm 1,n)$ splits $n$ (which again would counter
+the strong RSA assumption).
+Of course, if both $y$ and $g$ are quadratic residues, then
+$y \equiv g^u \pmod{n}$. 
+
+The reader might now think that the protocol is therefore a proof of knowledge under
+the strong RSA assumption for $\ell_c > 1$.
+Unfortunately this is not the case.
+Let us expand.
+The definition of a proof of knowledge, 
+requires that the inputs $n$, $g$, and $y$ be fixed, i.e., that
+the knowledge extractor works for any prover that is successful for a 
+given input $n$, $g$, and $y$.
+However, the above argument only works for $n$ chosen at random.
+For instance, it does not work if the prover knew the factorization of 
+$n$ as he then could compute $c$, $c'$, $s$, and $s'$ such that
+$(c'-c) \nmid (s-s')$ (for instance by adding a multiple of the order of 
+$g$ to $s$).
+Now, if $n$ is fixed, there always exists a prover who has the factorization 
+encoded into herself and thus she could successfully run the protocol but the
+knowledge extractor cannot extract a witness.
+In order words, the protocol only has the proof of knowledge property 
+for random $n$ which contradicts the requirement of a proof of knowledge that 
+the witness can be extracted for any given $n$.
+Nevertheless, the protocol is still useful as a building block, i.e., 
+one only need to take into account the probability spaces of $n$, $g$, and $y$.
+That is, one has to consider the overall system of which the protocol is part and cannot just
+consider the protocol by itself as one could if it was a true proof of knowledge.
+Despite of all of this, we denote this protocol also as 
+$\textit{PK}\{(\alpha): y \equiv \pm g^\alpha \pmod{n}\}$ or
+$\textit{PK}\{(\alpha): y \equiv g^\alpha \pmod{n}\}$, depending on whether the verifier
+is assured that $y$ is a quadratic residue or not.
+
+\subsection{Proving that a Secret Lies in a Given Interval}
+\label{Proving that a Secret Lies in a Given Interval}
+\index{proving that a secret lies in a given interval}
+\index{interval proof}
+
+One property of  the protocol just described that is handy in many cases is 
+the fact that the prover cannot reduce the response messages modulo the 
+order of the group is to argue about the bit-length of the secret known to the prover.
+Let $x \in \pm \{0,1\}^{\ell_x}$ for some $\ell_x$ and let $y := g^x \bmod{n}$, with 
+$g$ and $n$ as before.
+Now consider the following modification of the protocol 
+(the inputs to the prover and the verifier
+remain unchanged except that both parties are further given $\ell_x$).
+\begin{enumerate}
+\item The prover chooses uniform at random $r_\alpha  \in_R \{0,1\}^{\ell_x+\ell_c + \ell_\varnothing}$,
+computes $t_y := g^r \bmod{n}$, and sends $t$ to the verifier.
+\item The verifier chooses a random $c \in_R \{0,1\}^{\ell_c}$ and sends that to the 
+prover.
+\item The prover replies with $s_\alpha := r_\alpha - xc$.
+\item The verifier checks whether 
+\[
+t_y \stackrel{?}{\equiv} y^c g^{s_\alpha} \pmod{n}
+\quad\text{and}\quad
+s_\alpha \stackrel{?}{\in} \pm \{0,1\}^{\ell_x+\ell_c + \ell_\varnothing+1}
+\]
+hold.
+\end{enumerate}
+The modification is that the prover chooses $r_\alpha$ from a different interval
+and that the verifier also checks that $s_\alpha$ takes at most 
+${\ell_x+\ell_c + \ell_\varnothing+1}$ bits.
+
+The analysis of this protocols is of course almost identical to the original one, except
+that we are now considering the bit-lengths of $s_\alpha$ and $r_\alpha$.
+First, it is not difficult to see that the protocol remains statistical 
+honest-verifier zero-knowledge.
+Above we have argued that under the strong RSA assumption, one can extract
+a value $u$ from a successful prover such that 
+$y \equiv \pm g^u \pmod{n}$,
+where with $u = (s-s')/(c'-c)$. 
+Now because  $(c'-c)$ divides $(s-s')$ and as 
+$(s-s') \in \pm\{0,1\}^{\ell_x+\ell_c + \ell_\varnothing+2}$,
+we must have
+$u \in \pm\{0,1\}^{\ell_x+\ell_c + \ell_\varnothing+2}$.
+In other words, the discrete logarithm known to the prover has at most 
+$\ell_x+\ell_c + \ell_\varnothing+2$ bits (neglecting its sign). 
+Note that this length is independent of the length of the modulus $n$.
+Also note that in fact the length of the prover's secret must be shorter, 
+(only about $\ell_x$ bits) for the prover to be able to run
+the protocol successfully with high probability; so the protocol is not an argument of the
+exact length of the secret.
+However, in many cases this is good enough. 
+We denote this modified protocol as 
+$\textit{PK}\{(\alpha): y \equiv g^\alpha \pmod{n}  \quad \wedge \quad 
+\alpha \in  \pm\zo^{\ell_x+\ell_c + \ell_\varnothing+2}\}$.
+
+The protocol can be also be used to prove that the secret known to the prover 
+lies in any interval, say, in $[a,b]$.
+To this end note that $[a,b] = [\frac{a+b}{2} -  \frac{b-a}{2} , \frac{a+b}{2} + \frac{b-2}{2} ]$.
+Thus the protocol denoted 
+\[\textit{PK}\{(\alpha): \frac{y}{g^{(a+b)/2}} \equiv g^\alpha \pmod{n} \quad \wedge \quad \alpha \in 
+[-  \frac{b-a}{2} , \frac{b-a}{2} ] 
+\}
+\]
+is an argument that the prover knows a value $x$ such 
+that $x \in [a,b]$ and $y \equiv g^x \pmod{n}$.
+As before, the actual value $x$ given as input to the prover 
+must lie in a smaller interval, namely
+in the interval 
+$[\frac{a+b}{2} -  \frac{b-a}{2 \cdot 2^{\ell_c + \ell_\varnothing +2}} , 
+\frac{a+b}{2} + \frac{a+b}{2 \cdot 2^{\ell_c + \ell_\varnothing +2}}]$.
+
+
+It is straightforward to extent and generalize the protocols just discussed 
+in the same way as the
+protocols we considered for groups of 
+known order.
+Moreover, the protocols over groups of known order and those over groups of
+unknown order can be combined.
+Let us consider a simple combination as an example; 
+the constructions of general combinations
+is left as an exercise to the reader.
+
+Assume a group $G = \langle g \rangle$ of order a prime $q$,
+and let $n$ be an RSA modulus as above,  $h_1$ be an element
+from $\Zs{n}$, $h_2$ be an element from $\langle h_1 \rangle$, and
+$y = g^x$ with $x \in \zo^{\ell_x}$ for some integer $\ell_x < (\log_2 q) - 1 - ( \ell_c 
++ \ell_\varnothing + 2) $. 
+Finally, assume that the prover is not privy to $n$'s factorization.
+Now consider the following protocol.
+The common input to the prover and the verifier consists of $q$, $g$, $y$, $n$, $h_1$,  $h_2$, and $a$
+and the secret input to the prover consists of $x$. 
+\begin{enumerate}
+\item First, the prover chooses a random $r \in_R [0,n 2^{\ell_\varnothing}]$, computes
+$z := h_1^x h_2^r \bmod{n}$, and sends $z$ to the verifier.
+\item Next, the prover and the verifier run the protocol denoted:
+\[
+\textit{PK}\{(\alpha,\beta ): y = g^\alpha 
+\ \ \wedge \ \
+ z \equiv h_1^\alpha h_2^\beta \!\!\!\!\pmod{n} \ \ \wedge \ \
+\alpha \in  \pm\zo^{\ell_x+\ell_c + \ell_\varnothing+2}\},
+\]
+i.e., they perform the following 
+steps.
+\begin{enumerate}
+\item The prover chooses a random $r_\alpha \in [-a2^{\ell_c + \ell_\varnothing}, a2^{\ell_c + \ell_\varnothing}] $
+and a random $r_\beta \in \zo^{\ell_n+\ell_c + 2 \ell_\varnothing}] $, computes
+$t_y := g^{r_\alpha}$ and $t_z := h_1^{r_\alpha} h_2^{r_\beta} \bmod{n}$ and 
+sends $t_y$ and $t_z$ to the verifier.
+\item The verifier chooses a random $c \in_R \{0,1\}^{\ell_c}$ and sends that to the 
+prover.
+\item The prover replies with $s_\alpha := r_\alpha - xc$ and 
+$s_\beta := r_\beta - r c$.
+\item The verifier checks whether 
+\begin{xalignat*}{2}
+t_y & \stackrel{?}{=}  y^c g^{s_\alpha} \quad, &
+t_z &\stackrel{?}{\equiv}  z^c h_1^{s_\alpha} h_2^{s_\beta} \pmod{n}
+\quad, \ \text{and}\quad \\
+s_\alpha &\stackrel{?}{\in}  \pm \{0,1\}^{\ell_x+\ell_c + \ell_\varnothing+1}
+\end{xalignat*}
+hold.
+\end{enumerate}
+\end{enumerate}
+
+Let us analyze this protocol.
+From our considerations above we know that 
+one can extract from a successful prover
+values $(t_y,t_z, c, s_\alpha, s_\beta)$
+and  $(t'_y,t'_z, c', s'_\alpha, s'_\beta)$
+with $(t_y,t_z) = (t'_y,t'_z)$ and $c \neq c'$.
+From the verification equations we have that 
+\begin{xalignat*}{2}
+z^{c-c'} &\equiv h_1^{s'_\alpha - s_\alpha} h_2^{s'_\beta - s_\beta} \pmod{n}\enspace, \quad &
+y^{c-c'} &= g^{s'_\alpha - s_\alpha}\enspace, \quad \text{and}\\
+(s'_\alpha - s_\alpha) &\in \pm \{0,1\}^{\ell_x+\ell_c + \ell_\varnothing+2}\enspace.
+\end{xalignat*}
+From the first  of these equations we can conclude that under 
+the Strong RSA assumption $(c-c')$ divides $(s'_\alpha - s_\alpha)$, i.e.,
+there exists some $u $ such that $(s'_\alpha - s_\alpha) = u (c-c') $.
+  Thus, we can rewrite the second equation as 
+$y^{c-c'} = g^{u (c-c')}$.
+Now, as $y \in \langle g \rangle$ (which we can test as $g$ has prime order $q$),
+we must have $y = g^u$.
+From the third of the equations we can further
+ derive that $u \in  \pm \{0,1\}^{\ell_x+\ell_c + \ell_\varnothing+2}$.
+Thus the verifier is assured that the prover knows $\log_g y$ which lies in
+ $\pm \{0,1\}^{\ell_x+\ell_c + \ell_\varnothing+2}$, i.e., the protocol 
+is a proof that a discrete logarithm in a group of \emph{known order} lies in some interval.
+Of course this makes  sense only if the group's order 
+is larger than $2^{\ell_x+\ell_c + \ell_\varnothing+3}$.
+
+As the basic protocol $\textit{PK}\{(\alpha): y \equiv \pm g^\alpha \pmod{n}\}$ in 
+group of unknown order, the protocol just described in not a proof of knowledge either
+as its analysis depends on the strong RSA assumption and thus is correct only if the prover can 
+execute the protocol for a random $n$.
+As the goal of the protocol was to prove that $\log_g y$ lies in some interval,
+we do not need to fix $n$ but could have the verifier generate $n$ and send it to the
+prover before running the protocol.
+The protocol augmented like this would indeed be a true proof of knowledge.
+For the protocol to be zero-knowledge, the prover needs to be ensured that $h_2 \in \langle h_1 \rangle$ as
+otherwise $z$ could leak information about $x$.
+Unfortunately, the only way known to prove that $h_2 \in \langle h_1 \rangle$ holds is
+not very efficient, i.e., is to have the verifier run the protocol
+$\textit{PK}\{(\alpha): h_2 \equiv \pm h_1^\alpha \pmod{n}\}$ many times with binary challenges 
+(cf.\ above).
+However, in some cases this proof can be delegated to a set-up phase
+and thus needs to be done only once and for all,
+or sometimes $n$, $h_1$, and $h_2$ can be provided by a trusted third party.
+
+
+The protocol just discussed can be extended to three (or more) different groups, i.e., 
+groups $G_1 = \langle g_1 \rangle$  and $G_2 = \langle g_2 \rangle$  of known order
+$q_1$ and $q_2$ together with a RSA sub-group of unknown order as to show that two 
+discrete logarithms in $G_1$ and $G_2$ are the same.
+I.e., let $y_1 = g_1^x$ and $y_2 = g_2^x$ with $x \in \pm\zo^{\ell_x}$ and
+ $\ell_x < (\log_2 \min\{q_1,q_2\}) - 1 - ( \ell_c 
++ \ell_\varnothing + 2) $, and $z = h_1^x h_2^r \pmod{n}$ for some random $r$.
+Then, the protocol
+\[
+\textit{PK}\{(\alpha,\beta ): y_1 = g_1^\alpha  
+\quad \wedge \quad 
+y_2 = g_2^\alpha  
+\quad \wedge \quad  \\
+ z \equiv h_1^\alpha h_2^\beta \pmod{n}  \quad \wedge \quad 
+\alpha \in  \pm\zo^{\ell_x+\ell_c + \ell_\varnothing+2}\}\enspace,
+\]
+will convince a verifier that $\log_{g_1} y_1 = \log_{g_2} y_1 $ 
+where we define $\log_g y$ to be the integer $x$ for which $y=g^x$
+and that closed to $0$, i.e.,  $\log_g y$ lies in $[-q/2,q/2]$.
+Of course, the protocol can also be generalized to representations, i.e., to a protocol
+showing that an element of a representation lies in a certain interval.
+
+% \section{Example Specifications in XML}
+% 
+% We provide some examples of elements specified in XML. 
+% In addition, the test cases use simple specifications that can be used as a reference
+% when creating your own XML specifications.
+% 
+% \subsection{Credential Structure}
+% \label{sec:XML-credStruct}
+% 
+% The following credential structure follows the one proposed in 
+% Fig.~\ref{fig:credStruct}.
+% In addition it shows the flexibility of the prime encodings by having several
+% attributes encoded into one prime encoding.
+% 
+% {\small
+% \begin{verbatim}
+% <?xml version="1.0" encoding="UTF-8"?>
+% <CredentialStructure 
+% xmlns="http://www.zurich.ibm.com/security/idemix" 
+% xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+% xmlns:xs="http://www.w3.org/2001/XMLSchema"
+% xsi:schemaLocation="http://www.zurich.ibm.com/security/idemix 
+%                                   file:CredentialStructure.xsd">
+% 
+% <References>
+%   <IssuerPublicKey>
+%     http://www.ch.ch/passport/v2010/ipk.xml
+%   </IssuerPublicKey>
+% </References>
+% 
+% <Attributes>
+%   <Attribute name="FirstName" issuanceMode="known" type="string"/>
+%   <Attribute name="LastName" issuanceMode="known" type="string"/>
+%   <Attribute name="CivilStatus" issuanceMode="known" type="enum">
+%     <EnumValue name="Marriage"/>
+%     <EnumValue name="NeverMarried"/>
+%     <EnumValue name="Widowed" />
+%     <EnumValue name="LegallySeparated" />
+%     <EnumValue name="AnnulledMarriage" />
+%     <EnumValue name="Divorced" />
+%     <EnumValue name="Common-lawPartner" />
+%   </Attribute>
+%   <Attribute name="Sex" issuanceMode="known" type="enum">
+%     <EnumValue name="Male" />
+%     <EnumValue name="Female" />
+%   </Attribute>
+%   <Attribute name="OfficialLanguage" issuanceMode="known" type="enum">
+%     <EnumValue name="German" />
+%     <EnumValue name="French" />
+%     <EnumValue name="Italian"/>
+%     <EnumValue name="Rhaeto-Romanic" />
+%   </Attribute>
+%   <Attribute name="SocialSecurityNumber" issuanceMode="known" type="int"/>
+%   <Attribute name="BirthDate" issuanceMode="known" type="dateTime"/>
+%   <Attribute name="Epoch" issuanceMode="known" type="int"/>
+%   <Attribute name="Diet" issuanceMode="committed" type="string"/>
+% </Attributes>
+% 
+% <Features>
+%   <Epoch location="http://www.ch.ch/epoch file:CalculationMethod.xml"/>
+%   <Domain location="http://www.ch.ch "/>
+% </Features>
+% 
+% <Implementation>
+%   <PrimeEncoding name="PrimeEncoding1">
+%     <PrimeFactor attributeName="CivilStatus" enumValue="Marriage">
+%       3
+%     </PrimeFactor>
+%     <PrimeFactor attributeName="CivilStatus" enumValue="NeverMarried">
+%       5
+%     </PrimeFactor>
+%     <PrimeFactor attributeName="CivilStatus" enumValue="Widowed">
+%       7
+%     </PrimeFactor>
+%     <PrimeFactor attributeName="CivilStatus" enumValue="LegallySeparated">
+%       11
+%     </PrimeFactor>
+%     <PrimeFactor attributeName="CivilStatus" enumValue="AnnulledMarriage">
+%       13
+%     </PrimeFactor>
+%     <PrimeFactor attributeName="CivilStatus" enumValue="Divorced">
+%       17
+%     </PrimeFactor>
+%     <PrimeFactor attributeName="CivilStatus" enumValue="Common-lawPartner">
+%       19
+%     </PrimeFactor>
+%     <PrimeFactor attributeName="Sex" enumValue="Male">
+%       23
+%     </PrimeFactor>
+%     <PrimeFactor attributeName="Sex" enumValue="Female">
+%       29
+%     </PrimeFactor>
+%   </PrimeEncoding>
+%   <PrimeEncoding name="PrimeEncoding2">
+%     <PrimeFactor attributeName="OfficialLanguage" enumValue="German">
+%       2
+%     </PrimeFactor>
+%     <PrimeFactor attributeName="OfficialLanguage" enumValue="French">
+%       3
+%     </PrimeFactor>
+%     <PrimeFactor attributeName="OfficialLanguage" enumValue="Italian">
+%       5
+%     </PrimeFactor>
+%     <PrimeFactor attributeName="OfficialLanguage" enumValue="Rhaeto-Romanic">
+%       7
+%     </PrimeFactor>
+%   </PrimeEncoding>
+%   <AttributeOrder>
+%     <Attribute name="FirstName">1</Attribute>
+%     <Attribute name="LastName">2</Attribute>
+%     <Attribute name="primeEncoding1">3</Attribute>
+%     <Attribute name="primeEncoding2">4</Attribute>
+%     <Attribute name="SocialSecurityNumber">5</Attribute>
+%     <Attribute name="BirthDate">6</Attribute>
+%     <Attribute name="Epoch">7</Attribute>
+%     <Attribute name="Diet">8</Attribute>
+%   </AttributeOrder>
+% </Implementation>
+% 
+% </CredentialStructure>
+% \end{verbatim}
+% }
+% 
+% \subsection{Proof Specification}
+% \label{sec:XML-proofSpec}
+% 
+% {\small
+% \begin{verbatim}
+% <?xml version="1.0" encoding="UTF-8"?>
+% <CredentialStructure xmlns="http://www.zurich.ibm.com/security/idemix"
+% 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+% 	xsi:schemaLocation="http://www.zurich.ibm.com/security/idemix CertificateStructure.xsd">
+% 
+% 	<References>
+% 		<IssuerPublicKey>
+% 			tests\com\ibm\zrl\idmx\tests\ipk.xml
+% 		</IssuerPublicKey>
+% 	</References>
+% 
+% 	<Attributes>
+% 		<Attribute issuanceMode="known" name="FirstName" type="string" />
+% 		<Attribute issuanceMode="known" name="LastName" type="string" />
+% 		<Attribute issuanceMode="known" name="CivilStatus" type="enum">
+% 			<EnumValue>Marriage</EnumValue>
+% 			<EnumValue>NeverMarried</EnumValue>
+% 			<EnumValue>Widowed</EnumValue>
+% 			<EnumValue>LegallySeparated</EnumValue>
+% 			<EnumValue>AnnulledMarriage</EnumValue>
+% 			<EnumValue>Divorced</EnumValue>
+% 			<EnumValue>Common-lawPartner</EnumValue>
+% 		</Attribute>
+% 		<Attribute issuanceMode="known" name="SocialSecurityNumber"
+% 			type="int" />
+% 		<Attribute issuanceMode="known" name="BirthDate" type="date" />
+% 		<Attribute issuanceMode="committed" name="Diet" type="string" />
+% 		<Attribute issuanceMode="known" name="Epoch" type="epoch" />
+% 		<Attribute issuanceMode="known" name="OfficialLanguage"
+% 			type="enum">
+% 			<EnumValue>German</EnumValue>
+% 			<EnumValue>French</EnumValue>
+% 			<EnumValue>Italian</EnumValue>
+% 			<EnumValue>Rhaeto-Romanic</EnumValue>
+% 		</Attribute>
+% 		<Attribute issuanceMode="committed" name="DriverCategory"
+% 			type="enum">
+% 			<EnumValue>A1</EnumValue>
+% 			<EnumValue>B</EnumValue>
+% 			<EnumValue>B1</EnumValue>
+% 			<EnumValue>C</EnumValue>
+% 			<EnumValue>C1</EnumValue>
+% 			<EnumValue>D</EnumValue>
+% 			<EnumValue>D1</EnumValue>
+% 			<EnumValue>BE</EnumValue>
+% 			<EnumValue>CE</EnumValue>
+% 			<EnumValue>DE</EnumValue>
+% 			<EnumValue>C1E</EnumValue>
+% 			<EnumValue>D1E</EnumValue>
+% 			<EnumValue>F</EnumValue>
+% 			<EnumValue>G</EnumValue>
+% 			<EnumValue>M</EnumValue>
+% 		</Attribute>
+% 		<Attribute issuanceMode="known" name="Gender" type="enum">
+% 			<EnumValue>Male</EnumValue>
+% 			<EnumValue>Female</EnumValue>
+% 		</Attribute>
+% 	</Attributes>
+% 
+% 	<Features>
+% 		<Updates>http://www.ibm.com/employee/updates.xml</Updates>
+% 	</Features>
+% 
+% 	<Implementation>
+% 		<PrimeEncoding name="PrimeEncoding1">
+% 			<PrimeFactor attName="CivilStatus" attValue="Marriage">3
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="CivilStatus" attValue="NeverMarried">5
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="CivilStatus" attValue="Widowed">7
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="CivilStatus" attValue="LegallySeparated">11
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="CivilStatus" attValue="AnnulledMarriage">13
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="CivilStatus" attValue="Divorced">17
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="CivilStatus" attValue="Common-lawPartner">19
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="OfficialLanguage" attValue="German">23
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="OfficialLanguage" attValue="French">29
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="OfficialLanguage" attValue="Italian">31
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="OfficialLanguage" attValue="Rhaeto-Romanic">37
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="Gender" attValue="Male">41
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="Gender" attValue="Female">43
+% 			</PrimeFactor>
+% 		</PrimeEncoding>
+% 		<PrimeEncoding name="PrimeEncoding2">
+% 			<PrimeFactor attName="DriverCategory" attValue="A1">3
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="DriverCategory" attValue="B">5
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="DriverCategory" attValue="B1">7
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="DriverCategory" attValue="C">11
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="DriverCategory" attValue="C1">13
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="DriverCategory" attValue="D">17
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="DriverCategory" attValue="D1">19
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="DriverCategory" attValue="BE">23
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="DriverCategory" attValue="CE">29
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="DriverCategory" attValue="DE">31
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="DriverCategory" attValue="C1E">37
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="DriverCategory" attValue="D1E">41
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="DriverCategory" attValue="F">43
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="DriverCategory" attValue="G">47
+% 			</PrimeFactor>
+% 			<PrimeFactor attName="DriverCategory" attValue="M">53
+% 			</PrimeFactor>
+% 		</PrimeEncoding>
+% 		<AttributeOrder>
+% 			<Attribute name="FirstName">1</Attribute>
+% 			<Attribute name="LastName">2</Attribute>
+% 			<Attribute name="PrimeEncoding1">3</Attribute>
+% 			<Attribute name="SocialSecurityNumber">4</Attribute>
+% 			<Attribute name="BirthDate">5</Attribute>
+% 			<Attribute name="Diet">6</Attribute>
+% 			<Attribute name="Epoch">7</Attribute>
+% 			<Attribute name="PrimeEncoding2">8</Attribute>
+% 		</AttributeOrder>
+% 	</Implementation>
+% </CredentialStructure>
+% \end{verbatim}
+% }
+
+% \subsection{Data}
+% \label{app:data}
+% 
+% XML of the data objects.
+
+

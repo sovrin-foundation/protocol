@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<abc:CredentialSpecification
+  xmlns:abc="http://abc4trust.eu/wp2/abcschemav1.0"
+  Version="Version 1.0"
+  KeyBinding="true"
+  Revocable="false">
+  <abc:SpecificationUID>http://example.com/cs/passport.xml
+  </abc:SpecificationUID>
+  <abc:DefaultImageReference>http://example.com/passport.png
+  </abc:DefaultImageReference>
+    <abc:AttributeDescriptions MaxLength="256">
+      <abc:AttributeDescription Type="Fullname" DataType="xs:string"
+           Encoding="urn:abc4trust:1.0:encoding:string:utf-8" />
+      <abc:AttributeDescription Type="DOB" DataType="xs:date"
+           Encoding="urn:abc4trust:1.0:encoding:date:since1870:unsigned" />
+      <abc:AttributeDescription Type="Serial" DataType="xs:integer"
+           Encoding="urn:abc4trust:1.0:encoding:integer:unsigned" />
+    </abc:AttributeDescriptions>
+</abc:CredentialSpecification>

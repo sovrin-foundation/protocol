@@ -1,0 +1,23 @@
+%!TEX root =  IdmxSpecification.tex
+
+\section{Building Blocks}
+
+In this Section we describe the cryptographic building blocks supported
+by the Idmx library, and list their interfaces.
+We start by describing interfaces that are shared by
+multiple building blocks. 
+Section~\ref{sec:blocks:common} we outline the interfaces that are shared among most 
+building blocks.
+In Section~\ref{sec:blocks:major} we describe
+the major building blocks, which are \emph{abstract} interfaces, and
+list their concrete realization in Section~\ref{sec:blocks:major:impl}.
+Further, Section~\ref{sec:blocks:helper} we describe
+the helper building blocks, which are used as ``subroutines'' by the major blocks.
+Finally, in Section~\ref{sec:blocks:structural} we describe the structural
+building blocks, whose role it is to configure the zero-knowledge proof.
+
+\input{_blocks_1_common}
+\input{_blocks_2_major}
+\input{_blocks_3_major-impl}
+\input{_blocks_4_helper}
+\input{_blocks_5_struct}

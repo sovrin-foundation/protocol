@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<abc:CredentialSpecification
+  xmlns:abc="http://abc4trust.eu/wp2/abcschemav1.0"
+  Version="Version 1.0"
+  KeyBinding="true"
+  Revocable="false">
+  <abc:SpecificationUID>http://example.com/cs/cc.xml
+  </abc:SpecificationUID>
+  <abc:DefaultImageReference>http://example.com/cc.png
+  </abc:DefaultImageReference>
+    <abc:AttributeDescriptions MaxLength="256">
+      <abc:AttributeDescription Type="Number" DataType="xs:integer"
+           Encoding="urn:abc4trust:1.0:encoding:integer:unsigned" />
+      <abc:AttributeDescription Type="Name" DataType="xs:string"
+           Encoding="urn:abc4trust:1.0:encoding:string:utf-8" />
+      <abc:AttributeDescription Type="Status" DataType="xs:string"
+           Encoding="urn:abc4trust:1.0:encoding:string:utf-8" />
+    </abc:AttributeDescriptions>
+</abc:CredentialSpecification>

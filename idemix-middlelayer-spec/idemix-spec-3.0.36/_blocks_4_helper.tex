@@ -1,0 +1,643 @@
+%!TEX root =  IdmxSpecification.tex
+
+  \subsection{Helper Building Blocks}
+  \label{sec:blocks:helper}
+  Unlike the major building blocks, the helper building blocks implement
+  a concrete cryptographic functionality. These helper building blocks
+  are intended to be used exclusively as ``subroutines'' by the major building blocks.
+
+% ===========================================================================
+% ===========================================================================
+% ===========================================================================
+   The next three Building Blocks, Pedersen, Damgard-Fujisaki, and ModNSquare
+   Representations are conceptually very similar. They differ in which groups
+   they operate in.
+
+   \subsubsection{Datastructure for bases in Representation Building Blocks}
+   The Pedersen and Damgard-Fujisaki Representation Building Blocks make
+   use of the following datastructure to represent the bases they use:
+
+      \begin{method}
+      {BaseForRepresentation}
+      {buildBaseForRepresentationFromConstant}
+      {
+        {@in @Nullable GroupElement value}
+        {@in boolean chooseExponentRandomly}
+        {@in boolean hasExternalSecret}
+        {@in @Nullable BigInteger externalRandomizerOffset}
+      }
+      This factory generates a base for a Pedersen or Damgard-Fujisaki Representation.
+      The value specifies the value of the base. That value will be registered as an N-value.
+      (If the prover uses this method, the verifier is allowed to use
+      buildBaseForRepresentationFromDValue to recover the value from the D-value.)
+      The Representation Block will generate
+      a term of the form $\emph{base}^{\emph{exponent}}$ for each BaseForRepresentation element.
+      The flags will inform the Representation Block about the nature of the exponent:
+      \robert{It might also be a good idea to use different method altogether for these use cases instead of using flags}
+      \begin{itemize}
+        \item The exponent is a managed attribute whose value will be provided by another block.
+          In this case, set chooseExponentRandomly and hasExternalSecret to false, and externalRandomizerOffset to null.
+        \item The exponent is a managed attribute whose value shall be chosen randomly by the Representation block.
+          For Pedersen Representation, the attribute will be between 0 and the subgroup order minus 1.
+          For Damgard-Fujisaki Representation, the size of the attribute will be the size of the modulus plus \texttt{statisticalzk}.
+          In this case, set chooseExponentRandomly to true, hasExternalSecret to false, and externalRandomizerOffset to null.
+        \item The exponent is the device secret. In that case, set choseRandomizer to false, hasExternalSecret to true,
+          externalRandomizerOffset to null.
+        \item The exponent is the device randomizer (``credential secret key'') plus an optional offset.
+          In that case, set chooseExponentRandomly and hasExternalSecret to false, externalRandomizerOffset to the offset
+          (if the offset is not there, set it to zero).
+      \end{itemize}
+      \end{method}
+      \begin{method}
+      {BaseForRepresentation}
+      {buildBaseForRepresentationFromDValue}
+      {
+        {@in String identifierOfDValue}
+        {@in boolean chooseExponentRandomly}
+        {@in boolean hasExternalSecret}
+        {@in @Nullable BigInteger externalRandomizerOffset}
+      }
+      Same as buildBaseForRepresentationFromConstant, except that
+      the value of the base is taken from the value of the given D-Value.
+      \end{method}
+
+      The ModNSquare Representation uses the following methods instead:
+
+      \begin{method}
+      {BaseForModNSquareRepresentation}
+      {buildBaseForModNSqureRepresentationFromConstant}
+      {
+        {@in GroupElement value}
+        {@in boolean chooseExponentRandomly}
+        {@in ENUM(N\_NPRIME, N, NPRIME) order}
+      }
+      This factory generates a base for a ModNSquare Representation.
+      The value specifies the value of the base. That value will be registered as an N-value.
+      (If the prover uses this method, the verifier is allowed to use
+      buildBaseForModNSquareRepresentationFromDValue to recover the value from the D-value.)
+      The Representation Block will generate
+      a term of the form $\emph{base}^{\emph{exponent}}$ for each BaseForModNSquareRepresentation element.
+      Order represents the order of the base.
+      If chooseExponentRandomly is true, then the Representation Block will choose the value of the exponent randomly; if order is N,
+      the exponent will be chosen between 0 and the modulus minus 1, else the size of the exponents in bits will be equal to the size of the
+      order plus statistical-zk.
+      \end{method}
+      \begin{method}
+      {BaseForModNSquareRepresentation}
+      {buildBaseForModNSquareRepresentationFromDValue}
+      {
+        {@in String identifierOfDValue}
+        {@in boolean hasManagedRandomizer}
+        {@in ENUM(N\_NPRIME, N, NPRIME) order}
+      }
+      This method is similar to buildBaseForModNSqureRepresentationFromConstant,
+      except that the value
+      of the base is taken from the value of the given D-Value.
+      \end{method}
+
+    \subsubsection{Pedersen Representation}
+    \identifier{b:h:rep:p}
+
+    This block is used for generating a Pedersen commitment of a list
+    of attributes (including secrets), and proving knowledge of the representation.
+    This block is intended to be used as a sub-block by other building
+    blocks. This block is very complex, as it has to satisfy many use-cases.
+
+    This block has the following interfaces:
+    the one described in Section \ref{sec:intf:all};
+    and a proof interface (Section \ref{sec:intf:proof}).
+      We will now describe these interfaces in more detail.
+
+    \paragraph{Proof interface.}
+    The identifier of the attribute corresponding to the $(i+1)$st base will
+    be equal to the identifier of the instance of the ZkModule concatenated
+    with \texttt{:$i$}.
+    All bases used in this representation will be registered as integer N-values in
+    the proof; the name of the N-values will consist of the identifier of the instance
+    of the ZkModule concatenated with \texttt{:base:0}, \texttt{:base:1}, $\ldots$.
+    The commitment itself is registered as
+    an N-value whose name ends in \texttt{:C}. The modulus will also be registered in
+    an N-value whose name ends in \texttt{:p}. It is up to the caller to register D-values
+    if appropriate.
+
+    The caller may omit to specify the value of some of the attributes; in this case, he must
+    ensure that the attribute values will be available in time (by for example marking them as \emph{required}).
+    The caller may omit to specify the value of some of the bases, and instead request
+    that the base be copied from a D-value (with the same name as described above for N-values);
+    the caller must guarantee that this D-value will be available in time.
+      \begin{method}
+      {ZkModuleProver}
+      {getZkModuleProver}
+      {
+        {@in Map<Field, Value> systemParameters}
+        {@in Map<Field, Value> verifierParameters}
+        {@in String identifierOfModule}
+        {@in @Nullable String identifierOfSecret}
+        {@in @Nullable String identifierOfCredentialForSecret}
+        {@in List<BaseForRepresentation> bases}
+        {@in BigInteger modulus}
+        {@in BigInteger subgroupOrder}
+        {@ref BuildingBlockFactory bbFactory \textrm{\emph{/* For creating new sub-blocks*/}}}
+        {@ref @Nullable ExternalSecretManager esManager \textrm{\emph{/* Manages e.g., smartcards*/}}}
+      }
+      For all bases where chooseExponentRandomly is true, this method chooses a random value between $0$ and
+      $\textit{subgroupOrder}-1$ for the
+      corresponding attribute, and \emph{sets} that attribute value during the \emph{initialization} phase.
+
+      If a secret is used, exactly one base must have hasExternalSecret set, and at most one base must have a
+      non-null externalRandomizerOffset. This Block will call the External Secret Manager to delegate part of
+      the proof to the external device.
+
+      It then generates a ZkModuleProver that does the following:
+      (1) It then generates the Pedersen commitment $$C = \prod \textit{base}^\textit{exponent} \pmod{\textit{modulus}}$$,
+      possibly with the help of the external device (though the External Secret Manager);
+      (2) it proves knowledge of the attribute values contained in the commitment possibly with the help of the
+      external device (through the External Secret Manager).
+
+      It is the caller's responsibility to \emph{provide} or \emph{set} attribute values that are available and \emph{require}
+      attribute values that must be copied from other blocks.
+
+      The ZkModuleProver that is created implements the following additional methods:
+        \begin{itemize}
+          \item GroupElement recoverCommitment()---recovers value of the commitment $C$. This method may be called only after this sub-module
+             has finished the firstRound() in the proof.
+          \item List<BigInteger> recoverRandomizers()---recovers value of the randomizers. This method may be called at any time.
+        \end{itemize}
+
+      \end{method}
+      \begin{method}
+      {ZkModuleVerifier}
+      {getZkModuleVerifier}
+      {
+        {@in Map<Field, Value> systemParameters}
+        {@in Map<Field, Value> verifierParameters}
+        {@in String identifierOfModule}
+        {@in boolean hasSecret}
+        {@in List<BaseForRepresentation> bases}
+        {@in @Nullable GroupElementOrString commitment}
+        {@in @Nullable BigInteger modulus}
+        {@in BigInteger subgroupOrder}
+        {@ref BuildingBlockFactory bbFactory \textrm{\emph{/* For creating new sub-blocks*/}}}
+      }
+      This method creates a new ZkModuleVerifier object that will know how to
+      verify a proof of knowledge of the representation generated by getZkModuleProver.
+      \end{method}
+      %\begin{method}
+      %{ZkModuleDescriber}
+      %{getZkModuleDescriber}
+      %{
+        %{@in Map<Field, Value> systemParameters}
+        %{@in Map<Field, Value> verifierParameters}
+        %{@in String identifierOfModule}
+        %{@in @Nullable GroupElementOrString baseForSecret}
+        %{@in @Nullable String identifierOfSecret}
+        %{@in List<BaseForRepresentation> bases}
+        %{@in BigInteger modulus}
+        %{@in BigInteger subgroupOrder}
+        %{@ref BuildingBlockFactory bbFactory \textrm{\emph{/* For creating new sub-blocks*/}}}
+      %}
+      %This method creates a new ZkModuleDescriber object that will know how to
+      %describe what the corresponding ZkModuleProver does.
+      %\end{method}
+
+% ===========================================================================
+% ===========================================================================
+% ===========================================================================
+    \subsubsection{Damg\aa{}rd-Fujisaki Representation}
+    \identifier{b:h:rep:df}
+
+    This module is used for proving representations
+    (i.e., doing a Damg\aa{}rd-Fujisaki commitment) in a group of
+    signed quadratic residues modulo a composite.
+    This block is intended to be used as a sub-block by other building
+    blocks. This block is very complex, as it has to satisfy may use-cases.
+
+    It is conceptually very similar to the Pedersen representation block.
+
+    This block has the following interfaces:
+    the one described in Section \ref{sec:intf:all};
+    and a proof interface (Section \ref{sec:intf:proof}).
+      We will now describe these interfaces in more detail.
+
+    \paragraph{Proof interface.}
+    The identifier of the attribute corresponding to the $(i+1)$st base will
+    be equa identifier of the instance of the ZkModule concatenated
+    with \texttt{:$i$}.
+    The bases used in this representation will be registered as integer N-values in
+    the proof; the name of the N-values will consist of the identifier of the instance
+    of the ZkModule concatenated with \texttt{:base:0}, \texttt{:base:1}, $\ldots$.
+    The commitment itself is also registered as
+    an N-value whose name ends in \texttt{:C}. The modulus is also registered as a
+    N-value whose name ends in \texttt{:n}. It is up to the caller to register D-values
+    if appropriate.
+
+    The caller may omit to specify the value of some of the attributes; in this case, he must
+    ensure that the attribute values will be available in time (by for example marking them as \emph{required}).
+    The caller may omit to specify the value of some of the bases, and instead request
+    that the base be copied from a D-value (with the same name as described above for N-values);
+    the caller must guarantee that this D-value will be available in time.
+      \begin{method}
+      {ZkModuleProver}
+      {getZkModuleProver}
+      {
+        {@in Map<Field, Value> systemParameters}
+        {@in Map<Field, Value> verifierParameters}
+        {@in String identifierOfModule}
+        {@in @Nullable String identifierOfSecret}
+        {@in @Nullable String identifierOfCredentialForSecret}
+        {@in List<BaseForRepresentation> bases}
+        {@in BigInteger modulus}
+        {@ref BuildingBlockFactory bbFactory \textrm{\emph{/* For creating new sub-blocks*/}}}
+        {@ref @Nullable ExternalSecretManager esManager \textrm{\emph{/* Manages e.g., smartcards*/}}}
+      }
+      For all bases where chooseExponentRandomly is true, this method chooses a random value whose size is
+      equal to the size of the modulus plus the statistical-zk parameter.
+      The ZkModule \emph{provides} the value during the \emph{initialization} phase.
+
+      If a secret is used, exactly one base must have hasExternalSecret set, and at most one base must have a
+      non-null externalRandomizerOffset. This Block will call the External Secret Manager to delegate part of
+      the proof to the external device.
+
+      It then generates a ZkModuleProver that does the following:
+      (1) It then generates the Damg\aa{}rd-Fujisaki commitment $$C = \prod \textit{base}^\textit{exponent}$$
+      in the group of signed quadratic residues modulo \textit{modulus};
+      possibly with the help of the external device (though the External Secret Manager);
+      (2) it proves knowledge of the attribute values contained in the commitment possibly with the help of the
+      external device (through the External Secret Manager).
+
+
+      It is the caller's responsibility to \emph{provide} or \emph{set} attribute values that are available and \emph{require}
+      attribute values that must be copied from other blocks.
+
+      The ZkModuleProver that is created implements the following additional methods:
+        \begin{itemize}
+          \item GroupElement recoverCommitment()---recovers value of the commitment $C$. This method may be called only after this sub-module
+             has finished the firstRound() in the proof.
+          \item List<BigInteger> recoverRandomizers()---recovers value of the randomizers. This method may be called at any time.
+        \end{itemize}
+
+      \end{method}
+      \begin{method}
+      {ZkModuleVerifier}
+      {getZkModuleVerifier}
+      {
+        {@in Map<Field, Value> systemParameters}
+        {@in Map<Field, Value> verifierParameters}
+        {@in String identifierOfModule}
+        {@in boolean hasSecret}
+        {@in List<BaseForRepresentation> bases}
+        {@in @Nullable GroupElementOrString commitment}
+        {@in @Nullable BigInteger modulus}
+        {@ref BuildingBlockFactory bbFactory \textrm{\emph{/* For creating new sub-blocks*/}}}
+      }
+      This method creates a new ZkModuleVerifier object that will know how to
+      verify a proof of knowledge of the representation generated by getZkModuleProver.
+      \end{method}
+      %\begin{method}
+      %{ZkModuleDescriber}
+      %{getZkModuleDescriber}
+      %{
+        %{@in Map<Field, Value> systemParameters}
+        %{@in Map<Field, Value> verifierParameters}
+        %{@in String identifierOfModule}
+        %{@in @Nullable String identifierOfSecret}
+        %{@in List<BaseForRepresentation> bases}
+        %{@in BigInteger modulus}
+        %{@ref BuildingBlockFactory bbFactory \textrm{\emph{/* For creating new sub-blocks*/}}}
+      %}
+      %This method creates a new ZkModuleDescriber object that will know how to
+      %describe what the corresponding ZkModuleProver does.
+      %\end{method}
+
+% ===========================================================================
+% ===========================================================================
+% ===========================================================================
+    \subsubsection{ModNSquare Representation}
+    \identifier{b:h:rep:ns}
+
+    This module is used for proving representations
+    in a group of modulo the square of a safe RSA modulus.
+    This block is intended to be used as a sub-block by other building
+    blocks. This block is very complex, as it has to satisfy may use-cases.
+
+    It is conceptually very similar to the Pedersen representation block.
+
+    This block has the following interfaces:
+    the one described in Section \ref{sec:intf:all};
+    and a proof interface (Section \ref{sec:intf:proof}).
+      We will now describe these interfaces in more detail.
+
+    \paragraph{Proof interface.}
+    The identifier of the attribute corresponding to the $(i+1)$st base will
+    be equa identifier of the instance of the ZkModule concatenated
+    with \texttt{:$i$}.
+    The bases used in this representation will be registered as integer N-values in
+    the proof; the name of the N-values will consist of the identifier of the instance
+    of the ZkModule concatenated with \texttt{:base:0}, \texttt{:base:1}, $\ldots$.
+    The commitment itself is also registered as
+    an N-value whose name ends in \texttt{:C}. The modulus is also registered as a
+    N-value whose name ends in \texttt{:n}. It is up to the caller to register D-values
+    if appropriate.
+
+    The caller may omit to specify the value of some of the attributes; in this case, he must
+    ensure that the attribute values will be available in time (by for example marking them as \emph{required}).
+    The caller may omit to specify the value of some of the bases, and instead request
+    that the base be copied from a D-value (with the same name as described above for N-values);
+    the caller must guarantee that this D-value will be available in time.
+      \begin{method}
+      {ZkModuleProver}
+      {getZkModuleProver}
+      {
+        {@in Map<Field, Value> systemParameters}
+        {@in Map<Field, Value> verifierParameters}
+        {@in String identifierOfModule}
+        {@in List<BaseForModNSquareRepresentation> bases}
+        {@in boolean takeAbsoluteValue}
+        {@in BigInteger n}
+        {@ref BuildingBlockFactory bbFactory \textrm{\emph{/* For creating new sub-blocks*/}}}
+      }
+      For all bases where chooseExponentRandomly is true, this method chooses a random value of
+      appropriate size.
+      The ZkModule \emph{provides} the value during the \emph{initialization} phase.
+
+      If takeAbsoluteValue is set, then the absolute value (between $0$ and $n^2/2$) of the commitment
+      is taken.
+
+      It then generates a ZkModuleProver that does the following:
+      (1) It then generates the commitment $$C = \prod \textit{base}^\textit{exponent} \pmod{n^2}$$
+      in the group modulo $n^2$;
+      (2) it proves knowledge of the attribute values contained in the commitment.
+
+      It is the caller's responsibility to \emph{provide} or \emph{set} attribute values that are available and \emph{require}
+      attribute values that must be copied from other blocks.
+
+      The ZkModuleProver that is created implements the following additional methods:
+        \begin{itemize}
+          \item GroupElement recoverCommitment()---recovers value of the commitment $C$. This method may be called only after this sub-module
+             has finished the firstRound() in the proof.
+          \item List<BigInteger> recoverRandomizers()---recovers value of the randomizers. This method may be called at any time.
+        \end{itemize}
+
+      \end{method}
+      \begin{method}
+      {ZkModuleVerifier}
+      {getZkModuleVerifier}
+      {
+        {@in Map<Field, Value> systemParameters}
+        {@in Map<Field, Value> verifierParameters}
+        {@in String identifierOfModule}
+        {@in List<BaseForModNSqureRepresentation> bases}
+        {@in @Nullable GroupElementOrString commitment}
+        {@in boolean takeAbsoluteValue}
+        {@in @Nullable BigInteger n}
+        {@ref BuildingBlockFactory bbFactory \textrm{\emph{/* For creating new sub-blocks*/}}}
+      }
+      This method creates a new ZkModuleVerifier object that will know how to
+      verify a proof of knowledge of the representation generated by getZkModuleProver.
+      \end{method}
+      %\begin{method}
+      %{ZkModuleDescriber}
+      %{getZkModuleDescriber}
+      %{
+        %{@in Map<Field, Value> systemParameters}
+        %{@in Map<Field, Value> verifierParameters}
+        %{@in String identifierOfModule}
+        %{@in @Nullable String identifierOfSecret}
+        %{@in List<BaseForModNSqureRepresentation> bases}
+        %{@in boolean takeAbsoluteValue}
+        %{@in BigInteger n}
+        %{@ref BuildingBlockFactory bbFactory \textrm{\emph{/* For creating new sub-blocks*/}}}
+      %}
+      %This method creates a new ZkModuleDescriber object that will know how to
+      %describe what the corresponding ZkModuleProver does.
+      %\end{method}
+% ===========================================================================
+% ===========================================================================
+% ===========================================================================
+\iffalse
+    \subsubsection{Range Check}
+    \identifier{b:h:rangechk}
+
+    This module ensures that the attribute given as argument lies in
+    between 0 and $\emph{dhgrouporder}-1$ (when expressed as an integer)
+    by using range proofs. This block makes it safe to use range proofs with
+    attributes in a prime order group, and makes it safe to mix attributes living
+    in different known order groups. (It might however slow down the proof generation
+    considerably.)
+
+    This block has the following interfaces:
+    the one described in Section \ref{sec:intf:all}
+    and a proof interface (Section \ref{sec:intf:proof}).
+      We will now describe these interfaces in more detail.
+
+    \paragraph{Proof interface.}
+      \begin{method}
+      {ZkModuleProver}
+      {getZkModuleProver}
+      {
+        {@in Map<Field, Value> systemParameters}
+        {@in Map<Field, Value> verifierParameters}
+        {@in String identifierOfAttribute}
+        {@in boolean checkGreaterEqualZero}
+        {@in boolean checkSmallerThanDhSubgroup}
+        {@in BuildingBlock inequalityBuildingBlock}
+        {@ref BuildingBlockFactory bbFactory \textrm{\emph{/* For creating new sub-blocks*/}}}
+      }
+      This method creates a new ZkModuleProver that checks that the specified attribute lies
+      between 0 and $\emph{dhsubgroup}-1$. (If checkGreaterEqualZero or checkSmallerThanDhSubgroup are false,
+      then this blocks checks that the attribute is smaller than \emph{dhsubgroup} only, or greater equal zero only, respectively).
+      It uses the given Building Block to instantiate the range proofs.
+
+      The ZkModuleProver \emph{requires} the attribute value.
+
+      The identifier of the created module will be equal to the identifier of the attribute prepended with
+      \texttt{rangechk:}.
+      \end{method}
+      \begin{method}
+      {ZkModuleVerifier}
+      {getZkModuleVerifier}
+      {
+        {@in Map<Field, Value> systemParameters}
+        {@in Map<Field, Value> verifierParameters}
+        {@in String identifierOfAttribute}
+        {@in boolean checkGreaterEqualZero}
+        {@in boolean checkSmallerThanDhSubgroup}
+        {@in BuildingBlock inequalityBuildingBlock}
+        {@ref BuildingBlockFactory bbFactory \textrm{\emph{/* For creating new sub-blocks*/}}}
+      }
+      This method creates a ZkModuleVerifier that verifies that the attribute is in the correct range.
+
+      The identifier of the created module will be equal to the identifier of the attribute prepended with
+      \texttt{rangechk:}.
+      \end{method}
+      %\begin{method}
+      %{ZkModuleDescriber}
+      %{getZkModuleDescriber}
+      %{
+        %{@in Map<Field, Value> systemParameters}
+        %{@in Map<Field, Value> verifierParameters}
+        %{@in String identifierOfAttribute}
+        %{@in boolean checkGreaterEqualZero}
+        %{@in boolean checkSmallerThanDhSubgroup}
+        %{@in BuildingBlock inequalityBuildingBlock}
+        %{@ref BuildingBlockFactory bbFactory \textrm{\emph{/* For creating new sub-blocks*/}}}
+      %}
+      %This method creates a new ZkModuleDescriber object that will know how to
+      %describe what the corresponding ZkModuleProver does.
+      %\end{method}
+% ===========================================================================
+% ===========================================================================
+% ===========================================================================
+    \subsubsection{Check Prime Order}
+    \identifier{b:h:chk:p}
+
+    This is used to check that a given D-value is
+    an element of a given prime order group.
+    The prover may optionally skip the check altogether (if for example he generated
+    the D-value himself.)
+
+    This block has the following interfaces:
+    the one described in Section \ref{sec:intf:all};
+    a proof interface (Section \ref{sec:intf:proof});
+    and a method to do the check immediately.
+
+      We will now describe these interfaces in more detail.
+
+    \paragraph{Proof interface.}
+      \begin{method}
+      {ZkModuleProver}
+      {getZkModuleProver}
+      {
+        {@in String idOfValueToCheck}
+        {@in BigInteger subgroupOrder}
+        {@in BigInteger modulus}
+        {@in boolean allowOne}
+        {@in boolean skipCheck}
+      }
+      This method creates a new ZkModuleProver that checks whether the given D-value is in fact a member of
+      the given prime order group.
+      If the allowOne flag is cleared, then a value of $1$ is not accepted.
+      If skipCheck is set, then this block does not actually perform the check
+      (the verifier however, will still do the check).
+
+      The ZkModuleProver \emph{requires} the attribute value.
+
+      \end{method}
+      \begin{method}
+      {ZkModuleVerifier}
+      {getZkModuleVerifier}
+      {
+        {@in String idOfValueToCheck}
+        {@in BigInteger subgroupOrder}
+        {@in BigInteger modulus}
+        {@in boolean allowOne}
+      }
+      This method creates a new ZkModuleProver that checks whether the given
+      value (as a bigInteger or an integer D-value) is in fact a member of
+      the given prime order group.
+      \end{method}
+      %\begin{method}
+      %{ZkModuleDescriber}
+      %{getZkModuleDescriber}
+      %{
+        %{@in String idOfValueToCheck}
+        %{@in BigInteger subgroupOrder}
+        %{@in BigInteger modulus}
+        %{@in boolean allowOne}
+      %}
+      %This method creates a new ZkModuleDescriber object that will know how to
+      %describe what the corresponding ZkModuleProver does.
+      %\end{method}
+    \paragraph{Check directly.}
+      \begin{method}
+      {boolean}
+      {isInPrimeOrderGroup}
+      {
+        {@in GroupElement valueToCheck}
+        {@in BigInteger subgroupOrder}
+        {@in BigInteger modulus}
+        {@in boolean allowOne}
+      }
+      This method checks whether the given
+      value is in fact a member of
+      the given prime order group.
+      If the allowOne flag is cleared, then a value of $1$ is not accepted.
+      This method returns true if the check passed.
+      \end{method}
+% ===========================================================================
+% ===========================================================================
+% ===========================================================================
+    \subsubsection{Check Signed Quadratic Residuosity}
+    \identifier{b:h:chk:sqr}
+
+    This is used to check that a given value in a proof is
+    an element of a given group of signed quadratic residues.
+    The prover may optionally skip the check altogether (if for example he generated
+    the D-value himself.)
+
+    This block has the following interfaces:
+    the one described in Section \ref{sec:intf:all};
+    a proof interface (Section \ref{sec:intf:proof});
+    and a method to do the check immediately.
+
+      We will now describe these interfaces in more detail.
+
+    \paragraph{Proof interface.}
+      \begin{method}
+      {ZkModuleProver}
+      {getZkModuleProver}
+      {
+        {@in String idOfValueToCheck}
+        {@in BigInteger modulus}
+        {@in boolean allowOne}
+        {@in boolean skipCheck}
+      }
+      This method creates a new ZkModuleProver that checks whether the given
+      D-value is in fact a member of
+      the signed quadratic residues modulo the given composite.
+      If the allowOne flag is cleared, then a value of $1$ is not accepted.
+      If skipCheck is set, then this block does not actually perform the check
+      (the verifier however, will still do the check).
+
+      The ZkModuleProver \emph{requires} the attribute value.
+
+      \end{method}
+      \begin{method}
+      {ZkModuleVerifier}
+      {getZkModuleVerifier}
+      {
+        {@in String idOfValueToCheck}
+        {@in BigInteger modulus}
+        {@in boolean allowOne}
+      }
+      This method creates a new ZkModuleProver that checks whether the given
+      value (as a bigInteger or an integer D-value) is in fact a member of
+      the signed quadratic residues modulo the given composite.
+      \end{method}
+      %\begin{method}
+      %{ZkModuleDescriber}
+      %{getZkModuleDescriber}
+      %{
+        %{@in String idOfValueToCheck}
+        %{@in BigInteger modulus}
+        %{@in boolean allowOne}
+      %}
+      %This method creates a new ZkModuleDescriber object that will know how to
+      %describe what the corresponding ZkModuleProver does.
+      %\end{method}
+    \paragraph{Check directly.}
+      \begin{method}
+      {boolean}
+      {isSignedQR}
+      {
+        {@in GroupElement valueToCheck}
+        {@in BigInteger modulus}
+        {@in boolean allowOne}
+      }
+      This method checks whether the given
+      value is in fact a member of
+      the signed quadratic residues modulo the given composite.
+      If the allowOne flag is cleared, then a value of $1$ is not accepted.
+      This method returns true if the check passed.
+      \end{method}
+\fi
