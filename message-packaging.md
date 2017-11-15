@@ -7,15 +7,18 @@ For this reason, the protocol does not prescribe a single encryption, a single f
 # Message Packaging Primitives
 
 ### Typed Messages
-Messages are not self describing by themselves. They need some metadata to help describe what they are.
+Messages are not self-describing by themselves. They need some metadata to help describe what they are.
 
-This is done with a `type` object, which has two members. One for the type name, and another for the version.
+This is done with a `type` object, which has three members. One for the type name, one for the version and one for the format of the message.
+
+Generally, the version should conform to Semantic Versioning principles and the format should make use of mime-types.
 
 Example:
 ```json
 {
   "name": "CLAIM",
-  "version": "0.1"
+  "version": "0.1",
+  "format": "application/msgpack"
 }
 ```
 
