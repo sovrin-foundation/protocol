@@ -186,7 +186,7 @@ Example:
 ```
 
 ### Encrypted Messages
-There are three basic types of encrypted messages.
+There are two basic types of encrypted messages.
 1. `anoncrypt`: public key anonymous encryption
 1. `authcrypt`: public key authenticated encryption
 
@@ -208,7 +208,7 @@ deanoncrypt(msg, recipient_private_key)
 ```
 
 #### Authcrypt Messages
-`authcrypt` messages are like `anoncrypt` in that they are constructed with an ephemeral key pair. The difference is there are two attributes included with the message that make it possible to authenticate the sender: (1) sender's ver_key, and (2) sender's ephemeral pub_key signed by the sender. The sender's ver_key cannot be trusted. In order to trust the ver_key, the recipient must verify the signature. The signature proves to the recipient that the sender (the holder of the private counterpart to the ver_key) sent the message. This encryption retains the repudiable characteristic, in that the recipient cannot prove that the sender sent the message. They can only prove the sender once used the ephemeral key, which doesn't prove anything of any importance. 
+`authcrypt` messages are like `anoncrypt` in that they are constructed with an ephemeral key pair. The difference is there are two attributes included with the message that make it possible to authenticate the sender: (1) sender's ver_key, and (2) signature over sender's ephemeral pub_key using the sender's sig_key (private counterpart to the ver_key). The sender's ver_key cannot be trusted. In order to trust the ver_key, the recipient must verify the signature. The signature proves to the recipient that the sender (the holder of the private counterpart to the ver_key) sent the message. This encryption retains the repudiable characteristic, in that the recipient cannot prove that the sender sent the message. They can only prove the sender once used the ephemeral key, which doesn't prove anything of any importance. 
 
 Internal message structure:
 ```json
@@ -222,12 +222,12 @@ Internal message structure:
 ##### Encryption
 To encrypt, the sender calls...
 ```
-authcrypt(msg, recipient_verkey, sender_private_key)
+authcrypt(msg, recipient_verkey, sender_ver_key, sender_sig_key)
 ```
 
 The authcrypt function...
 1. Generates a new ephemeral keypair.
-1. Signs the ephmeral public key.
+1. Signs the ephmeral public key using `sender_sig_key`.
 1. Constructs a JSON object like so:
     ```json
     {
@@ -250,7 +250,7 @@ The deauthcrypt function...
 
 1. Removes the appended ephemeral public key
 1. Uses the ephemeral public key and its own private key to decrypt the ciphertext.
-1. Verifies the signature is a signature from the sender over the ephemeral public key.
+1. Verifies that the signature over the ephemeral public key is correct using the `sender's ver_key`.
 
 ##### Implementation using libsodium
 Anoncrypt is simply the sealed_box in libsodium. Authcrypt is similar, in that it uses the same deterministic nonce, and appends the ephemeral public key to the ciphertext. The main difference is the ephemeral public key must be signed in the message. Authcrypt uses a libsodium crypto_box with a deterministic nonce = hash(ephemeral pub key, recipient pub key), the same approach that sealed_box takes.
