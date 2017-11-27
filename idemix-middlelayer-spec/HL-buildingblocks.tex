@@ -2,24 +2,61 @@
 
 
 
+\section{ZKLang}
+
 \newcommand{\NIZK}{\operatorname{NIZK}}
 
 If credentials are key-bound, they are required to be bound to the same (secret) key. 
 
+At this level, all message $m_i$ are integers.
+
 \begin{multline}
-\NIZK\lbrace(m_1, m_2, m_3): \operatorname{Credential}( \emph{ipk}, m_1, m_2, m_3) \rbrace\shoveleft\
+\NIZK\lbrace(m_i)_{i\in h}[m]_{i\not\in h}: \operatorname{Credential}( \emph{ipk}, m_1, m_2, m_3) \rbrace\shoveleft\
 \end{multline}
 
 
 \begin{multline}
-\NIZK\lbrace(): \operatorname{Nym}( \emph{nym}, \mathit{scope}) \rbrace\shoveleft\
+\NIZK\lbrace(): \operatorname{Nym}( \emph{nym}) \rbrace\shoveleft\
 \end{multline}
+
+
+\begin{multline}
+\NIZK\lbrace(): \operatorname{SNym}( \emph{nym}, \mathit{scope}) \rbrace\shoveleft\
+\end{multline}
+
 
 \begin{multline}
 \NIZK\lbrace(m): \operatorname{Enc}( \emph{epk}, m, \mathit{ctxt}) \rbrace\shoveleft\
 \end{multline}
 
 \begin{multline}
-\NIZK\lbrace(m): \operatorname{Range}(m, a , b) \rbrace\shoveleft\
+\NIZK\lbrace(m): \operatorname{Larger}(m, c) \rbrace\shoveleft\
 \end{multline}
 
+\begin{multline}
+\NIZK\lbrace(m): \operatorname{Smaller}(m, c) \rbrace\shoveleft\
+\end{multline}
+
+
+Example composition: here 
+
+Explanations of stuff
+
+
+
+\section{Mapping Verifiable Claims to ZKLang}
+
+
+
+
+\section{Realization of ZKLang Components}
+
+$m_i$ from $Z_q$, so everything in prime order group
+
+Nyms
+
+CL sigs
+
+Vereng
+
+Orchestration
