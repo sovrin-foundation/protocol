@@ -1,0 +1,25 @@
+% !TEX root =  PrivateCredSpecification.tex
+
+
+
+\newcommand{\NIZK}{\operatorname{NIZK}}
+
+If credentials are key-bound, they are required to be bound to the same (secret) key. 
+
+\begin{multline}
+\NIZK\lbrace(m_1, m_2, m_3): \operatorname{Credential}( \emph{ipk}, m_1, m_2, m_3) \rbrace\shoveleft\
+\end{multline}
+
+
+\begin{multline}
+\NIZK\lbrace(): \operatorname{Nym}( \emph{nym}, \mathit{scope}) \rbrace\shoveleft\
+\end{multline}
+
+\begin{multline}
+\NIZK\lbrace(m): \operatorname{Enc}( \emph{epk}, m, \mathit{ctxt}) \rbrace\shoveleft\
+\end{multline}
+
+\begin{multline}
+\NIZK\lbrace(m): \operatorname{Range}(m, a , b) \rbrace\shoveleft\
+\end{multline}
+
