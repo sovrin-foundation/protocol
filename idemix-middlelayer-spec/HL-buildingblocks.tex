@@ -11,7 +11,7 @@ If credentials are key-bound, they are required to be bound to the same (secret)
 At this level, all message $m_i$ are integers.
 Terms that the language supports are the following ones.
 \begin{align}
-&\NIZK\lbrace(m_i)_{i\in h}[m]_{i\not\in h}: \operatorname{Credential}( \emph{ipk}, m_1, m_2, m_3) \rbrace\\
+&\NIZK\lbrace(m_i)_{i\in h}[m]_{i\not\in h}: \operatorname{Credential}( \mathit{issuer\_public\_key}, m_1, m_2, m_3) \rbrace\\
 &\NIZK\lbrace(): \operatorname{Nym}( \emph{nym}) \rbrace\\
 &\NIZK\lbrace(): \operatorname{SNym}( \emph{nym}, \mathit{scope}) \rbrace\\
 &\NIZK\lbrace(m): \operatorname{Enc}( \emph{epk}, m, \mathit{ctxt}) \rbrace\\
@@ -48,6 +48,9 @@ This mapping will depend on the credential specification of the issuer of a cred
 
 
 \section{Realization of ZKLang Components}
+We could do all of this with X509 credentials, but then have no privacy features. 
+We here concentrate on how to do this with the privacy features.
+
 
 $m_i$ from $Z_q$, so everything in prime order group
 
