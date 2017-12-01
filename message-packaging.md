@@ -204,7 +204,7 @@ anoncrypt(msg, recipient_verkey)
 
 Anoncrypt messages can be decrypted.
 ```
-deanoncrypt(msg, recipient_private_key)
+anondecrypt(msg, recipient_private_key)
 ```
 
 #### Authcrypt Messages
@@ -243,10 +243,10 @@ The authcrypt function...
 ##### Decryption
 To decrypt, the recipient calls...
 ```
-deauthcrypt(msg, recipient_private_key)
+authdecrypt(msg, recipient_private_key)
 ```
 
-The deauthcrypt function...
+The authdecrypt function...
 
 1. Removes the appended ephemeral public key
 1. Uses the ephemeral public key and its own private key to decrypt the ciphertext.
