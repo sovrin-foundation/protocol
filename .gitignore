@@ -1,4 +1,6 @@
 .idea/
+.project
+/*/.project
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
@@ -12,6 +14,8 @@
 *.fot
 *.cb
 *.cb2
+*.blg
+*.bbl
 
 ## Build tool auxiliary files:
 *.fdb_latexmk

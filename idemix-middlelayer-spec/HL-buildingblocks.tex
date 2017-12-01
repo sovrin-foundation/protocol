@@ -52,12 +52,52 @@ We could do all of this with X509 credentials, but then have no privacy features
 We here concentrate on how to do this with the privacy features.
 
 
-$m_i$ from $Z_q$, so everything in prime order group
+We assume that the system parameters describe a groups $\G_1$, $\G_2$, $\G_T$, of prime order $q$, with efficiently computable bilinear map $e$.
+We further assume here that all attributes $m_i$ are elements of $Z_q$, and consider the encoding of other typed attribute values in different sections.
 
-Nyms
+\subsection{CL signatures}
+A credential will take the form of a signature created by an issuer. 
+As we want to prove knowledge of credentials, we need ``signatures with efficient protocols'', also called CL signatures~\cite{camlys02b}. 
+Examples are the RSA-based CL signature~\cite{camlys02b}, the pairing-based CL signature~\cite{camlys04},
+and the BBS+ signature scheme~\cite{bobosh04,ASMC13}. 
+We recall the BBS+ signature scheme:
+\begin{description}
+\item[Key Generation] Take $(h_0, \ldots, h_L) \gets \G_1^{L+1}$, $x \gets Z_q^*$, $w \gets g_2^x$, and set $sk = x$ and $pk = (w, h_0, \ldots, h_L)$.
+\item[Signature] On input message $(m_1, \ldots, m_L) \in Z_q^L$ and secret key $x$, 
+pick $e, s \gets Z_q$ and compute $A \gets (g_1 h_0^s \prod_{i = 1}^{L} h_i^{m_{i}})^{\frac{1}{e+x}}$.
+Output signature $\sigma \gets (A, e, s)$.
+\item[Verification] On input a public key $(w, h_0, \ldots, h_L) \in \G_2 \times \G_1^{L+1}$, 
+message $(m_1, \ldots, m_L) \in Z_q^L$, and purported signature $(A, e, s) \in \G_1 \times Z_q^2$, 
+check $e(A, w g_2^e) = e(g_1 h_0^s \prod_{i = 1}^{L} h_i^{m_{i}}, g_2)$.
+\end{description}
 
-CL sigs
+We can use the following zero-knowledge proof to prove knowledge of a BBS+ signature, while selectively disclosing the attributes~\cite{CDL16eprint}:
+The prover has signature $\sigma \gets (A, e, s)$ with $A = (g_1 h_0^s \prod_{i = 1}^{L} h_i^{m_{i}})^{\frac{1}{e+x}}$.
+He can prove knowledge of a BBS+ signature while selectively disclosing messages $m_i$ with $i \in D$.
+Randomize the credential by taking $r_1 \gets Z_q^*$, set $A' \gets A^{r_1}$, and set $r_3 \gets \frac{1}{r_1}$.
+Set $\bar{A} \gets A'^{-e} \cdot b^{r_1} (= A'^{x})$.
+Choose $r_2 \gets Z_p$, set $d \gets (g_1 h_0^s \prod_{i = 1}^{L} h_i^{m_{i}})^{r_1} \cdot h_0^{-r_2}$, and set $s' \gets s - r_2 \cdot r_3$.
+The prover now proves 
+\begin{multline*}
+\pi \in \SPK\{(\{m_i\}_{i \notin D}, e, r_2, r_3, s') : \\
+\bar{A}/d = A'^{-e} \cdot h_0^{r_2} ~\land~ g_1 \prod_{i \in D} {h_{i}}^{m_i}= d^{r_3}h_0^{-s'} \prod_{i \notin D} {h_{i}}^{-m_i}\}.
+\end{multline*}
+The resulting proof consists of $(A', \bar{A}, d, \pi)$.
+To verify a proof, the verifier checks $A' \neq 1_{\G_1}$, $e(A', X) = e(\bar{A}, g_2)$, and verifies $\pi$.
 
-Vereng
+\subsection{Pseudonyms}
+Pseudonyms will be formed from Pedersen commitments~\cite{peders91b}.
+Let $g_1$ and $h_1$ be generators of $\G_1$.
+\begin{description}
+\item[Commit] To commit to a value $m_1 \in Z_q$, take $r \gets Z_q$ and output $c \gets g_1^{m_1}h_1^r$.
+\item[ComVf] To verify that $c$ commits to $m_1$ with opening $r$, check $c \stackrel{?}{=} g_1^{m_1}h_1^r$.
+\end{description}
 
-Orchestration
+One can efficiently prove that a pseudonym $\nym$ is correctly constructed by proving 
+\[ \pi \in \SPK\{(m_1, r) : \nym = g_1^{m_1} h_1^r \].
+
+\subsection{Range proofs}
+
+\subsection{Verifiable Encryption}
+
+\subsection{Orchestration}
