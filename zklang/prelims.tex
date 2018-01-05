@@ -39,6 +39,33 @@ Any witness w $\in$ \textit{$W_R$(s)} that satisfies the latter bound is called 
 Subsequent definitions assume an alphabet \(\Lambda\), S and W as infinite subsets of \(\Lambda^{*}\), an infinite relation $R \subseteq S \times W$ and an NP language \textit{$L_R$} 
 \newline
 \newline
-\textit{Interactive proof}. 
+\textit{Interactive proof}. Protocol (P, V) is an interactive proof system for R if there exists a negligible function \(\epsilon\) : $\mathbb{N}$ \(\to\) $\mathbb{R}^{+}$ such that, for every s $\in$ S and for every prover \textit{$P^{*}$}, (P, V) provides the following two guarantees.
+\begin{enumerate}
+  \item \textbf{Complete:}  If s $\in$ \textit{$L_R$}, then $Pr[1 \gets \langle P, V \rangle (s)] = 1$.
+  \item \textbf{Sound:}  If s $(\notin)$ \textit{$L_R$}, then $Pr[1 \gets \langle P^{*}, V \rangle (s)] \le \epsilon(|s|)$.
+\end{enumerate}
+\textit{Interactive arguments}. It is useful to assume that \textit{$P^{*}$} is PPT in the common input, in which case we must modify the completeness criterion to provide honest P with an appropriate witness as private auxiliary input. The The interpretation of the soundness criterion also changes when we restrict \textit{$P^{*}$} to be PPT: for any sufficiently long common input s $\in$ S \ensuremath{\backslash} \textit{$L_R$} , it is computationally infeasible for \textit{$P^{*}$} to make V accept with a non-negligible probability.
+\begin{enumerate}
+  \item \textbf{Complete:}  If \textit{R(s, w)} = 1, then $Pr[1 \gets \langle P(w), V \rangle (s)] = 1$.
+  \item \textbf{Sound:}  If s $(\notin)$ \textit{$L_R$}, then $Pr[1 \gets \langle P^{*}, V \rangle (s)] \le \epsilon(|s|)$.
+\end{enumerate}
+\textit{Knowledge extraction}. An algorithm E is called an extractor if given s and special access to \textit{$P^{*}$} as an oracle, can efficiently compute a witness w $\in$ \textit{W\textsubscript{R}(s)}. Consider a probabilistic algorithm $E_{P^{*}}$ endowed with rewinding black box oracle access to \textit{$P^{*}$}, meaning it can (i) send arbitrary messages to \textit{$P^{*}$} and read the responses \textit{$P^{*}$} generates  (ii) "rewind" \textit{$P^{*}$} to any earlier internal state (iii) is not privy to \textit{$P^{*}$}’s private inputs or internal state. Such a probabilistic algorithm $E_{P^{*}}$ is called an oracle machine for \textit{$P^{*}$}. If the ability for \textit{$P^{*}$} to make V accept with a probability non-negligible in $|s|$ implies that $E_{P^{*}}$ is an efficient algorithm for computing a witness \textit{w'} $\in$ \textit{$W_R$(s)}, then we say that an accepting proof or argument that s $\in$ \textit{$L_R$} implies \textit{$P^{*}$} knows a witness \textit{w} $\in$ \textit{$W_R$(s)}.
 \newline
+Protocol (P, V) is a system for proofs of knowledge for \textit{$L_R$} if there exists an oracle machine E, a positive function \(\kappa\) : $\mathbb{S}$ \(\to\) $\mathbb{R}^{+}$, and a constant a $\in$ $\mathbb{R}^{+}$ such that, for every prover \textit{$P^{*}$} the following are true
+\begin{enumerate}
+  \item \textbf{Complete:}  If s $\in$ \textit{$L_R$}, then $Pr[1 \gets \langle P, V \rangle (s)] = 1$.
+  \item \textbf{Extractable::}  Let \(\rho\)(s) = $Pr[1 \gets \langle P^{*}, V \rangle (s)]$. If $\rho(s) > \kappa(s)$, then $E_{P^{*}}$ outputs a witness \textit{w'} $\in$ \textit{$W_R$(s)} in an expected number of steps at most $ |s|^{a} / (\rho(s) - \kappa(s)) $.
+\end{enumerate}
+An oracle machine E satisfying the above extractability criterion is called a universal knowledge extractor and the smallest function \(\kappa\)(·) for which the extractability criterion holds  is called the knowledge error function for (P, V). The knowledge error function measures the probability with which a dishonest \textit{$P^{*}$} can make V accept on input s $\in$ S without actually knowing a witness w $\in$ \textit{$W_R$(s)}, if \textit{$P^{*}$} causes honest V to accept with a probability non-negligibly greater than \(\kappa\)(s), then $E_{P^{*}}$ efficiently extracts a witness \textit{w} $\in$ \textit{$W_R$(s)}.
+\newline
+\textit{Zero-knowledge proofs}. Informally, an interactive proof system for \textit{$L_R$} is zero-knowledge if a trusted oracle merely proclaiming that s $\in$ \textit{$L_R$} enables any \textit{$V^{*}$} to efficiently deduce anything it might have "learned" by engaging in (P, ${V^{*}}$) on common input s $\in$ \textit{$L_R$}. A given verifier ${V^{*}}$ gains zero (extra) knowledge if, without any help from P, ${V^{*}}$ can "simulate" an interaction that is "indistinguishable" from the real interactions that occur when an honest P executes the protocol with that particular ${V^{*}}$ on the same common input. Thus there is no PPT cheating strategy using which ${V^{*}}$ can "learn" things from P that it could not just as easily compute on its own given the common input s and a promise that s $\in$ \textit{$L_R$}.
+\newline
+For a protocol execution between P and ${V^{*}}$: 
+\begin{itemize}
+  \item A \emph{transcript} is the tuple of messages exchanged between P and ${V^{*}}$ up until ${V^{*}}$ halts. 
+  \item An \emph{accepting transcript} is a transcript of an accepting proof and a \emph{rejecting transcript} is a transcript of a rejecting proof.
+  \item The \emph{aggregate view} of ${V^{*}}$ upon interacting with P, denoted $View_{P,V^{*}}(s)$, consists of all the information that ${V^{*}}$ "sees" in the protocol execution, including (i) the transcript, (ii) the common input string s (iii) ${V^{*}}$’s own private inputs (iv) ${V^{*}}$’s random coin flips  
+  \item By parameterizing over all possible protocol executions for the same common input s but different random flips of ${V^{*}}$, we obtain a collection ${ View_{P,V^{*}}(s)}_{s \in L_R }$ of random variables called the \emph{ensemble}.
+\end{itemize}
+A two-party interactive protocol (P, V) is zero-knowledge on \textit{$L_R$} if, for every verifier ${V^{*}}$ and for every auxiliary string \textit{z} $\in$ \(\Lambda^n\), there exists an expected PPT algorithm $S_{V^{*}}$ such that the ensembles ${ View_{P,V^{*}}(s)}_{s \in L_R }$ and ${S_{V^{*}}(s,z)}_{s \in L_R }$ are indistinguishable. An algorithm $S_{V^{*}}$ with this property is called a simulator for ${V^{*}}$. \textit{z} is the prior knowledge of ${V^{*}}$, the idea is that for $S_{V^{*}}$ to have access to any data ${V^{*}}$ has access to. 
 \end{document}
