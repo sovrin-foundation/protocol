@@ -26,13 +26,13 @@ The symbols that will be used in zero knowledge proof statements can be found he
 
 ZKLang requires new terminology which should be easy to understand and expressive to write.\newline
 
-\indent $\mathbb{Z}_p$: Multiplicative group modulo $p$. $p$ is a prime. The basic rule for computations module a prime is to do the computations using the numbers as integers, but every time result $r$ is derived, compute it modulo $p$.~\footnote{\url{https://crypto.stanford.edu/pbc/notes/numbertheory/arith.html}}\newline
+\indent $\mathbb{Z}_p^{*}$: Multiplicative group modulo $p$. $p$ is a prime. The basic rule for computations module a prime is to do the computations using the numbers as integers, but every time result $r$ is derived, compute it modulo $p$.~\footnote{\url{https://crypto.stanford.edu/pbc/notes/numbertheory/arith.html}}\newline
 
-$\mathbb{Z}$\textbf{[g, p]}: Multiplicative group with generator $g$ modulo $p$. $g$ and $p$ are public.~\footnote{\url{https://crypto.stanford.edu/pbc/notes/numbertheory/gen.html}}\newline
+$\mathbb{Z^*}$\textbf{[g, p]}: Multiplicative group with generator $g$ modulo $p$. $g$ and $p$ are public.~\footnote{\url{https://crypto.stanford.edu/pbc/notes/numbertheory/gen.html}}\newline
 
-\textbf{Comm}: Commitment. Hides a value, but ensures that it cannot be changed later. Given the parameters $\mathbb{Z}$[g, p], the statement \textbf{Comm(x)} means  $c=g^x\mod{p}$. The commitment scheme used for zero-knowledge proofs is the \emph{pedersen commitment scheme}. This is given as \textbf{Comm(x, y)} which means $c=g^xh^y\mod{p}$.~\footnote{\url{https://anoncoin.net/Commitment_scheme/}}~\footnote{\url{http://www.ru.nl/publish/pages/769526/thesis_definitief_drijvers.pdf}} Another example is \textbf{Comm}($A_1, A_2, A_3, \dots, A_n, r)=g_1^{A_1} g_2^{A_2} g_3^{A_3}\dots g_n^{A_n} h^r$\newline
+\textbf{Comm}: Commitment. Hides a value, but ensures that it cannot be changed later. Given the parameters $\mathbb{Z^*}$[g, p], the statement \textbf{Comm(x)} means  $c=g^x\mod{p}$. The commitment scheme used for zero-knowledge proofs is the \emph{pedersen commitment scheme}. This is given as \textbf{Comm(x, y)} which means $c=g^xh^y\mod{p}$.~\footnote{\url{https://anoncoin.net/Commitment_scheme/}}~\footnote{\url{http://www.ru.nl/publish/pages/769526/thesis_definitief_drijvers.pdf}} Another example is \textbf{Comm}($A_1, A_2, A_3, \dots, A_n, r)=g_1^{A_1} g_2^{A_2} g_3^{A_3}\dots g_n^{A_n} h^r$\newline
 
-\textbf{DComm}: Double Commitment. Based on ~\cite[Appendix]{MiersG0R13} Proves a hierarchy of commitments. Given the parameters $\mathbb{Z}$[g, p], the statement \textbf{DComm(C1, C2)} means the following:
+\textbf{DComm}: Double Commitment. Based on ~\cite[Appendix]{MiersG0R13} Proves a hierarchy of commitments. Given the parameters $\mathbb{Z^*}$[g, p], the statement \textbf{DComm(C1, C2)} means the following:
 $c=Comm(a, r_0)$, $C_1=Comm(a, r_1)$, $C_2=Comm(c, r_2)$. $C_2$ is a commitment to $c$, which is itself a commitment to $a$. We want to prove the knowledge of $a$ by putting it in another commitment $C_1$ or $C_1 = g_1^a h_1^{r_1}$ and $C_2 = g_2^{g_1^{a} h_1^{r_0}} h_2^{r_2}$.\newline
 
 \textbf{ZK}: interactive Zero-knowledge proof of Knowledge. A prover convinces a verifier that she knows a value $v$ such that a predicate $P$ is fulfilled without revealing any further information about $v$.\newline
@@ -49,4 +49,3 @@ For example $NIZK\{(m_1, m_2, m_3)[m_4]: Credential(PK_I, m_1, m_2, m_3, m_4)\}$
 \bibliography{zklang}
 
 \end{document}
-
