@@ -26,3 +26,5 @@
 *.synctex.gz(busy)
 *.pdfsync
 
+## generated zklang pdf files
+zklang/*.pdf
