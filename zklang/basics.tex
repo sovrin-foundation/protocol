@@ -42,8 +42,14 @@ $c=Comm(a, r_0)$, $C_1=Comm(a, r_1)$, $C_2=Comm(c, r_2)$. $C_2$ is a commitment 
 \textbf{SPK}: Signature Proof of Knowledge\newline
 
 \section{Statements}
-ZKLang ultimately describes zero knowledge statements. Statements are defined using a proof pattern, i.e., a term $ZK, NIZK, SPK, DComm, etc.$ with a list of messages or values that are included in the proof called the declaration. Declaration values contained in parenthesis $()$ are considered hidden messages or not revealed while values contained in brackets $[]$ are known or revealed. The entire pattern is contained in braces \{\}. The proof describes what a verifier accepts. The idea is that the pattern can be read from left to right so it describes what the verifier needs and the prover knows.
-For example $NIZK\{(m_1, m_2, m_3)[m_4]: Credential(PK_I, m_1, m_2, m_3, m_4)\}$ means Non Interactive Zero-knowledge proof of Knowledge for messages $m_1, m_2, m_3, m_4$ where $m_1, m_2, m_3$ are hidden messages, $m_4$ will be revealed and the proof is a credential over those messages that can be verified using public key $PK_I$. Another example is the proof for describing $DComm(C1, C2)$ is: $SPK\{(a, c, r_0, r_1, r_2)[C_1, C_2]: c=Comm(a, r_0) \wedge C_1 = Comm(a, r_1) \wedge C_2 = Comm(c, r_2)\}$. \newline
+ZKLang ultimately describes zero knowledge statements. Statements are defined using a proof pattern, i.e., syntax that can be read from left to right and describes that a verifier needs and a prover knows. The pattern begins with a term $ZK, NIZK, SPK, DComm, etc.$ followed by a variable declaration--a list of messages or values that are included in the proof, and terminated by the proof statement. 
+The declaration specifies what variables will become known or revealed to verifying parties. Values not specified in the declaration remain hidden or not revealed. The proof statement is separated from the declaration by a colon $:$. Braces \{\} are used to encapsulate the entire pattern.
+
+For example $NIZK\{m_4: Credential(PK_I, m_1, m_2, m_3, m_4)\}$ means Non Interactive Zero-knowledge proof of Knowledge for messages $m_1, m_2, m_3, m_4$ where $m_1, m_2, m_3$ are hidden messages, $m_4$ will be revealed and the proof is a credential over those messages that can be verified using public key $PK_I$.
+
+The previous example only contained a single statement. ZKLang allows for multiple statements to be included as part of the proof. Each statement must be separated by boolean expressions so the end result forms a true or false predicate.
+
+Another example is the proof for describing $DComm(C1, C2)$ is: $SPK\{(a, c, r_0, r_1, r_2)[C_1, C_2]: c=Comm(a, r_0) \wedge C_1 = Comm(a, r_1) \wedge C_2 = Comm(c, r_2)\}$. \newline
 
 \bibliographystyle{alpha}
 \bibliography{zklang}
