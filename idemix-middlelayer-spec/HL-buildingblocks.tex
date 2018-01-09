@@ -83,21 +83,41 @@ The prover now proves
 \bar{A}/d = A'^{-e} \cdot h_0^{r_2} ~\land~ g_1 \prod_{i \in D} {h_{i}}^{m_i}= d^{r_3}h_0^{-s'} \prod_{i \notin D} {h_{i}}^{-m_i}\}.
 \end{multline*}
 The resulting proof consists of $(A', \bar{A}, d, \pi)$.
-To verify a proof, the verifier checks $A' \neq 1_{\G_1}$, $e(A', X) = e(\bar{A}, g_2)$, and verifies $\pi$.
+To verify a proof, the verifier checks $A' \neq 1_{\G_1}$, $e(A', w) = e(\bar{A}, g_2)$, and verifies $\pi$.
 
 \subsection{Pseudonyms}
-Pseudonyms will be formed from Pedersen commitments~\cite{peders91b}.
-Let $g_1$ and $h_1$ be generators of $\G_1$.
+Pseudonyms can be constructed from Pedersen commitments~\cite{peders91b} to the user secret key.
+A user can create arbitrarily many pseudonyms, all of which are unlinkable.
+
+Let $g_1$ and $h_1$ be generators of $\G_1$. 
+Pedersen commitments are constructed as follows.
 \begin{description}
 \item[Commit] To commit to a value $m_1 \in Z_q$, take $r \gets Z_q$ and output $c \gets g_1^{m_1}h_1^r$.
 \item[ComVf] To verify that $c$ commits to $m_1$ with opening $r$, check $c \stackrel{?}{=} g_1^{m_1}h_1^r$.
 \end{description}
 
 One can efficiently prove that a pseudonym $\nym$ is correctly constructed by proving 
-\[ \pi \in \SPK\{(m_1, r) : \nym = g_1^{m_1} h_1^r \].
+\[\SPK\{(m_1, r) : \nym = g_1^{m_1} h_1^r .\]
+
+For certain applications, we might want to restrict a user to create only a single pseudonym for one context.
+Domain specific pseudonyms offer this functionality. 
+Let $\mathit{bsn}$ be a string that describes the context, a scope exclusive pseudonym can be constructed by $\nym \gets H(\mathit{bsn})^{m_1}$. 
+A user can prove this is correctly computed:
+\[\SPK\{(m_1) : \nym = H(\mathit{bsn}^{m_1} .\]
+
 
 \subsection{Range proofs}
 
+
 \subsection{Verifiable Encryption}
+Verifiable encryption allows a prover to prove that a certain value is correctly encrypted to a certain public key.
+Here, we consider verifiable encryption of group elements for which the prover knows $b^m$, for some base $b \in \G_1$.
+
+Recall the Elgamal encryption scheme: 
+to encrypt $m \in \G_1$ to public key $\mathit{epk}$, take $r \gets Z_q$, and set $c_1 \gets g_1^r$, $c_2 \gets \mathit{epk}^r \cdot m$.
+
+To verifiably encrypt a value $b^m$ to public key $\mathit{epk}$, the prover creates an Elgamal ciphertext $(c_1, c_2)$ encrypting $b^m$ to $\mathit{epk}$,
+and proves
+\[\SPK\{(m_1, r) : c_1 = g_1^r \land c_2 = \mathit{epk}^r b^{m_1} .\]
 
 \subsection{Orchestration}
