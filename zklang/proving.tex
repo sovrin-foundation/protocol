@@ -1,0 +1,30 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{amssymb,amsthm,amsmath,amsfonts,longtable,comment,array,ifpdf,hyperref,url}
+\usepackage{graphicx}
+
+
+\title{Proving in zero knowledge}
+\author{Lovesh Harchandani}
+\date{5th January 2018, version 0.1}
+
+\begin{document}
+
+\maketitle
+
+\section{Sigma protocols}
+These are a class of interactive protocols for proving knowledge of certain values in zero knowledge; i.e. without revealing the values itself. The protocol is considered safe only in the case of an honest verifier. The protocol works in 3 steps:
+\begin{enumerate}
+  \item The prover wants to prove knowledge of a witness \emph{w}; prover sends a commitment \emph{C} on a random nonce \emph{n} to the verifier. The prover should choose a different nonce \emph{n} each time else verifer can extract the value of \emph{x}.
+  \item The verifier sends a random challenge \emph{c} to the prover
+  \item The prover answers the challenge by sending a value derived from the nonce \emph{n}, challenge \emph{c} and witness \emph{w}.  Verifier can check that the prover computed the value correctly but verifier is not able to know the value of witness \emph{w}.
+\end{enumerate}
+Sigma protocols can be composed in several ways, (i) proving knowledge of a single witness that satisfies multiple relations; a witness \textit{w} satisfying relations \textit{R1} and \textit{R2}, $ R=\{(s1,s2,w) \mid (s1,w) \in R1 \land (s2,w) \in R2\} $. (ii) proving knowledge of a witness satisfying each relation; witnesses \textit{w1} and \textit{w2} satisfying \textit{R1} and \textit{R2} respectively, $ R=\{(s1,s2,w1,w2) \mid (v1,w1) \in R1 \land (v2,w2) \in R2\}. $. (iii) proving knowledge of at least one witness satisfying one of the given relations; witnesses \textit{w1} satisfying \textit{R1}  or \textit{w2} satisfying \textit{R2}, $ R=\{(s1,s2,w1,w2) \mid (v1,w1) \in R1 \lor (v2,w2) \in R2\}. $. The verifier is assured that either \textit{w1} is a witness of \textit{s1} or \textit{w2} is a witness of \textit{s2} (or both are true) but he cannot judge elements of the disjunction indiviadually. 
+As per CS notation\footnote{Proof Systems for General Statements about Discrete Logarithms, \url{ftp://ftp.inf.ethz.ch/pub/crypto/publications/CamSta97b.pdf}} sigma proofs-of-knowledge, i.e. proving knowledge of witness $x_1$,...$x_n$ with ($s_1$,...$s_n$;$x_1$,...$x_n$) $\in$ R are denoted by $ PK\{(x_1,...x_n) : (s_1,...s_n;x_1,...x_n) \in R\} $
+\newline
+Since sigma protocols work only for honest verifiers, an approach to handle potentially dishonest verifiers is not using any input from the verifer; using  non-interactive proofs. Using Fiat Shamir transform the 2nd step of above sigma protocol where the verifier sends a challenge can be ommitted. Instead the prover calcualtes a challenge using a hash function.
+\section{Proving knowledge}
+
+\end{document}
