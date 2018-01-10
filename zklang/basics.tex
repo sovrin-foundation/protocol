@@ -18,6 +18,10 @@ Currently there exists many different methods for describing zero knowledge proo
 
 \section{Background}
 
+\subsection{Mathmatical symbols}
+
+ZKLang uses mathmatical symbols that the reader is encouraged to learn. See ~\cite{mathsymbolswiki}
+
 \subsection{Set Theory}
 
 The symbols that will be used in zero knowledge proof statements can be found here~\footnote{\url{https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols\#Set_and.2For_logic_notation}}
@@ -26,13 +30,14 @@ The symbols that will be used in zero knowledge proof statements can be found he
 
 ZKLang requires new terminology which should be easy to understand and expressive to write.\newline
 
-\indent $\mathbb{Z}_p^{*}$: Multiplicative group modulo $p$. $p$ is a prime. The basic rule for computations module a prime is to do the computations using the numbers as integers, but every time result $r$ is derived, compute it modulo $p$.~\footnote{\url{https://crypto.stanford.edu/pbc/notes/numbertheory/arith.html}}\newline
+\indent $\mathbb{Z}_p^{*}$: Multiplicative group modulo $p$. $p$ is a prime.~\footnote{\url{https://www.di-mgt.com.au/multiplicative-group-mod-p.html}}
+The basic rule for computations module a prime is to do the computations using the numbers as integers, but every time result $r$ is derived, compute it modulo $p$.~\footnote{\url{https://crypto.stanford.edu/pbc/notes/numbertheory/arith.html}}\newline
 
 $\mathbb{Z^*}$\textbf{[g, p]}: Multiplicative group with generator $g$ modulo $p$. $g$ and $p$ are public.~\footnote{\url{https://crypto.stanford.edu/pbc/notes/numbertheory/gen.html}}\newline
 
-\textbf{Comm}: Commitment. Hides a value, but ensures that it cannot be changed later. Given the parameters $\mathbb{Z^*}$[g, p], the statement \textbf{Comm(x)} means  $c=g^x\mod{p}$. The commitment scheme used for zero-knowledge proofs is the \emph{pedersen commitment scheme}. This is given as \textbf{Comm(x, y)} which means $c=g^xh^y\mod{p}$.~\footnote{\url{https://anoncoin.net/Commitment_scheme/}}~\footnote{\url{http://www.ru.nl/publish/pages/769526/thesis_definitief_drijvers.pdf}} Another example is \textbf{Comm}($A_1, A_2, A_3, \dots, A_n, r)=g_1^{A_1} g_2^{A_2} g_3^{A_3}\dots g_n^{A_n} h^r$\newline
+\textbf{Comm}: Commitment. Hides a value, but ensures that it cannot be changed later. Given the parameters $\mathbb{Z^*}$[g, p], the statement \textbf{Comm(x)} means  $c=g^x\mod{p}$. A commitment scheme used for zero-knowledge proofs is the \emph{pedersen commitment scheme}. This is given as \textbf{Comm(x, y)} which means $c=g^xh^y\mod{p}$.~\footnote{\url{https://anoncoin.net/Commitment_scheme/}}~\footnote{\url{http://www.ru.nl/publish/pages/769526/thesis_definitief_drijvers.pdf}} Another form is \textbf{Comm}($A_1, A_2, A_3, \dots, A_n, r)=g_1^{A_1} g_2^{A_2} g_3^{A_3}\dots g_n^{A_n} h^r$\newline
 
-\textbf{DComm}: Double Commitment. Based on ~\cite[Appendix]{MiersG0R13} Proves a hierarchy of commitments. Given the parameters $\mathbb{Z^*}$[g, p], the statement \textbf{DComm(C1, C2)} means the following:
+\textbf{DComm}: Double Commitment. Based on ~\cite{MiersG0R13} Proves a hierarchy of commitments. Given the parameters $\mathbb{Z^*}$[g, p], the statement \textbf{DComm(C1, C2)} means the following:
 $c=Comm(a, r_0)$, $C_1=Comm(a, r_1)$, $C_2=Comm(c, r_2)$. $C_2$ is a commitment to $c$, which is itself a commitment to $a$. We want to prove the knowledge of $a$ by putting it in another commitment $C_1$ or $C_1 = g_1^a h_1^{r_1}$ and $C_2 = g_2^{g_1^{a} h_1^{r_0}} h_2^{r_2}$.\newline
 
 \textbf{ZK}: interactive Zero-knowledge proof of Knowledge. A prover convinces a verifier that she knows a value $v$ such that a predicate $P$ is fulfilled without revealing any further information about $v$.\newline
@@ -47,7 +52,9 @@ The declaration specifies what variables will become known or revealed to verify
 
 For example $NIZK\{m_4: Credential(PK_I, m_1, m_2, m_3, m_4)\}$ means Non Interactive Zero-knowledge proof of Knowledge for messages $m_1, m_2, m_3, m_4$ where $m_1, m_2, m_3$ are hidden messages, $m_4$ will be revealed and the proof is a credential over those messages that can be verified using public key $PK_I$.
 
-The previous example only contained a single statement. ZKLang allows for multiple statements to be included as part of the proof. Each statement must be separated by boolean expressions so the end result forms a true or false predicate.
+The previous example only contained a single proof statement. ZKLang allows for multiple statements to be included as part of the proof. Each statement must be separated by boolean expressions so the result forms a true or false predicate.
+
+To build on the previous example, the verifier could also ask for another statement that proves the holder has voted. The example is expanded to include a commitment to the value of the vote like $NIZK\{m_4, C_1: Credential(PK_I, m_1, m_2, m_3, m_4) \wedge C_1=Comm(vote)\}$.
 
 Another example is the proof for describing $DComm(C1, C2)$ is: $SPK\{(a, c, r_0, r_1, r_2)[C_1, C_2]: c=Comm(a, r_0) \wedge C_1 = Comm(a, r_1) \wedge C_2 = Comm(c, r_2)\}$. \newline
 
