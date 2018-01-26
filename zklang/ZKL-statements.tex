@@ -1,0 +1,30 @@
+% !TEX root =  main.tex
+
+
+If credentials are key-bound, they are required to be bound to the same (secret) key. 
+
+At this level, all message $m_i$ are integers.
+Terms that the language supports are the following ones.
+\begin{align}
+&\NIZK\lbrace(m_i)_{i\in h}[m]_{i\not\in h}: \operatorname{Credential}( \mathit{issuer\_public\_key}, m_1, m_2, m_3) \rbrace\\
+&\NIZK\lbrace(): \operatorname{Nym}( \emph{nym}) \rbrace\\
+&\NIZK\lbrace(): \operatorname{SNym}( \emph{nym}, \mathit{scope}) \rbrace\\
+&\NIZK\lbrace(m): \operatorname{Enc}( \emph{epk}, m, \mathit{ctxt}) \rbrace\\
+&\NIZK\lbrace(m): \operatorname{Larger}(m, c) \rbrace\\
+&\NIZK\lbrace(m): \operatorname{Smaller}(m, c) \rbrace \\
+&\NIZK\lbrace(m): \operatorname{Member}(m, c) \rbrace
+\end{align}
+
+
+Example composition of a statement.
+\begin{multline*}
+\NIZK\lbrace(m_1,m_2,m_3,m_4)[m_5]: \\
+ \operatorname{Credential}( \emph{ipk}_1, m_1, m_2, m_3) \  \wedge \
+\and \operatorname{Credential}( \emph{ipk}_2, m_1, m_4, m_5) \  \wedge \\
+\and \operatorname{Nym}( \emph{nym}) \  \wedge \
+\and \operatorname{Larger}(m_3, c)   \rbrace
+\end{multline*}
+Explanations of stuff
+
+
+

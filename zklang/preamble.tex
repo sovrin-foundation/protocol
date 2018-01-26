@@ -1,3 +1,9 @@
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb,amsthm,amsmath,amsfonts,longtable,comment,array,ifpdf,hyperref,url}
+\usepackage{graphicx}
+\usepackage{authblk}
+
+
 \usepackage{float} % additional placement specifier H
 \usepackage{subfigure}
 \usepackage{tabularx}
@@ -5,8 +11,6 @@
 \usepackage{booktabs}
 \usepackage{comment}
 \usepackage{url}
-\usepackage{fullpage}
-\usepackage{amsthm}
 \usepackage{hyperref}
 \setcounter{tocdepth}{3}
 \usepackage{xspace}
@@ -14,6 +18,10 @@
 \graphicspath{{figures/}, {pictures/}, {fig/}, {img/}, {image/}, {images/}, {pict/}, {picts/}}
 \usepackage{psfrag}
 \usepackage{framed}
+\usepackage[cm,plain]{fullpage}
+
+
+
 % theorem definitions
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{corollary}[theorem]{Corollary}
@@ -124,6 +132,9 @@
 \newcommand{\serializelist}{\textsf{List}\xspace}
 \newcommand{\intToBytes}{\textsf{int2B}\xspace}
 \newcommand{\stringToBytes}{\textsf{Str2B}\xspace}
+\newcommand{\NIZK}{\operatorname{NIZK}}
+
+
 
 \floatstyle{boxed}
 \newfloat{program}{thp}{lop}

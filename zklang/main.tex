@@ -1,23 +1,19 @@
 \documentclass[a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage{geometry}
-\usepackage{amssymb,amsthm,amsmath,amsfonts,longtable,comment,array,ifpdf,hyperref,url}
-\usepackage{graphicx}
-\usepackage{authblk}
 
 \input{preamble}
 
 
 \title{Zero Knowledge Language}
-\author[1]{Michael Lodder}
-\author[1]{Brent Zundel}
-\author[1]{Jason Law}
-\author[1]{Lovesh Harchandani}
+%alphabethic author order
 \author[2]{Jan Camenisch}
 \author[2]{Manu Drijvers}
+\author[1]{Lovesh Harchandani}
+\author[1]{Jason Law}
+\author[1]{Michael Lodder}
+\author[1]{Brent Zundel}
 
 \affil[1]{Evernym}
-\affil[2]{IBM Zurich}
+\affil[2]{IBM Research -- Zurich}
 
 \date{10th January 2018, version 0.1}
 
@@ -43,14 +39,24 @@ TODO: Evernym
 TODO: Both Evernym and IBM
 %\input{terminology}
 
-\input{HL-buildingblocks.tex}
+
+\section{ZKLang Statements}
+TODO: Both Evernym and IBM
+
+\input{ZKL-statements}
+%(statements}
 
 
-\subsection{Mapping Verifiable Claims to ZKLang}
-TODO: IBM
-
+\section{Mapping Verifiable Claims to ZKLang}
+TODO: Evernym
 \subsection{Mapping the different types to integers}
 TODO: IBM
+
+
+\section{Realization of ZKLang Components}
+TODO: IBM
+\input{HL-buildingblocks.tex}
+
 
 \subsection{Age proof}
 TODO: IBM
@@ -73,12 +79,20 @@ TODO: IBM
 \subsection{Orchestration}
 TODO: IBM
 
-\section{Statements}
-TODO: Both Evernym and IBM
+\newpage
+\bibliographystyle{alpha}
+\bibliography{../idemix-middlelayer-spec/idemix-spec-3.0.36/repageba,../idemix-middlelayer-spec/idemix-spec-3.0.36/biche,references}
 
-%\input{statements}
+\begin{appendix}
 
-\subsection{Realization of ZKLang Components}
-TODO: IBM
+\section{SPK Realizations}
+
+\input{spk-realizations}
+
+
+
+
+\end{appendix}
+
 
 \end{document}

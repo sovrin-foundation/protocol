@@ -1,62 +1,47 @@
-% !TEX root =  PrivateCredSpecification.tex
+% !TEX root =  main.tex
 
-
-
-\section{ZKLang}
-
-\newcommand{\NIZK}{\operatorname{NIZK}}
-
-If credentials are key-bound, they are required to be bound to the same (secret) key. 
-
-At this level, all message $m_i$ are integers.
-Terms that the language supports are the following ones.
-\begin{align}
-&\NIZK\lbrace(m_i)_{i\in h}[m]_{i\not\in h}: \operatorname{Credential}( \mathit{issuer\_public\_key}, m_1, m_2, m_3) \rbrace\\
-&\NIZK\lbrace(): \operatorname{Nym}( \emph{nym}) \rbrace\\
-&\NIZK\lbrace(): \operatorname{SNym}( \emph{nym}, \mathit{scope}) \rbrace\\
-&\NIZK\lbrace(m): \operatorname{Enc}( \emph{epk}, m, \mathit{ctxt}) \rbrace\\
-&\NIZK\lbrace(m): \operatorname{Larger}(m, c) \rbrace\\
-&\NIZK\lbrace(m): \operatorname{Smaller}(m, c) \rbrace \\
-&\NIZK\lbrace(m): \operatorname{Member}(m, c) \rbrace
-\end{align}
-
-
-Example composition of a statement.
-\begin{multline*}
-\NIZK\lbrace(m_1,m_2,m_3,m_4)[m_5]: \\
- \operatorname{Credential}( \emph{ipk}_1, m_1, m_2, m_3) \  \wedge \
-\and \operatorname{Credential}( \emph{ipk}_2, m_1, m_4, m_5) \  \wedge \\
-\and \operatorname{Nym}( \emph{nym}) \  \wedge \
-\and \operatorname{Larger}(m_3, c)   \rbrace
-\end{multline*}
-Explanations of stuff
-
-
-
-\section{Mapping Verifiable Claims to ZKLang}
-
-This mapping will depend on the credential specification of the issuer of a credentials.
-
-
-\subsection{Mapping the different types to integers}
-
-
-\subsection{Age proof}
-
-
-\subsection{Membership proof}
-
-
-
-\section{Realization of ZKLang Components}
-We could do all of this with X509 credentials, but then have no privacy features. 
+We could do all of this with X.509 credentials, but then have no privacy features. 
 We here concentrate on how to do this with the privacy features.
 
 
 We assume that the system parameters describe a groups $\G_1$, $\G_2$, $\G_T$, of prime order $q$, with efficiently computable bilinear map $e$.
 We further assume here that all attributes $m_i$ are elements of $Z_q$, and consider the encoding of other typed attribute values in different sections.
 
-\subsection{CL signatures}
+\subsection{Generalized Schnorr Protocols Notation}
+
+
+In the following we will use various protocols to prove knowledge of and relations 
+among discrete logarithms.
+To describe these protocols, we use  notation introduced by Camenisch and
+Stadler~\cite{camsta97b} for various proofs of knowledge of discrete
+logarithms and proofs of the validity of statements about discrete logarithms.
+For instance,
+\[\textit{PK}
+\{ (\alpha,\beta,\gamma): y = g^\alpha h^\beta \ \wedge \ \tilde{y} =
+\tilde{g}^\alpha \tilde{h}^\gamma \ \wedge \ ( v < \alpha < u) \}
+\]
+denotes a ``\textit{zero-knowledge \emph{P}roof of \emph{K}nowledge of
+  integers $\alpha$, $\beta$, and $\gamma$ such that $y = g^\alpha h^\beta$
+  and $\tilde{y} = \tilde{g}^\alpha \tilde{h}^\gamma$ holds, with $ v <
+  \alpha < u$},'' where $y,g,h,\tilde{y},\tilde{g}$, and $\tilde{h}$ are
+elements of some groups $G = \langle g\rangle = \langle h\rangle$ and
+$\tilde{G} = \langle \tilde{g}\rangle = \langle \tilde{h} \rangle$.  
+The
+convention is that Greek letters denote the quantities the knowledge of which is
+being proved, while all other parameters are known to the verifier. 
+More precisely, the property of ``proof of knowledge'' means that there exists a
+\emph{knowledge extraction} 
+\index{knowledge extraction}
+algorithm who can 
+extract the Greek quantities from a successful prover if given rewinding and
+reset access to the prover (cf.~Appendix~\ref{spk-real}).
+Thus, using this
+notation, a proof protocol can be described by just pointing out its aim while
+hiding the protocols realization details.
+
+
+
+\subsection{CL Signatures}
 A credential will take the form of a signature created by an issuer. 
 As we want to prove knowledge of credentials, we need ``signatures with efficient protocols'', also called CL signatures~\cite{camlys02b}. 
 Examples are the RSA-based CL signature~\cite{camlys02b}, the pairing-based CL signature~\cite{camlys04},
@@ -98,13 +83,13 @@ Pedersen commitments are constructed as follows.
 \end{description}
 
 One can efficiently prove that a pseudonym $\nym$ is correctly constructed by proving 
-\[\SPK\{(m_1, r) : \nym = g_1^{m_1} h_1^r .\]
+\[\SPK\{(m_1, r) : \nym = g_1^{m_1} h_1^r \}.\]
 
 For certain applications, we might want to restrict a user to create only a single pseudonym for one context.
 Domain specific pseudonyms offer this functionality. 
 Let $\mathit{bsn}$ be a string that describes the context, a scope exclusive pseudonym can be constructed by $\nym \gets H(\mathit{bsn})^{m_1}$. 
 A user can prove this is correctly computed:
-\[\SPK\{(m_1) : \nym = H(\mathit{bsn}^{m_1} .\]
+\[\SPK\{(m_1) : \nym = H(\mathit{bsn})^{m_1} \} .\]
 
 
 \subsection{Range proofs}
@@ -119,6 +104,6 @@ to encrypt $m \in \G_1$ to public key $\mathit{epk}$, take $r \gets Z_q$, and se
 
 To verifiably encrypt a value $b^m$ to public key $\mathit{epk}$, the prover creates an Elgamal ciphertext $(c_1, c_2)$ encrypting $b^m$ to $\mathit{epk}$,
 and proves
-\[\SPK\{(m_1, r) : c_1 = g_1^r \land c_2 = \mathit{epk}^r b^{m_1} .\]
+\[\SPK\{(m_1, r) : c_1 = g_1^r \land c_2 = \mathit{epk}^r b^{m_1} \}.\]
 
 \subsection{Orchestration}
