@@ -17,7 +17,7 @@ https://agency.example.com/msg/
 ## Response
 ### Codes
 #### OK
-How the message is processed and what response is given is the prerogative of the receiver of the message. There is two convetnions for non-error response.
+How the message is processed and what response is given is the prerogative of the receiver of the message. There is two conventions for non-error response.
 
 **202 Accepted** -- The message is processed asynchronously. No content is return.
 
