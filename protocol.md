@@ -138,8 +138,6 @@ If an Issuer is pre-issuing its Revocation Registry (recommended), then no ledge
 
 Updates to a Revocation Registry can be batched. If an Issuer issues and revokes a large number of Claims in a short period of time, these issuances and revocations can be combined in one efficient transaction.
 ### Proving Sub-Protocol
-Proof presentation and verification also follows the Negotiation Pattern, . The sub-protocol would start with a 
-
 Proving also follows the Negotiation Pattern with one caveat: there would not be a leading Proof Offer. The Proving Sub-Protocol would start with a Proof Request. If a Claim holder could not or wished not to provide Proof as requested by the Proof Request, then the claim holder could send a Proof Offer that described the proof it was willing to share.
 
 Here is the mapping to the pattern:
