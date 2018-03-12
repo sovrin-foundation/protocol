@@ -126,8 +126,8 @@ This has a side benefit of reducing the number writes to the public ledger, whic
 ### Connecting Sub-Protocol
 TODO
 
-### Issuing Sub-Protocol
-Issuing a Claim follows the Negotiation Pattern. Here is the mapping to the pattern:
+### Issuance Sub-Protocol
+The Issuance sub-protocol describes the interaction between the Issuer and Identity Owner. This interaction follows the Negotiation Pattern. Here is the mapping to the pattern:
 * The **Identity Owner** assumes the *Acquirer* role in the pattern. 
 * The **Issuer** assumes the *Producer* role.
 * The **Claim Offer** maps to the *Offer*.
@@ -137,8 +137,8 @@ Issuing a Claim follows the Negotiation Pattern. Here is the mapping to the patt
 If an Issuer is pre-issuing its Revocation Registry (recommended), then no ledger write is required for Issuance. Otherwise, a single transaction to update the Revocation Registry is required before the Claim can be used.
 
 Updates to a Revocation Registry can be batched. If an Issuer issues and revokes a large number of Claims in a short period of time, these issuances and revocations can be combined in one efficient transaction.
-### Proving Sub-Protocol
-Proving also follows the Negotiation Pattern with one caveat: there would not be a leading Proof Offer. The Proving Sub-Protocol would start with a Proof Request. If a Claim holder could not or wished not to provide Proof as requested by the Proof Request, then the claim holder could send a Proof Offer that described the proof it was willing to share.
+### Authentication Sub-Protocol
+The Authentication sub-protocol describes the interaction between the Relying Party and Identity Owner. This interaction also follows the Negotiation Pattern with one caveat: there would not be a leading Proof Offer. The Authentication Sub-Protocol would start with a Proof Request. If a Claim holder could not or wished not to provide Proof as requested by the Proof Request, then the claim holder could send a Proof Offer that described the proof it was willing to share. The Authentication sub-protocol lists guidelines that the Relying Party could follow while constructing the Proof Request such that the Identity Owner can ensure that requested information respects its privacy. 
 
 Here is the mapping to the pattern:
 * The **Relying Party** assumes the *Acquirer* role in the pattern. 
@@ -147,7 +147,7 @@ Here is the mapping to the pattern:
 * The **Proof Request** maps to the *Request*.
 * The **Proof** maps to the *Matter* in the pattern.
 
-### Revoking Sub-Protocol
+### Revocation Sub-Protocol
 Revocations are accomplished with a Ledger write to the Revocation Registry. The Issuer should also communicate with the Claim holder directly that their Claim was revoked using a CLAIM_NOTICE message.
 
 ## Agents
@@ -167,6 +167,6 @@ Any public ledger that is capable of storing and maintaining the core Public Obj
 ### Interoperability Requirements
 
 ### Ledger Requirements
-Generating a new Claim does not require writing to the ledger if the Issuer pre-issues the Revocation Registry. Proving does not require a write to the ledger either. 
+Generating a new Claim does not require writing to the ledger if the Issuer pre-issues the Revocation Registry. Authentication does not require a write to the ledger either; it requires a read though. 
 
 Proving a Claim is not revoked, and verification of a Proof both require reading from the ledger. Therefore the ledger should have good read performance.
