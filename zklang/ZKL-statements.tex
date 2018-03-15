@@ -1,0 +1,72 @@
+% !TEX root =  main.tex
+
+\subsection{Notation}
+
+
+\subsection{ZKLang Statements}
+
+At this level, all message $m_i$ are integers.
+Terms that the language supports are the following ones.
+\begin{align}
+&\NIZK\lbrace(m_{i\in h})[m_{i\not\in h},\mathit{ipk},]: \operatorname{Credential}( \mathit{ipk}, m_1, m_2, \ldots, m_n) \rbrace\\
+&\NIZK\lbrace()[\emph{nym}]: \operatorname{Nym}( \emph{nym}) \rbrace\\
+&\NIZK\lbrace()[\emph{nym},\mathit{scope}]: \operatorname{SNym}( \emph{nym}, \mathit{scope}) \rbrace\\
+&\NIZK\lbrace(m)[\emph{epk},\mathit{ctxt}]: \operatorname{Enc}( \emph{epk}, m, \mathit{ctxt}) \rbrace\\
+&\NIZK\lbrace(m)[c]: \operatorname{Larger}(m, c) \rbrace\\
+&\NIZK\lbrace(m)[c]: \operatorname{Smaller}(m, c) \rbrace \\
+&\NIZK\lbrace(m)[c]: \operatorname{Member}(m, c) \rbrace \\
+&\NIZK\lbrace(m_{i\in h})[m_{i\not\in h},c]: \operatorname{Com}(m1, m_2, c) \rbrace
+\end{align}
+
+\paragraph{Credential $\operatorname{Credential}$.}
+
+\paragraph{Pseudonyms $\operatorname{Nym}$ and $\operatorname{SNym}$.}
+
+\paragraph{Verifiable Encryption  $\operatorname{Enc}$.}
+
+\paragraph{Range Statements $\operatorname{Larger}$ and $\operatorname{Smaller}$.}
+
+\paragraph{Membership $\operatorname{Member}$.}
+%%
+This express that some attribute is contained in a set represented by the constant $c$.
+The value of the constant depends on how the membership proof is realized. 
+For instance, the value of $c$ be the set itself, e.g., $\{c_1, c_2, ..., c_l\}$, an cryptographic accumulator, or 
+or a signature verification key w.r.t.\ which set element where signed by some authority.
+
+
+\paragraph{Commitments $\operatorname{Com}$.}
+%%
+This language element is need to re-use (hidden) attributes in an other protocol. 
+For instance if an issuer want to issue a credential that contains an attribute of a user that the issuer shall not be
+privy off. 
+
+
+\paragraph{Possible Extentions}
+There are a number of possible extensions that for now are beyond the scope of the language. 
+Such extensions include statements on polynomial relations between attributes such as $m_1 = 3*m_2 +m_3^2$.
+
+
+\subsection{Composing Statements}
+
+Example composition of a statement.
+\begin{multline*}
+\NIZK\lbrace(m_1,m_2,m_3,m_4)[m_5]: \\
+ \operatorname{Credential}( \emph{ipk}_1, m_1, m_2, m_3) \  \wedge \
+\and \operatorname{Credential}( \emph{ipk}_2, m_1, m_4, m_5) \  \wedge \\
+\and \operatorname{Nym}( \emph{nym}) \  \wedge \
+\and \operatorname{Larger}(m_3, c)   \rbrace
+\end{multline*}
+Explanations of stuff
+
+\subsection{Discussion}
+
+\paragraph{User Secret Keys}
+
+Pseudonyms are always bound to a user secret key, credentials can be bound to a user secret key.
+Commitments might also contain a secret key.
+
+If in a composed statement the ownership of several pseudonyms, commitments and credentials are proved,
+they must be related to the same secret key. 
+Thus, secret keys cannot be mixed and matched.
+
+If credentials are key-bound, they are required to be bound to the same (secret) key. 

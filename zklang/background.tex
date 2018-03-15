@@ -1,0 +1,113 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{amssymb,amsthm,amsmath,amsfonts,longtable,comment,array,ifpdf,hyperref,url}
+\usepackage{graphicx}
+
+\newcommand{\quotes}[1]{``#1''}
+
+\title{Background}
+\author{Lovesh Harchandani}
+\date{5th January 2018, version 0.1}
+
+\begin{document}
+
+\maketitle
+\begin{abstract}
+  This document is meant to be a concise introduction to zero knowledge proofs for non-cryptographers and folks without a strong mathematical or computer science background. However knowledge of elementary mathematics is assumed, some references to required reading are given in the text throughout.
+  The document starts with notion of strings and languages and checking presence of strings in language and witnesses. After that interactions are described between 2 parties where one party "proves" to the other party that a specific string is present in a language. Then the concept of knowledge extraction and simulation is presented where it is shown that one party cannot extract any knowledge that the other party does not want to disclose and still be convinced that the assertion that the first party is making is true. 
+  This document is based on Efficient Zero-Knowledge Proofs and Applications \footnote{\url{https://uwspace.uwaterloo.ca/bitstream/handle/10012/8621/Henry_Ryan.pdf
+}}
+\end{abstract}
+
+\section{Outline}
+\begin{enumerate}
+  \item Prerequisites
+  \item Languages
+  \item Interactive protocols and proofs
+  \item Zero Knowledge Proofs, interactive and non-interactive
+  \item Camenisch-Stadler notation
+\end{enumerate}
+\section{Prerequisites}
+\textit{Some preliminary concepts need to be defined; a basic understanding of set theory \footnote{\url{https://en.wikipedia.org/wiki/Set-builder_notation}\newline \url{https://www.tutorialspoint.com/discrete_mathematics/discrete_mathematics_relations.htm}\newline \url{https://www.tutorialspoint.com/discrete_mathematics/discrete_mathematics_functions.htm}}, some arithematic\footnote{\url{https://en.wikipedia.org/wiki/Modular_arithmetic}\newline \url{https://www.mathsisfun.com/algebra/exponents-logarithms.html}} and group theory~\footnote{\url{https://www.di-mgt.com.au/multiplicative-group-mod-p.html}} is required.} 
+\newline
+Throughout, $\mathbb{G}$ will always denote a finite multiplicative group prime order \emph{q} and a fixed generator \emph{g}\(\in\)$\mathbb{G}$ and $\mathbb{G}^{*}$ = $\mathbb{G}$ \ensuremath{\backslash} \{1\} will refer to its subset of non-identity elements (order \emph{q-1}). Likewise, $\mathbb{Z}_q$ will denote the field of integers modulo \emph{q} (order \emph{q}), and $\mathbb{Z}^{*}_q$ = $\mathbb{Z}_q$ \ensuremath{\backslash} \{0\} will refer to its multiplicative group of units (order \emph{q-1}).
+\section{Languages}
+\textit{Languages and membership}. If \(\Lambda\) is a finite set, then the set of all length-n sequences of elements from \(\Lambda\) is denoted by \(\Lambda^n\) and the set of all finite sequences (of any finite, non-negative length) of elements from \(\Lambda\) is denoted by \(\Lambda^{*}\) = \( \bigcup_{n\in\mathbb{N}} \)\(\Lambda^n\). The sequences in \(\Lambda^{*}\) are called finite strings over the alphabet \(\Lambda\) and subsets of \(\Lambda^{*}\) are called languages of strings over \(\Lambda\). Let \textit{S} and \textit{W} be arbitrary languages over \(\Lambda\). A collection of ordered pairs \textit{R} \(\subseteq\) \textit{S} \(\times\) \textit{W} is a (binary) relation on strings from \(\Lambda^{*}\). We call the language of strings \textit{$L_R$} {=} \{ \textit{s} $\in$ \textit{S} \(\mid\) \(\exists\)w $\in$ \textit{W}, \textit{(s, w)} $\in$ \textit{R} \} the language induced by \textit{R}. We treat \textit{R(s, w)} as a function evaluating to 1 if \textit{(s, w)} $\in$ \textit{R} and to 0 otherwise. If \textit{R(s, w)} = 1, then the string w is called a witness that s $\in$ \textit{$L_R$}. Given a string s $\in$ S, the set \textit{$W_R$(s)} = \{ \textit{w} $\in$ W $\mid$ \textit{R(s, w)} = 1 \}  is called the witness set for s $\in$ \textit{$L_R$}. Of course, \textit{$W_R$(s)} = \{\} if s $\notin$ \textit{$L_R$}. 
+\newline
+Some examples (which will be extended upon later): 
+\newline
+\indent Let \textit{$R_{e(10)}$} be the relation describing all exponentiations of a number 10 so $(1, 0), (10, 1), (100, 2)$ are some elements of \textit{$R_{e(10)}$}, where 0 is the witness of 1, 1 is the witness of 10 and 2 is the witness of 100. Then the language induced by {$R_{e(10)}$} on \textit{L} comprises of all exponentiations of 10, \textit{$L_{R_{e(10)}}$} $ = \{1, 10, 100, ...\} $. The witness set \textit{W} consists of $\{0, 1, 2, ...\}$, the witness set of an element say 100 is a set of 1 element $\{2\}$; $ W_{R_{e(10)}}(100) = \{2\} $. 
+\newline
+\indent In another example Let \textit{$R_{sq}$} be the relation describing all squares of natural numbers so $(1, 1), (4, 2), (9, 3)$ are some elements of \textit{$R_{sq}$}; $(1, -1), (4, -2), (9, -3)$ are also some elements of \textit{$R_{sq}$}. Here 1 and -1 are the witnesses of 1, 2 and -2 are witnesses of 4 and so on. Then the language induced by \textit{$R_{sq}$} on \textit{L} is \textit{$L_{R_{sq}}$} $ = \{1, 4, 9, ...\} $, the witnesses being $\{-1, 1, -2, 2, -3, 3, ...\}$; witness set of 9 of $ W_{R_{sq}}(9) = \{-3, 3\} $
+\newline
+An algorithm whether it be deterministic or probabilistic is efficient if its expected running time is polynomial in the length of its inputs.
+\newline
+Throughout, it is assumed that there are efficient algorithms to test membership of arbitrary strings in \textit{S} and \textit{W} so that identifying instances for \textit{R} is easy. 
+\newline
+No assumption is made about the ease or difficulty of testing membership of a string s in \textit{L\textsubscript{R}} when no appropriate witness w $\in$ \textit{W\textsubscript{R}(s)} has been provided.
+\newline
+\newline
+\textit{NP-relations and NP-languages}. A language \textit{$L_R$} is called an NP-language if it belongs to the complexity class NP\footnote{\url{https://stackoverflow.com/q/1857244}}; that is, if (i) there exists an efficient algorithm to evaluate \textit{R(s, w)} on any instance \textit{(s,w)} $\in$ \textit{S $\times$ W}, and (ii) there exists a polynomial time function \emph{p(n)} such that every s $\in$ \textit{$L_R$} has at least one witness w $\in$ \textit{$W_R$(s)} satisfying $|w|\leq p(|s|)$. \textit{An informal way to say the same is that for an NP-language, given any string s and any witness w, it is efficient to check whether the given witness is a witness of the given string, i.e $ (s,w) \in R$ and the size of the witness is less than or equal to the size of the string.} 
+Any witness w $\in$ \textit{$W_R$(s)} that satisfies the latter bound is called an NP-witness that s $\in$ \textit{$L_R$} . If \textit{$L_R$} is an NP-language, then we call the relation R an NP-relation. From above examples both \textit{$L_{R_{e(10)}}$} and \textit{$L_{R_{sq}}$} NP-lnaguages and \textit{$R_{e(10)}$} and \textit{$R_{sq}$} are NP-relations
+Viewing \textit{$W_R$(s)} as the set of proofs that s $\in$ \textit{$L_R$}, we can interpret NP as the class of languages whose strings each have one or more \quotes{short} proofs of membership that can be checked in polynomial time.
+\section{Interactive protocols and proofs}
+\textit{Interactive protocol} A protocol is a system of rules describing the sequence, syntax, and semantics of message exchange between two or more interactive algorithms where each exchange is called a move and 2 consecutive moves constitute a round. Protocols comprising just one move are called non-interactive protocols and those comprising two or more moves are called interactive protocols. We will be dealing with two-party protocols called interactive proof systems, which involve a pair of interactive algorithms that play two distinct roles: one algorithm is the prover and the other algorithm is the verifier. The \quotes{honest} prover and verifier algorithms are denoted by P and V respectively, potential \quotes{dishonest} impostors, \textit{$P^{*}$} and \textit{$V^{*}$} denote arbitrary algorithms taking on the prover and verifier roles in the protocol. If P is an interactive algorithm, then P(w) denotes P given the string w $\in$ \(\Lambda^{*}\) as its private auxiliary input. If V is a second interactive algorithm, then (P, V) denotes the protocol arising when P interacts with V, and $\langle$P, V$\rangle$(s) denotes the random variable describing the output of V in such an interaction when the common input string is s $\in$ S. P always makes the final move in an interactive proof, after which V checks one or more verification equations to decide whether it should accept or reject the interaction. From the above examples there can be a P who is trying to prove to V that he knows 1000 to be an exponentiation of 10, here 1000 is the common input to for both P and V, the witness (exponent) 3 (since $10^3=1000$) is the private input of P denoted by P(3), the outcome (whether V believes P knows an exponent of 10 resulting in 1000) of interactions between P and V with 1000 as the common input would be $\langle$P, V$\rangle$(1000) (P is not disclosing 3 to V). 
+$Pr[1 \gets \langle P, V \rangle (s)]$ denotes the probability that \quotes{V accepts} and $Pr[0 \gets \langle P, V \rangle (s)]$ denotes the probability that \quotes{V rejects}. 
+\newline
+Subsequent definitions assume an alphabet \(\Lambda\), S and W as infinite subsets of \(\Lambda^{*}\), an infinite relation $R \subseteq S \times W$ and an NP language \textit{$L_R$} 
+\newline
+\newline
+\textit{Interactive proof}. Protocol (P, V) is an interactive proof system for R if there exists a negligible function \(\epsilon\) : $\mathbb{N}$ \(\to\) $\mathbb{R}^{+}$ such that, for every s $\in$ S and for every prover \textit{$P^{*}$}, (P, V) provides the following two guarantees.
+\begin{enumerate}
+  \item \textbf{Complete:}  If s $\in$ \textit{$L_R$}, then $Pr[1 \gets \langle P, V \rangle (s)] = 1$.
+  \item \textbf{Sound:}  If s $(\notin)$ \textit{$L_R$}, then $Pr[1 \gets \langle P^{*}, V \rangle (s)] \le \epsilon(|s|)$.
+\end{enumerate}
+Informally, in an interactive proof a prover with unbounded computational capacity, who knows any string in a language can convince the verifier that the string is really in the langauge. But for any string not in a language the prover has an extremely little chance of convincing the verifier that the string is in the language. From above examples, when P wants to convince V that the number 1000 is an exponentiation of 10 i.e $ 1000 \in L_{R_{e(10)}} $ it can always do it (however expensively though) but if P wants to convince that 250 is an exponentiation of 10 which is not true, i.e $ 250 \notin \textit{$L_{R_{e(10)}}$} $, P has a negligible chance. Similarly P can always convince V that $ 9 \in L_{R_{sq}} $ but has a negligible chance of convincing V that $ 6 \in L_{R_{sq}} $
+\newline
+\newline
+\textit{Interactive arguments}. It is useful to assume that \textit{$P^{*}$} is PPT\footnote{\url{https://crypto.stackexchange.com/q/8624}} in the common input, in which case we must modify the completeness criterion to provide honest P with an appropriate witness as private auxiliary input. The interpretation of the soundness criterion also changes when we restrict \textit{$P^{*}$} to be PPT: for any sufficiently long common input s $\in$ S \ensuremath{\backslash} \textit{$L_R$} , it is computationally infeasible for \textit{$P^{*}$} to make V accept with a non-negligible probability.
+\begin{enumerate}
+  \item \textbf{Complete:}  If \textit{R(s, w)} = 1, then $Pr[1 \gets \langle P(w), V \rangle (s)] = 1$.
+  \item \textbf{Sound:}  If s $(\notin)$ \textit{$L_R$}, then $Pr[1 \gets \langle P^{*}, V \rangle (s)] \le \epsilon(|s|)$.
+\end{enumerate}
+Informally, in an interactive argument a computationally bound (which is practical) prover who knows the witness for any string in a language can convince the verifier that the string is really in the langauge but a a computationally bound prover who does not the witness has an extremely little chance of convincing the verifier that the string is in the language. Again from above examples, when P wants to convince V that the number 1000 is an exponentiation of 10 i.e $ 1000 \in L_{R_{e(10)}} $ and P knows $ 10^3 = 1000 $ it can always do it efficiently but if P wants to convince that 250 is an exponentiation of 10 which is not true, i.e $ 250 \notin \textit{$L_{R_{e(10)}}$} $, P has a negligible chance. Similarly P can always convince (efficiently) V that $ 9 \in L_{R_{sq}} $ if P knows 3 since $3^2 = 9$ but has a negligible chance of convincing V that $ 6 \in L_{R_{sq}} $
+\section{Zero-knowledge proofs}
+Informally, an interactive proof system for \textit{$L_R$} is zero-knowledge if a trusted entity merely proclaiming that s $\in$ \textit{$L_R$} enables any \textit{$V^{*}$} to efficiently deduce anything it might have \quotes{learned} by engaging in (P, ${V^{*}}$) on common input s $\in$ \textit{$L_R$}. A given verifier ${V^{*}}$ gains zero (extra) knowledge if, without any help from P, ${V^{*}}$ can \quotes{simulate} an interaction that is \quotes{indistinguishable} from the real interactions that occur when an honest P executes the protocol with that particular ${V^{*}}$ on the same common input. Thus there is no PPT cheating strategy using which ${V^{*}}$ can \quotes{learn} things from P that it could not just as easily compute on its own given the common input s and a promise that s $\in$ \textit{$L_R$}.
+\newline
+For a protocol execution between P and ${V^{*}}$: 
+\begin{itemize}
+  \item A \emph{transcript} is the tuple of messages exchanged between P and ${V^{*}}$ up until ${V^{*}}$ halts. 
+  \item An \emph{accepting transcript} is a transcript of an accepting proof and a \emph{rejecting transcript} is a transcript of a rejecting proof.
+  \item The \emph{aggregate view} of ${V^{*}}$ upon interacting with P, denoted $View_{P,V^{*}}(s)$, consists of all the information that ${V^{*}}$ \quotes{sees} in the protocol execution, including (i) the transcript, (ii) the common input string s (iii) ${V^{*}}$’s own private inputs (iv) ${V^{*}}$’s random coin flips  
+  \item By parameterizing over all possible protocol executions for the same common input s but different random flips of ${V^{*}}$, we obtain a collection ${ View_{P,V^{*}}(s)}_{s \in L_R }$ of random variables called the \emph{ensemble}.
+\end{itemize}
+A two-party interactive protocol (P, V) is zero-knowledge on \textit{$L_R$} if, for every verifier ${V^{*}}$ and for every auxiliary string \textit{z} $\in$ \(\Lambda^n\), there exists an expected PPT algorithm $S_{V^{*}}$ such that the ensembles ${ View_{P,V^{*}}(s)}_{s \in L_R }$ and ${S_{V^{*}}(s,z)}_{s \in L_R }$ are indistinguishable. An algorithm $S_{V^{*}}$ with this property is called a simulator for ${V^{*}}$. \textit{z} is the prior knowledge of ${V^{*}}$, the idea is that for $S_{V^{*}}$ to have access to any data ${V^{*}}$ has access to.
+In the above mentioned examples,
+\newline
+\indent  A zero knowledge proof protocol execution between P and V where P knows $10^3 = 1000$ (3 is the witness of 1000) and wants to convice V that 1000 (1000 is the common input, say \textit{s}) is some exponentiation of 10 involves 
+\begin{enumerate}
+  \item P chooses a random integer say 9, and tells V the value of $10^9$ but not 9 itself; lets call 9 as \textit{r} and $10^9$ as \textit{t}
+  \item V records the value of $10^9$ and then sends P a random challenge say 5; lets call the challege 5 as \textit{c}.
+  \item P computes a value $5*3 + 9$, call it \textit{x} and sends it to V (V only gets the computed value, 24 in this case, it can't know the individual components). V on receiving compares $10^{24}*1000^{-5}$ and $10^9$. It finds them equal since $10^{24}*1000^{-5} = 10^{24}*10^{3*-5} = 10^{24}*10^{-15} = 10^{25-15} = 10^9$
+\end{enumerate}
+Hence without disclosing the witness 3, P is able to prove that 1000 is an exponentiation of 10. (9, 5 24) is the \textit{transcript}, it is an \textit{accepting transcript} since the verifier is convinced the 1000 is some exponentiation of 10. The \textit{aggregate view} of V is (9, 5 24, 1000) and the random choices it made to select the challenge; it does not have any private inputs. The \textit{ensemble} of V for 1000 would be all possible \textit{aggregate view}s that will be generated in any interaction between P and V where P is trying to prove that 1000 is an exponentiation of 10.
+\newline
+\indent  A zero knowledge proof protocol execution between P and V where P knows $5^2 = 25$ (5 is the witness of 25) and wants to convice V that 25 (25 is the common input) is some square involves 
+\begin{enumerate}
+  \item P chooses a random integer say 3, and tells V the value of $3^2$ which is 9 but not 3 itself; lets call 3 as \textit{r} and $3^2$ as \textit{t}
+  \item V records the value of $3^2$ and then sends P a random challenge say 10; lets call the challege 10 as \textit{c}.
+  \item P computes a value $3*5^{10}$, call it \textit{x} and sends it to V (V only gets the computed value 29296875). V on receiving compares $29296875^2$ and $9*25^{10}$. It finds them equal since $29296875^2 = 858306884765625$ and $9*25^{10} = 858306884765625$
+\end{enumerate}
+Hence without disclosing the witness 5, P is able to prove that 25 is a square. \textit{The reason why the above steps work will be explained in the next document; it is not difficult to think about it though}
+\newline
+\section{Camenisch-Stadler notation}
+The notation is used to denote systems for honest-verifier (verifier always chooses random values when it is supposed to and does not try to act on previously seen values) zero-knowledge proofs of knowledge.
+\begin{itemize}
+  \item $PK\{w : R(s,w) = 1\}$ denotes an honest-verifier zero-knowledge proof (or argument) of knowledge of a witness \textit{w} $\in$ \textit{$W_R$(s)}. By convention, any values that appear to the left of the colon constitute a witness that ${P^{*}}$ is proving knowledge of, and any values that appear only to the right of the colon are public.
+  \item An interactive proof system (P, V) is called \emph{public coin} if the messages that honest V sends to P on common input \textit{s} $\in$ \textit{S} contain only uniform random strings from some publicly known \quotes{challenge} domain \textit{C(s)} 
+  \item \emph{Fiat-Shamir Transform}: To convert a public coin system of Interactive Honest Verifier Zero Knowledge (IHVZK) proofs, replace \textit{V} with cryptographically secure hash function $H_s$ with range \textit{C(s)}. Whenever in IHVZK \textit{V} sends a random message, in Non Interactive Honest Verifier Zero Knowledge (NIHVZK), \textit{P} computes a random message by evaluating $H_s$ on the entire transcript until the current move. This is the \emph{Fiat-Shamir Transform}. Also \textit{V} can start the transcript with a random nonce $M$ forcing \textit{P} to compute a new proof every time and preventing \textit{P} to use any previously used proofs. By applying \emph{Fiat-Shamir Transform} in the above examples, the \textit{step 2} where verifier sends a challenge \textit{c} can be replaced with the prover P computing a hash of \textit{t} and using it as a challenge. An argument for the hash of \textit{t} being an appropriate challenge is that in case of the interactive proof, the prover P first commits to a value \textit{r} and sends the commitment \textit{t} and then learns the challege; the prover cannot change \textit{r} after learning the challege \textit{r}. In case of the non-interactive proof, P cannot choose an \textit{r} that gives it an appropriate challenge.   
+  \item $SPK\{w : R(s,w) = 1\}(M)$ is the non-interactive form of $PK\{w : R(s,w) = 1\}$ using \emph{Fiat-Shamir Transform} and the nonce $M$. SPK stands for signature proofs of knowledge since an accepting transcript with common input s and $M$ can be seen as P's signature over $M$ where witness \textit{w} $\in$ \textit{$W_R$(s)} is the private key. 
+\end{itemize}
+\end{document}

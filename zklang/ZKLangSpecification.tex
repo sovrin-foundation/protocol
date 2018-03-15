@@ -1,0 +1,417 @@
+\documentclass[a4paper]{article}
+
+\usepackage{float} % additional placement specifier H
+\usepackage{subfigure}
+\usepackage{tabularx}
+\usepackage{amsmath,amsfonts,amssymb,xspace}
+\usepackage{booktabs}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{fullpage}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\setcounter{tocdepth}{3}
+\usepackage{xspace}
+\usepackage{graphicx}
+\graphicspath{{figures/}, {pictures/}, {fig/}, {img/}, {image/}, {images/}, {pict/}, {picts/}}
+\usepackage{psfrag}
+\usepackage{framed}
+% theorem definitions
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+% these ones in textrm
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{assumption}{Assumption}
+
+\newcommand{\ceil}[1]{\ensuremath{\left\lceil #1 \right\rceil}}
+\newcommand{\set}[1]{\ensuremath{\left\{ #1 \right\}}}
+\newcommand{\pmset}[1]{\ensuremath{\pm\left\{ #1 \right\}}}
+\newcommand{\ideal}[1]{\ensuremath{\left\langle #1 \right\rangle}}
+\newcommand{\Spec}{\ensuremath{\mathcal{S}}}
+\newcommand{\lres}{\ensuremath{ \ell_{\mathit{res}} }}
+\newcommand{\lszk}{\ensuremath{ \ell_{\text{\o}} } }
+
+\newcommand{\SPK}{\ensuremath{\mathit{SPK}}}
+\newcommand{\PK}{\ensuremath{\mathit{PK}}}
+\newcommand{\Cal}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\itemline}{ \item[]$~$ }	% adds a blank line in an item/description env. used for protocols 
+\DeclareSymbolFont{AMSb}{U}{msb}{m}{n}
+\DeclareMathSymbol{\Ff}{\mathalpha}{AMSb}{"46}
+\DeclareMathSymbol{\Bb}{\mathalpha}{AMSb}{"42}
+\DeclareMathSymbol{\N}{\mathalpha}{AMSb}{"4E}
+\DeclareMathSymbol{\R}{\mathalpha}{AMSb}{"52}
+\DeclareMathSymbol{\X}{\mathalpha}{AMSb}{"58}
+\DeclareMathSymbol{\Zz}{\mathalpha}{AMSb}{"5A}
+\newcommand{\Z}[1]{\ensuremath{\Zz_{#1}} }
+\newcommand{\F}[1]{\ensuremath{\Ff_{#1}} }
+\newcommand{\Zs}[1]{\ensuremath{\Zz^{\ast}_{#1}}}
+\newcommand{\jac}[2]{\ensuremath{\genfrac{(}{)}{0.1ex}{}{#1}{#2}\!}}
+
+\newcommand{\ord}[1]{\mathop{\textrm{ord}}(#1)}
+\newcommand{\PP}{\ensuremath{\mathbf{P}}}  % VJS
+\newcommand{\TT}{\ensuremath{\mathbf{T}}}  % VJS
+\newcommand{\GG}{\ensuremath{\mathbf{G}}}  % VJS
+\newcommand{\GGf}{\ensuremath{\mathfrak{G}}}  % VJS
+\newcommand{\abs}{\mathop{\mathrm{abs}}}  % VJS
+%\newcommand{\PK}{\ensuremath{\mathsf{PK}}}  % VJS
+%\newcommand{\SK}{\ensuremath{\mathsf{SK}}}  % VJS
+\newcommand{\reject}{\ensuremath{\mathsf{reject}}}  % VJS
+
+\newcommand{\cindist}{\stackrel{c}{\approx}}
+\newcommand{\QR}[1]{\ensuremath{\textit{QR}_{#1}}}
+
+\newcommand{\hashkey}{\ensuremath{\mathsf{hk}}}  % VJS
+\newcommand{\hash}[1]{\ensuremath{\mathcal{H}_{\hashkey}(#1)}}  % VJS
+\newcommand{\hashscheme}{\ensuremath{\mathcal{H}}}  % VJS
+\newcommand{\floor}[1]{\ensuremath{\lfloor{#1}\rfloor}}
+\newcommand{\de}[1]{\ensuremath{\Delta{#1}}}
+\newcommand{\rem}[1]{\ensuremath{\operatorname{rem} #1}}  
+\newcommand{\rangefloor}[1]{\ensuremath{[#1]}}  
+\newcommand{\range}[1]{\ensuremath{[#1]}}  
+\newcommand{\cert}{\ensuremath{\mathit{cert}}}
+
+\newcommand{\apihead}[1]{\noindent\textbf{#1}\\[-3mm]}
+
+
+% Attributes (name, value, type)
+\newcommand{\attName}[1]{\ensuremath{\pi_n(a_#1)}}
+\newcommand{\attValue}[1]{\ensuremath{\pi_v(a_#1)}}
+\newcommand{\attType}[1]{\ensuremath{\pi_t(a_#1)}}
+\newcommand{\mappedValue}[1]{\ensuremath{\pi_{\mathit{mv}}(a_#1)}}
+%\newcommand{\simpleValue}[1]{\ensuremath{v_#1}}
+
+% Attribute sets
+\newcommand{\Attributes}{\ensuremath{A}}
+\newcommand{\AttributesCommitted}{\ensuremath{\Attributes_{c}}}
+\newcommand{\AttributesKnown}{\ensuremath{\Attributes_{k}}}
+\newcommand{\AttributesHidden}{\ensuremath{\Attributes_{h}}}
+\newcommand{\AttributesRevealed}{\ensuremath{\Attributes_{r}}}
+\newcommand{\AttributesNonRevealed}{\ensuremath{\Attributes_{\overline{r}}}}
+\newcommand{\Identifiers}{\ensuremath{\Cal{I}}}
+\newcommand{\IdentifierRevealed}{\ensuremath{\Identifiers_{r}}}
+\newcommand{\IdentifierNonRevealed}{\ensuremath{\Identifiers_{\overline{r}}}}
+
+\newcommand{\attributeTestSize}{}
+\newcommand{\cred}{\ensuremath{\mathit{cred}}}
+\newcommand{\comm}{\ensuremath{\mathit{comm}}}
+\newcommand{\rep}{\ensuremath{\mathit{rep}}}
+\newcommand{\nym}{\ensuremath{\mathit{nym}}}
+\newcommand{\dnym}{\ensuremath{\mathit{dNym}}}
+\newcommand{\verEnc}{\ensuremath{\mathit{verEnc}}}
+\newcommand{\msg}{\ensuremath{\mathit{msg}}}
+
+%math assignments
+\newcommand{\asn}{\ensuremath{\gets}}
+% \renewcommand{\equiv}{\equiv}
+\newcommand{\becomes}{\ensuremath{:=}}
+\newcommand{\inR}{\ensuremath{\in_R}}
+
+\newcommand{\G}{\ensuremath{\mathbb{G}}}
+\newcommand{\g}{\ensuremath{\mathrm{g}}}
+\newcommand{\bits}{\ensuremath{\{0,1\}}}
+\newcommand{\eq}{\ensuremath{=}}
+\newcommand{\commit}{\ensuremath{\mathrm{Comm}}}
+
+%Roles: Prover, Verifier, Issuer
+\newcommand{\Prover}{{\sc Prover}}
+\newcommand{\Verifier}{{\sc Verifier}}
+\newcommand{\Issuer}{{\sc Issuer}}
+\newcommand{\Recipient}{{\sc Recipient}}
+
+\newcommand{\hashfunction}{\textsf{H}\xspace}
+\newcommand{\serializelist}{\textsf{List}\xspace}
+\newcommand{\intToBytes}{\textsf{int2B}\xspace}
+\newcommand{\stringToBytes}{\textsf{Str2B}\xspace}
+
+\floatstyle{boxed}
+\newfloat{program}{thp}{lop}
+\floatname{program}{Figure}
+
+\def\shortbib {0}
+
+\newcommand{\notimplemented}{\textcolor{red}{\textbf{Not implemented.}}\xspace}
+
+
+\newcommand{\LRarrow}[2][\veclen]{              %l"ange als optionales argument
+  \unitlength1ex
+  \begin{picture}(#1,1.25)
+  \put(0,0.25){\vector(1,0){#1}}
+  \put(0,0.75){\makebox(#1,2){#2}}
+  \end{picture}}
+\newcommand{\LLarrow}[2][\veclen]{
+  \unitlength1ex
+  \begin{picture}(#1,1.25)
+  \put(#1,0.25){\vector(-1,0){#1}}
+  \put(0,0.75){\makebox(#1,2){#2}}
+  \end{picture}}
+
+\newcommand{\zos}{\zo^*}  
+%\newcommand{\prob}[1]{\operatorname{Pr}[#1]}
+\newcommand{\zo}{\{0,1\}}
+
+
+\newcommand{\changenote}[1]{
+ %   {\fontfamily{cmss}\selectfont #1}
+  %   \marginpar{\sf $\leftarrow\!\!$change$\!\!\rightarrow$}
+ }
+
+
+\newcommand{\changenotetwo}[1]{
+     {\fontfamily{cmss}\selectfont V2.0 #1}
+     \marginpar{\sf $\leftarrow\!\!$change$\!\!\rightarrow$}
+     }
+
+% \newcommand{\work}[1]{
+%      {\fontfamily{cmss}\selectfont todo: #1}
+%      \marginpar{\sf $\leftarrow\!\!$work$\!\!\rightarrow$}
+%      }
+\newcommand{\work}[1]{
+     }
+
+% \ShowComments
+% \HideComments
+
+
+% =================================================================
+% SPACING
+
+\newcommand{\includeThis}[1]{}
+\sloppy
+
+%   \let\oldthebibliography=\thebibliography
+%   \let\endoldthebibliography=\endthebibliography
+%   \renewenvironment{thebibliography}[1]{%
+%     \begin{oldthebibliography}{#1}%
+%       \setlength{\parskip}{0ex}%
+%       \setlength{\itemsep}{0ex}%
+%   }%
+%   {%
+%     \end{oldthebibliography}%
+%   }
+
+% =================================================================
+
+
+
+% Notation
+\newcommand{\idemix}{\emph{idemix}\xspace}
+\newcommand{\eg}{for example}
+\newcommand{\ie}{that is}
+
+
+
+
+\newcommand{\imagespacebefore}{}%\vspace{-10pt}}
+\newcommand{\imagespaceafter}{}%\vspace{-15pt}}
+\newcommand{\imagespacecaption}{\vspace{-15pt}}
+
+
+\usepackage[british]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{amsmath}
+\usepackage{ae}
+\usepackage{multirow}
+\usepackage{aecompl}
+\usepackage{color}
+\usepackage{fancyhdr}
+\usepackage{a4}
+\usepackage{xspace}
+\usepackage{listings}
+
+\definecolor{navy}{rgb}{0, 0, 0.25}
+\definecolor{green}{rgb}{0, 0.25, 0}
+\definecolor{emph}{rgb}{1,0.3,0}
+\definecolor{darkgreen}{rgb}{0.1,0.5,0.15}
+\definecolor{steelblue}{rgb}{0.2745,0.5098,0.7059}
+
+\newcommand{\processlist}[3][\relax]{\def\listfinish{#1}\long\def\listact{#2}\processfirst#3\listfinish}
+\newcommand{\processfirst}[1]{\ifx\listfinish#1\empty\else\listact{\texttt{#1}}\expandafter\processnext\fi}
+\newcommand{\processnext}[1]{\ifx\listfinish#1\empty\else\texttt{,}\listact{\texttt{#1}}\expandafter\processnext\fi}
+\newenvironment{method}[3]
+{\begin{itemize}\item\texttt{\textcolor{navy}{#1}}\\\texttt{\phantom{..}#2 \textcolor{green}{(\processlist{\\\texttt{\phantom{....}}}{#3}\texttt{)}}}\par}
+{\end{itemize}}
+\newenvironment{getter}[2]
+{\begin{itemize}\item\texttt{\textcolor{navy}{#1}}\\\texttt{\phantom{..}#2 \textcolor{green}{()}}\par}
+{\end{itemize}}
+\newcommand{\identifier}[1]{\texttt{urn:\allowbreak{}idmx:\allowbreak{}3.0.3:\allowbreak{}block:\allowbreak{}#1}}
+\newcommand{\anja}[1]{}%\textcolor{emph}{anja: #1}}
+\newcommand{\michael}[1]{}%\textcolor{darkgreen}{michael: #1}}
+\newcommand{\gert}[1]{}%\textcolor{blue}{gert: #1}}
+\newcommand{\robert}[1]{}%\textcolor{steelblue}{\\\noindent\rule{1ex}{1ex} \textbf{Robert:} #1\\}}
+\newcommand{\patrik}[1]{}%\textcolor{grey}{\\\noindent\rule{1ex}{1ex} \textbf{Patrik:} #1\\}}
+
+
+
+
+% % Used for captions after verbatim environment
+% \usepackage{float}
+% % allows use of "@" in control sequence names
+% \makeatletter
+% 
+% % this creates a custom and simpler ruled box style
+% \newcommand\floatc@simplerule[2]{{\@fs@cfont #1 #2 \\[-7pt] \hrule height.4pt depth0pt \kern-2pt}\par}
+% \newcommand\fs@simplerule{\def\@fs@cfont{\bfseries}\let\@fs@capt\floatc@simplerule  
+%   \def\@fs@pre{\hrule height.8pt depth0pt \kern4pt}%
+%   \def\@fs@post{\kern-2pt\hrule height.4pt depth0pt \kern2pt \relax}%
+%   \def\@fs@mid{\kern8pt}%
+%   \let\@fs@iftopcapt\iftrue}
+% 
+% % this code block defines the new and custom floatbox float environment
+% \newfloat{xml}{thp}{lop}[section]
+% \floatname{xml}{XML}
+
+
+% \makeatletter
+% 
+% % \newcounter{xml}
+% % \newcommand\xmlname{XML}
+% % \renewcommand\thexml{\thesection.\@arabic\c@xml}
+% % \def\fps@xml{thp}
+% % \def\ftype@xml{1}
+% % \def\ext@xml{lop}
+% % \def\fnum@xml{\xmlname\nobreakspace\thexml}
+% \usepackage{float}
+% \floatstyle{boxed}
+% \newfloat{xmlFloat}{h}{lop}
+% \floatname{xmlFloat}{Example}
+% \newenvironment{xml}
+% {	\xmlFloat
+% %     \caption{#2}%
+% %     \label{#1}%
+%     \verbatim
+% }%\@float{xml}}
+% {%
+%     \endverbatim
+%     \vskip-.7\baselineskip
+%     \endxmlFloat
+% }
+% %\end@float}
+% 
+% \makeatother
+
+\usepackage{verbatim}
+\usepackage{float}
+\usepackage{listing}
+\usepackage{enumitem}
+
+% allows use of "@" in control sequence names
+\makeatletter
+
+% this creates a custom and simpler ruled box style
+\newcommand\floatc@simplerule[2]{{\@fs@cfont #1 #2 \\[-7pt] \hrule height.4pt depth0pt \kern-2pt}\par}
+\newcommand\fs@simplerule{\def\@fs@cfont{\bfseries}\let\@fs@capt\floatc@simplerule
+  \def\@fs@pre{\hrule height.8pt depth0pt \kern4pt}%
+  \def\@fs@post{\kern-2pt\hrule height.4pt depth0pt \kern2pt \relax}%
+  \def\@fs@mid{\kern8pt}%
+  \let\@fs@iftopcapt\iftrue}
+
+\makeatletter
+
+\floatstyle{simplerule}
+\newfloat{xmlcode}{htp!}{lop}[section]
+\floatname{xmlcode}{XML}
+
+\newbox\examplebox
+\newenvironment{xml}[2]{%
+    \xmlcode
+    \caption{#2}%
+    \label{#1}%
+    \small
+	\verbatim%\begin{lstlisting}[language=XML]
+}{%
+    \endverbatim%\end{lstlisting}
+    \normalsize
+    \endxmlcode
+}
+
+
+\newenvironment{parameter}[1][\unskip]{%}
+%\vspace{0.6em}%
+%\noindent\texttt{ #1}\\[3pt]%
+%\noindent%
+\begin{itemize}[leftmargin=15pt]
+  \item[~] \texttt{ #1} \\[2pt]
+}{%
+\end{itemize}
+%\vspace{3pt}\hrule%
+%\vspace{0.6em}%
+}
+
+\makeatother
+
+
+\begin{document}
+
+
+% Title
+\title{VC-ZKLang\\  \large Specification of Privacy-Enhancing Implementation of Verifiable Claims}
+
+% Authors
+\author{Jan Camenisch \and Manu Drijvers \and ?}
+
+
+\maketitle
+
+% Abstract (mainly from the original Idemx Spec)
+%\input{0_abstract}
+\begin{abstract}
+This document specifies an language that allow one to describe the cryptographic protocols
+that will generate a cryptographic token as a witness to a verifiable claim.
+The cryptographic protocol that will then be executed from this specification should be (but need not be) 
+such that the token is not linkable to the credentials on which it is based.
+\end{abstract}
+
+% Table of Contents
+\newpage
+\tableofcontents
+\newpage
+
+% Introduction           
+%\input{1_intro}           % from the original Idemx Spec
+%\input{2_certsysoverview} % from IDMAN 2010 publication
+%\input{3_preliminaries}   % from the original Idmx Spec
+%\input{4_arch-highlevel}  % from Crypto Arch (ABC4Trust)
+%\input{4a_arch-detail}    % to be completed
+%\input{4b_example}        % from Crypto Arch (ABC4Trust)
+%\input{6_api}             % from Crypto Arch (ABC4Trust)
+%\input{7_blocks}          % from Crypto Arch (ABC4Trust)
+%\input{8_major}           % from Crypto Arch (ABC4Trust)
+%\input{5_dataFormats}     % new
+
+
+\input{HL-buildingblocks}
+
+
+
+%\input{architecture}    % from IDMAN 2010 publication
+%\input{whatsnew}
+%\input{setup}
+
+% The following two can probably be removed as this is not at all what we do
+%\input{specification-issuance}
+%\input{specification-proof}
+
+
+%TODO: 
+% * mappings from type  -> integer 
+%                 (string -> H(string)) 
+%                 (dateTime - different granularities)
+% * proof object specification
+% * example (ePetition)
+
+\newpage
+\bibliographystyle{alpha}
+\bibliography{../idemix-middlelayer-spec/idemix-spec-3.0.36/repageba,../idemix-middlelayer-spec/idemix-spec-3.0.36/biche,references}
+
+%\newpage
+%\input{appendix}
+
+\end{document}
+
