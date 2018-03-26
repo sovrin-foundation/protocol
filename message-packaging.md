@@ -223,15 +223,15 @@ Internal message structure:
 ```
 
 #### Multiplexing Authcrypt Messages
-In cases where two different edge agents need to receive the same message, but the message is being sent through the a common cloud agent, one solution is simply to send two separate authcrypt messages. 
+In cases where two different edge agents need to receive the same message, but the message is being sent through a common cloud agent, one solution is simply to send two separate authcrypt messages. 
 
-If the message is large, this can result in encrypting the message twice, and having to send it twice. It may be desireable to encrypt it and send it only once, while maintaining the requirement that both edge agents still be able to authenticate the message to the source.
+If the message is large, this results in encrypting the message twice, and having to send it twice. It may be desireable to encrypt it and send it only once, while maintaining the requirement that both edge agents still be able to authenticate the message to the source.
  
 This can be done by a process called **Multiplexing**. 
 
 In Multiplexing, the Authcrypt message is split into two parts. The **Meta** and the **Elemental**. At a high level, the Authcrypt Meta looks like a normal Authcrypt message, except the base message is moved into the Authcrypt Elemental.
 
-The Authcrypt Meta message holds the hash and the key of the base message, but the base and the 
+The Authcrypt **Meta** message holds the hash and the key of the base message, but the base is held encrypted in the **Elemental**.
 
 The sender generates a one-time random symmetric key, and encrypts the base message with this key. This is the Elemental.
 
@@ -251,7 +251,7 @@ The Meta message's internal structure can be the same for each recipient, includ
 
 The sender can then send a collection of Authcrypt Meta messages, one for each recipient, and one Authcrypt Elemental Message. The Cloud Agent can disperse the appropriate Authcrypt Meta message to each recipient, along with the Elemental Message.
 
-The recipients decrypt the Authcrypt Meta messages and verify it like any other Authcrypt message. Then it hashes Elemental and verifies it matches the hash in the Meta. Then it decrypts Elemental.
+The recipients decrypt the Authcrypt Meta messages and verify it like any other Authcrypt message. Then it hashes Elemental and verifies it matches the hash in the Meta. Then it decrypts Elemental using the key in Meta.
 
 ##### Encryption
 To encrypt, the sender calls...
