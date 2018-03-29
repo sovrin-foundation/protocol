@@ -6,10 +6,10 @@ As we've modeled the various interactions between parties in the Sovrin protocol
 ### The Negotiation Pattern 
 This pattern allows two parties to asynchronously negotiate the transference of a matter (data) with a clear set of states. These states allow both sides to encapsulate intent and remain in control.
 
-This protocol was developed with the intended use with sovrin anonymous credentials (connections, claims, and proofs). Those three use cases are quite different in material but have common elements in their product. 
+This protocol was developed with the intended use with sovrin anonymous credentials (connections, credentials, and proofs). Those three use cases are quite different in material but have common elements in their product. 
 
 Examples:
-1. Claim Issuance
+1. Credential Issuance
 2. Proof Presentation
 
 #### Elements
@@ -34,7 +34,7 @@ The Acquirer will hold the matter if the negotiation is successful. The Acquirer
 ##### Offer
 Sent by Provider to the Acquirer. This message must provide context to the Acquirer that provides understanding about the matter. This context could express the type, kind and content of the matter. To be effective the offer should be structured such that the Acquirer can reasonably extrapolate what the matter will contain. 
 
-For example, in a verifiable claim the offer could contain the attributes that will be bound when issuing the claim (the matter). But would not contain signatures or other cryptographic elements that make the claim verifiable and useful in proofs. 
+For example, in a verifiable credential the offer could contain the attributes that will be bound when issuing the credential (the matter). But would not contain signatures or other cryptographic elements that make the credential verifiable and useful in proofs. 
 
 ##### Request
 Sent by the Acquirer to the Provider. This message must provide context to the Provider that provides understanding about the desired matter. This context could express the type, kind and/or context that would be an acceptable matter. This context could also express agreement with the offer. This message must precede the sending of the matter.
