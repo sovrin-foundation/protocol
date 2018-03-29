@@ -1,0 +1,30 @@
+@startuml
+
+
+component "Proof Request" as preq
+component "Proof Resolution" as pr
+component "Valid Proof Resolution" as vpr
+component "public registry" as reg
+component "ZKL-ProofSpec" as ps
+component "ZKL-Proof" as zp
+component "Sovrin Proof" as p
+component "Disclosed\nAttributes" as da
+component "Verification\nOutcome" as x
+
+
+
+p --> zp
+p --> pr
+p --> da
+
+preq --> vpr: x
+pr --> vpr: x
+
+vpr --> ps
+reg --> ps
+da --> ps
+
+zp --> x
+ps --> x
+
+@enduml
