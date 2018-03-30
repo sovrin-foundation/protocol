@@ -3,7 +3,7 @@ Attributes describe the characterstics of an identity, name, birthdate, location
 Verifiable attributes allow individuals to use the relationship they have with trusted institutions to establish new trusted relationships with others, by sharing those attributes. Sovrin's attribute exchange protocol is described below
 
 ## Objects:
-__To Remove: Taken from [Schema Elements doc](https://docs.google.com/document/d/1VT8myB5XcCJIrIU2xEE3Vgxpfa47aFswh1qDCFCBtIg/edit#)__
+__Taken from [Schema Elements doc](https://docs.google.com/document/d/1VT8myB5XcCJIrIU2xEE3Vgxpfa47aFswh1qDCFCBtIg/edit#). Reference this in that doc__
 1. Schema  
 Describes the various attributes present in a credential. Contains a field called *name* and an ordered array of locally named references to Schema Elements (see below) and other Schemas. Every member of a schema must have a unique name. It can optionally contains a field called *spec* that describes the schema.
 Note: When a field’s "name" attribute is missing, it inherits its name from the schema or schema element that named.
