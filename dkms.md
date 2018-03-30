@@ -7,7 +7,7 @@ immutability, availability, and resiliency properties of distributed ledgers
 to provide highly scalable key distribution, verification, and recovery.
 
 ### Key Types
-DKMS uses the following key layering and policies.
+DKMS uses the following key types:
 1. **Master keys**: Keys that are not cryptographically protected. They are distributed manually or
 initially installed and protected by procedural controls and physical or electronic isolation.
 2. **Key encrypting keys**: Symmetric or public keys used for key transport or storage of other keys.
