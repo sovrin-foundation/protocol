@@ -179,10 +179,10 @@ For the holder to create a proof from a credential and the relying party to veri
   },
 ```
 
-11. Credential Offer
+11. Credential Offer  
 An issuer might want to give a credential to a holder. The message used for this communication is called Credential Offer. More... TBD
 
-12. Credential Request
+12. Credential Request  
 A holder might request an issuer for a certain credential. The message used for this communication is called Credential Request. More... TBD
 
 13. Revocation registry TBD
