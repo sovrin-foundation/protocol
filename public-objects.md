@@ -1,10 +1,10 @@
 # Public Objects
-## Claim Definition
+## Credential Definition
 ```json
 {
   "schema_ref": "<schema id>",
   "primary": {
-    "sig_type": "<primary claim signature scheme>",
+    "sig_type": "<primary credential signature scheme>",
     "verification_key": { <scheme-specific public key material> }
   },
   "revocation": {
@@ -16,11 +16,11 @@
 <span style="color:yellow">TODO: Needs Issuer reference</span>
 
 # Signature Schemes
-## Primary Claim Signature Schemes
-This is the value of the "primary" element in a Claim Definition.
+## Primary Credential Signature Schemes
+This is the value of the "primary" element in a Credential Definition.
 
 There is currently only one scheme in use today: CL.
-###The "CL" Primary Claim Signature Scheme
+###The "CL" Primary Credential Signature Scheme
 ```json
 {
   "sig_type": "CL",
@@ -39,7 +39,7 @@ There is currently only one scheme in use today: CL.
 ```
 
 ## Revocation Signature Schemes
-This is the value of the "revocation" element in a Claim Definition.
+This is the value of the "revocation" element in a Credential Definition.
 
 There is currently only one scheme in use today: CL(TODO).
 ###The "CL(TODO)" Revocation Signature Scheme

@@ -7,15 +7,18 @@ For this reason, the protocol does not prescribe a single encryption, a single f
 # Message Packaging Primitives
 
 ### Typed Messages
-Messages are not self describing by themselves. They need some metadata to help describe what they are.
+Messages are not self-describing by themselves. They need some metadata to help describe what they are.
 
-This is done with a `type` object, which has two members. One for the type name, and another for the version.
+This is done with a `type` object, which has three members. One for the type name, one for the version and one for the format of the message.
+
+Generally, the version should conform to Semantic Versioning principles and the format should make use of mime-types.
 
 Example:
 ```json
 {
-  "name": "CLAIM",
-  "version": "0.1"
+  "name": "CRED",
+  "version": "0.1",
+  "format": "application/msgpack"
 }
 ```
 
@@ -66,8 +69,8 @@ For example, the `ED25519_B64U` signature scheme has the following characteristi
 * Signing algorithm: **ed25519**
 * Signature encoding: **BASE64URL**
 
-More advanced signature schemes can be used. For example, the CL_CLAIM_1 algorithm has the following characteristics.
-* Pre-conditions: **message is a typed CLAIM version 0.1 through 0.2, JSON**
+More advanced signature schemes can be used. For example, the CL_CRED_1 algorithm has the following characteristics.
+* Pre-conditions: **message is a typed CRED version 0.1 through 0.2, JSON**
 * Message encoding: **none**
 * Signing algorithm: **CL-RSA**
 * Signature encoding: **none**
@@ -94,12 +97,12 @@ interaction by its `tid`, the sender DID, and the `mid`. The combination of thos
 In an interaction, it may be useful for the recipient of a message to know if their last message was received. A Last Message ID or `lmid` can be included to help detect missing messages.
 
 #### Example
-As an example, Alice is an issuer and she offers a claim to Bob.
+As an example, Alice is an issuer and she offers a credential to Bob.
 
 * Alice establishes a Topic ID, 7.
-* Alice sends a CLAIM_OFFER, `tid`=7, `mid`=0. 
-* Bob responded with a CLAIM_REQUEST, `tid`=7, `mid`=0, `lmid`=0.
-* Alice sends a CLAIM, `tid`=7, `mid`=1, `lmid`=0.
+* Alice sends a CRED_OFFER, `tid`=7, `mid`=0. 
+* Bob responded with a CRED_REQUEST, `tid`=7, `mid`=0, `lmid`=0.
+* Alice sends a CRED, `tid`=7, `mid`=1, `lmid`=0.
 * Bob responds with an ACK, `tid`=7, `mid`=1, `lmid`=1.
 
 #### Nested interactions
@@ -108,14 +111,14 @@ Sometimes there are interactions that need to occur with the same party, while a
 When an interaction is nested within another, the initiator of a new interaction can include a Parent Topic ID (`ptid`). This signals to the other party that this is a topic that is branching off of an existing interaction.
 
 #### Nested Example
-As before, Alice is an issuer and she offers a claim to Bob. This time, she wants a bit more information before she is comfortable providing a claim.
+As before, Alice is an issuer and she offers a credential to Bob. This time, she wants a bit more information before she is comfortable providing a credential.
 
 * Alice establishes a Topic ID, 7.
-* Alice sends a CLAIM_OFFER, `tid`=7, `mid`=0. 
-* Bob responded with a CLAIM_REQUEST, `tid`=7, `mid`=0, `lmid`=0.
+* Alice sends a CRED_OFFER, `tid`=7, `mid`=0. 
+* Bob responded with a CRED_REQUEST, `tid`=7, `mid`=0, `lmid`=0.
 * **Alice sends a PROOF_REQUEST, `tid`=11, `ptid`=7, `mid`=0.**
 * **Bob sends a PROOF, `tid`=11,`mid`=0, `lmid`=0.**
-* Alice sends a CLAIM, `tid`=7, `mid`=1, `lmid`=0.
+* Alice sends a CRED, `tid`=7, `mid`=1, `lmid`=0.
 * Bob responds with an ACK, `tid`=7, `mid`=1, `lmid`=1.
 
 All of the steps are the same, except the two bolded steps that are part of a nested interaction.
@@ -170,7 +173,7 @@ Structure:
 }
 ```
 
-This can be useful when the recipient of a message is to forward a message on, but needs to have some information about the message. This is a common requirement with Agents, where the Agent needs to know that the message is a Claim Offer, but doesn't need to know the details of the Claim itself.
+This can be useful when the recipient of a message is to forward a message on, but needs to have some information about the message. This is a common requirement with Agents, where the Agent needs to know that the message is a Credential Offer (CRED_OFFER), but doesn't need to know the details of the Credential itself.
 
 Example:
 ```json
@@ -215,9 +218,40 @@ Internal message structure:
 {
   "from": "<sender's ver_key>",
   "sig": "<sender's ephemeral pub_key signed by sender>",
-  "msg": "msg"
+  "msg": "<msg>"
 }
 ```
+
+#### Multiplexing Authcrypt Messages
+In cases where two different edge agents need to receive the same message, but the message is being sent through a common cloud agent, one solution is simply to send two separate authcrypt messages. 
+
+If the message is large, this results in encrypting the message twice, and having to send it twice. It may be desireable to encrypt it and send it only once, while maintaining the requirement that both edge agents still be able to authenticate the message to the source.
+ 
+This can be done by a process called **Multiplexing**. 
+
+In Multiplexing, the Authcrypt message is split into two parts. The **Meta** and the **Elemental**. At a high level, the Authcrypt Meta looks like a normal Authcrypt message, except the base message is moved into the Authcrypt Elemental.
+
+The Authcrypt **Meta** message holds the hash and the key of the base message, but the base is held encrypted in the **Elemental**.
+
+The sender generates a one-time random symmetric key, and encrypts the base message with this key. This is the Elemental.
+
+Then the sender constructs an Authcrypt Meta message for each recipient. It substitutes a hash of the Elemental and the symmetric key for the base message.
+
+Internal message structure (for each recipient):
+```json
+{
+  "from": "<sender's ver_key>",
+  "sig": "<sender's ephemeral pub_key signed by sender>",
+  "msg_hash": "<msg_hash>",
+  "msg_key": "<msg_key>"
+}
+```
+
+The Meta message's internal structure can be the same for each recipient, including using the same ephemeral keypair. However, each message is encrypted _for_ each recipient using X25519 just like any other message.
+
+The sender can then send a collection of Authcrypt Meta messages, one for each recipient, and one Authcrypt Elemental Message. The Cloud Agent can disperse the appropriate Authcrypt Meta message to each recipient, along with the Elemental Message.
+
+The recipients decrypt the Authcrypt Meta messages and verify it like any other Authcrypt message. Then it hashes Elemental and verifies it matches the hash in the Meta. Then it decrypts Elemental using the key in Meta.
 
 ##### Encryption
 To encrypt, the sender calls...
@@ -327,9 +361,9 @@ anoncrypt( encrypted for router
   routed(
     authcrypt( encrypted for cloud
       topical(
-        signed( CL_CLAIM
+        signed( CL_CRED
           typed(
-            CLAIM
+            CRED
           )
         )
       )
@@ -345,11 +379,11 @@ anoncrypt( encrypted for router
   routed(
     authcrypt( for cloud agent
       topical(
-        shared( with claim_headers
+        shared( with credential_headers
           authcrypt( for edge agent
-            signed( CL_CLAIM
+            signed( CL_CRED
               typed(
-                CLAIM
+                CRED
               )
             )
           )

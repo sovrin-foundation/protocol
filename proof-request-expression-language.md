@@ -25,15 +25,15 @@ I imagine a SQL-like language that allows for complex conditions like:
     * less than
     * less than or equal
     * between
-* predicates between fields and fields (from different claims)
+* predicates between fields and fields (from different credentials)
     * for example: proof that I have a passport and the name on the passport matches that of my driver license without revealing the name
 * logical composition
     * AND
     * OR
     * NOT
     * explicit order of operation (parentheses)
-* claims about claims
-    * for example: I have a passport and I have a claim from a reputable authentication service that my picture matches me within the past 3 hours
+* credentials about credentials
+    * for example: I have a passport and I have a credential from a reputable authentication service that my picture matches me within the past 3 hours
 * conditions about revocation
     * proof of non-revocation
     * incentivizing RPs not to demand ultra-recent proof (this would be inefficient for all parties and add load to the ledger)
