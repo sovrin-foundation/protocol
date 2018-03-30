@@ -1,6 +1,6 @@
 # Non Public Objects
 
-## CLAIM_OFFER
+## CRED_OFFER
 ```json
 {
   "schema_seq_no": "<a reference to the schema, like sequence number of schema on the ledger>",
@@ -9,7 +9,7 @@
 ``` 
 
 
-## Claim Request
+## Credential Request
 ```json
 {
   "data": {
@@ -40,5 +40,5 @@
 }
 ```
 
-## Claim Notice
-When an issuer is making a change that affects its claim holders, it should let them know of the change. This could be because that the Issuer is updating its Claims to a new schema, or rotating its public keys, or some breach was detected and claims issued between a certain date period need to be reissued, or a particular claim was revoked (e.g, driver privileges suspended due to court order). This is done by sending the claim holder(s) a Claim Notice message.
+## Credential Notice
+When an issuer is making a change that affects its credential holders, it should let them know of the change. This could be because that the Issuer is updating its Credentials to a new schema, or rotating its public keys, or some breach was detected and credentials issued between a certain date period need to be reissued, or a particular credential was revoked (e.g, driver privileges suspended due to court order). This is done by sending the credential holder(s) a Credential Notice message.

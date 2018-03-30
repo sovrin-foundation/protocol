@@ -40,10 +40,10 @@ Alice sends message to Bob
   "cloud_msg": {...},
   "edge_msg": {
     "header": {
-      "type": "CLAIM",
+      "type": "CRED",
       "type_version": "0.1"
     },
-    "payload": {<some claim>}
+    "payload": {<some credential>}
 }
 ```
 
