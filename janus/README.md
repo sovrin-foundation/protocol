@@ -27,9 +27,9 @@ At the highest level, Janus aims to:
 3. Facilitate interoperability (be usable from many programming languages,
    many blockchain technologies, many vendor stacks, many OSes and
    hardware platforms).
-4. Be transport-agnostic (work over http, raw tcp, smtp, snail mail,
+4. Be [transport-agnostic](message-transport.md) (work over http, raw tcp, smtp, snail mail,
    carrier pigeon...).
-5. Be composable and extensible.
+5. Be [composable](message-packaging.md) and [extensible](message-inventory.md).
 
 ## Agents and Keys
 
@@ -73,19 +73,7 @@ non-message-oriented communication mode with trust and security rooted
 in Janus's standard guarantees (e.g., video streaming over a channel
 built with Janus messages).
 
-## Message Types
-
-The inventory of Janus message types is open; anybody can add their own.
-A few message types are well known and trending toward standardization:
-
-* Connection request
-* Credential offer, Credential request, Credential issuance
-* Proof offer, Proof request, Proof presentation
-* Trust ping
-* Payment
-* Agent interface discovery and back-channel security negotiation
-* Arbitrary information (analogous to secure chat or s/mime)
-* Noise
+The [inventory of Janus message types](message-inventory.md) is open; anybody can add their own.
 
 ## Composability and Transformations
 
@@ -95,53 +83,11 @@ same envelope.
 
 Janus messages are similar. Core messages (what you put inside the
 envelope) can be packaged and repackaged per circumstance, with
-_transformations_:
+[_transformations_](message-packaging.md).
 
-* Encrypt or sign (possibly more than once)
-* Route (possibly in multiple ways)
-* Disclose or describe (possibly various things to multiple parties)
+## Case Studies
 
-## Crypto Transformations
+Perhaps the best way to understand Janus is to observe it in action.
+See the following:
 
-Janus uses elliptic curve cryptography to achieve message availability,
-confidentiality, and integrity. It offers three crypto primitives:
-
-```anon_crypt(msg, recipient_verkey)```
-<blockquote>Encrypt only for recipient. Sender is anonymous. Parties can be unknown
-to each other. The message is tamper evident.</blockquote>
-
-```auth_crypt(msg, recipient_verkey, sender_verkey, sender_sigkey)```
-<blockquote>Encrypt only for recipient. Recipient learns sender’s verkey but can’t
-prove to anybody else who the sender is (making the message repudiable).
-Parties can be unknown to each other. The message is tamper evident.</blockquote>
-
-```sign(msg, sender_sigkey)```
-<blockquote>Associate a non-repudiable signature with a message.</blockquote>
-
-## Other Transformations
-
-```Forward(msg)```
-<blockquote>Specify where to send something.</blockquote>
-
-```Topicalize(msg)```
-<blockquote>Give a message a context/thread and a sequence number within that context.</blockquote>
-
-Bundle -- treat multiple messages as a unit
-Type -- describe message type, format, version
-
-## Love Letters
-
-Let us use a familiar circumstance as a case study in secure communication.
-Suppose Alice and Bob wish to carry on a private romantic conversation.
-We will explore how this interaction unfolds across the edge and cloud
-agents owned by Alice and Bob, and how it also involves services in the
-low-trust layer of the ecosystem.
-
-The general flow will be as follows:
-
-![how love letters flow](love-letter-flow.png)
-
-The state of agents, keys, wallets, and service that provide the backdrop
-for this interaction looks like this:
-
-<img src="love-letters-1-640.png" style="height:100px"/>
+* [Love Letters](love-letters.md)

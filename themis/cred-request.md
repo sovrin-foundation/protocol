@@ -1,15 +1,11 @@
-# Non Public Objects
+# Credential Request
 
-## CRED_OFFER
-```json
-{
-  "schema_seq_no": "<a reference to the schema, like sequence number of schema on the ledger>",
-  "issuer_did": "<reference to the issuer, like the issuer’s DID on the ledger>"
-}
-``` 
+A credential request is sent from a potential credential holder to an
+issuer, asking that a credential be issued. This message is a necessary
+step in issuance, because the potential holder must provide a blinded
+_link secret_ that will be used to bind the credential exclusively
+to them.
 
-
-## Credential Request
 ```json
 {
   "data": {
@@ -21,21 +17,6 @@
     },
     "prover_did": "<does not have to be the prover's DID, but some unique identifier by which the issuer knows the prover>"
   },
-  "nonce": "<a nonce acting as request id>"
-}
-```
-
-## Proof Request
-```json
-{
-  "name": "<name of the proof request>",
-  "version": "<version of the proof request>",
-  "attributes": {
-      "<attribute name, like age>": "<attribute type, like number>",
-      "<attribute name, like ssn>": "<attribute type, like string>",
-      "<attribute name, like status>": "<attribute type, like enum>"
-  },
-  "verifiableAttributes": "<a list of attribute names for which the proof has to be presented>",
   "nonce": "<a nonce acting as request id>"
 }
 ```

@@ -1,7 +1,8 @@
 # Proof Format
-A proof is a JSON document that derives from one or more claims. It
-demonstrates in a cryptographic/mathematical way that claims held by
-the prover satisfy constraints requested by a verifier.
+
+A proof is a JSON document that derives from one or more credentials. It
+demonstrates in a cryptographic/mathematical way that attributes within
+credentials held by the prover satisfy constraints requested by a verifier.
 
 Proof formats are likely to evolve over time, as the ecosystem's
 requirements for proving become more sophisticated, and as claims
