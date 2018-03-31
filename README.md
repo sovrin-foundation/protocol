@@ -31,6 +31,80 @@ Alice's digital interactions should be essentially free, regardless of her circu
 
 For a more detailed discussion on these principles, see [Self-Sovereign Privacy By Design - V1](https://docs.google.com/document/d/1fKAw9p8eJI-7hAZuQ8orMDGYnq7WWpE6QYs1YOTWgjA).
 
+## Three Dimensions of Self Sovereign Identity
+
+There are three orthogonal dimensions to Alice's digital identity: (1) her _relationships_, (2) her _attributes_, and (3) her _agents_. Separating these three dimensions allows for a clear understanding of how they interact. Conflating them confuses the proper role of actors and systems and weakens security.
+
+
+### Relationships
+
+In Sovrin, identifiers are not shared across contexts. This helps protect privacy by limiting unwanted or cross-context correlation. Identifiers can be thought of as correlation handles. Correlation handles, like identifiers, are very useful within a context. Because identifiers are not shared across contexts, Alice uses a different identifier for every relationship she has. Because each relationship, or "pairing," has a different identifier, you can say that Sovrin uses pairwise identifiers.
+
+Sovrin's identifiers are DIDs. DID stands for Decentralized Identifier. (reference the DID spec).
+
+Sovrin supports groups. It can be said that a pair is just another group, a group of two. There are cases where an identifier is well known, as in the case of a public corporation. The corporation can have one or more "public" DIDs. This holds true to the constraint that identifiers are not shared across contexts, because the context of these DIDs is a public one. This is an exceptional case. Even though a person is free to create a public DID, it's important not to attach to that DID a reputation that must be carried into other contexts.
+
+
+### Attributes
+
+In Sovrin, a person has two types of attributes. The first type is assertions about oneself, like "my name is Alice," or, "my favorite color is yellow." The second are asserted by others. For example, a driver license with my address on it. Essentially, this is an assertion made by the State of California that I live at this address.
+
+The party asserting some attributes about another is called an **Issuer**. When Alice holds a driver license, she can share that with Bob and Bob can examine it. If Bob believes that that driver license is authentic, and Bob trusts the State of California in its address verification processes, Bob can rely on the fact that Alice lives at 123 Oak Street.
+
+A **Credential** is a generic term to refer to a collection of attributes. A driver license is a credential. A credential allows Alice to prove to Bob that another party asserts some attributes about Alice.
+
+
+### Agents
+
+In the physical world, we can speak with our mouths, sign documents with our hands, hear with our ears. In the digital world, we have software and hardware that we use to accomplish the digital equivalent. These bits of running code that operate on our behalf are called, Agents.
+
+My mobile phone can run an agent. My notebook computer can run an agent. I can ask a service provider to host an agent in the cloud.
+
+The important thing to note is an agent is owned by one person or entity. Even if I have an agent hosted by a service provider, it's still my agent.
+
+Some agents have endpoints. These agents can serve as simple message proxies or perform more sophisticated actions.
+
+There are two types of agents: Edge Agents, and Cloud Agents.
+
+Agents hold keys which are authorized for certain types of activity. This allows the Agent owner to assign low privileges to lower trust Cloud Agents, and higher privileges to higher trust Edge Agents. Some privileges may require multiple keys held by different agents, including agents of trusted associates, to perform certain types of activities. For example, perhaps a funds transfer of greater than $10,000 USD would require two of four keys (phone, tablet, notebook, and Alice's partner, Bob).
+
+Reference diagrams found here: [DIDs, Credentials and Agents slides](https://docs.google.com/presentation/d/1oz1uB7y4J6GuqlmzyRmqrAwNiQQaWXs1LuHfFayAnwI) 
+
+TODO: pull diagrams into this doc. 
+
+## The Intersections of Dimensions
+
+
+### The Relationship-Attribute Plane
+
+Because Relationships and Attributes are orthogonal, an Issuer does not issue credentials to a particular DID. Remember DIDs are contextual to a relationship, and Credentials should be usable in different relationships without sharing correlation handles across relationships or contexts.
+
+Sovrin Credentials allow for an individual to dynamically generate proofs from one or more credentials as needed for any relationship, without correlation handles. This is not to say that cross-context correlation can't be done with shared attributes, but the control is in a person's hands, and the protocol does not leak correlation handles.
+
+
+### The Relationship-Agent Plane
+
+Because a person or entity has multiple relationships (represented by a pair of DIDs), an agent must support multiple DIDs. 
+
+Not every agent needs to be used in every relationship. The Relationship-Agent plane is represented by a "Relationship State Machine," which is implemented with a replicated microledger. Agents are authorized within the microledger so the other party (or parties) in the relationship know how to regard each agent (identified by public key). For example, a cloud agent may _not_ be authorized to sign on behalf of a person, but may be authorized to communicate GPS coordinates or be a message relay.
+
+Note, an agent does not have its own DID. DIDs are orthogonal to Agents. Agents can be identified by a local name, or by the public key used in a particular relationship. 
+
+Each DID/Agent combination requires a separate key. An endpoint must be unique per relationship, so an agent must support multiple endpoints. 
+
+Agents are authorized for certain types of activity _for each relationship_. This allows the Agent owner to use different agents in different contexts.
+
+
+### The Agent-Attribute Plane
+
+The keys Agents have are stored in their own wallets. Wallets can hold credentials (verifiable collections of attributes).
+
+Agents have special keys that allow them to be able to generate proofs about credentials they hold. The Agent Authorization Policy is a combination of a ledger smart contract and a cryptographic accumulator that allows for proving in zero knowledge that a device is an authorized device. This allows a person or organization to have a sophisticated recovery policy and to be able to revoke a compromised agent.
+
+A person may selectively copy credentials to different agents, effectively limiting which credentials are provable from which agents.
+
+For more details about how these dimensions work together, see [How DIDs, Keys, Credentials, and Agents Work Together in Sovrin](https://docs.google.com/document/d/1hnQPEdfmAG-DnXGrDXowjc5J571pK7Ub4bWkUlzrH1Y).
+
 ##Key components of the Sovrin Protocol include:
 
 * [Janus](janus/README.md) (a subprotocol for secure and private communication)
