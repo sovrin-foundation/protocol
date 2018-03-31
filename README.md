@@ -1,3 +1,5 @@
+<!-- TODO: Add link to this doc from here: https://wiki.hyperledger.org/projects/indy/documentation -->
+
 # The Sovrin Protocol
 
 The Sovrin Protocol is a set of standards, patterns, and tools that facilitate
@@ -66,13 +68,13 @@ Some agents have endpoints. These agents can serve as simple message proxies or 
 
 There are two types of agents: Edge Agents, and Cloud Agents. 
 
-**TODO: reconcile with description found elsewhere** 
+<!--TODO: reconcile with description found elsewhere--> 
 
 Agents hold keys which are authorized for certain types of activity. This allows the Agent owner to assign low privileges to lower trust Cloud Agents, and higher privileges to higher trust Edge Agents. Some privileges may require multiple keys held by different agents, including agents of trusted associates, to perform certain types of activities. For example, perhaps a funds transfer of greater than $10,000 USD would require two of four keys (phone, tablet, notebook, and Alice's partner, Bob).
 
 Reference diagrams found here: [DIDs, Credentials and Agents slides](https://docs.google.com/presentation/d/1oz1uB7y4J6GuqlmzyRmqrAwNiQQaWXs1LuHfFayAnwI) 
 
-**TODO: pull diagrams into this doc.** 
+<!--TODO: pull diagrams into this doc.--> 
 
 ## The Intersections of Dimensions
 
@@ -90,7 +92,7 @@ Because a person or entity has multiple relationships (represented by a pair of 
 
 Not every agent needs to be used in every relationship. The Relationship-Agent plane is represented by a "Relationship State Machine," which is implemented with a replicated microledger. Agents are authorized within the microledger so the other party (or parties) in the relationship know how to regard each agent (identified by public key). For example, a cloud agent may _not_ be authorized to sign on behalf of a person, but may be authorized to communicate GPS coordinates or be a message relay.
 
-**TODO: RSM reference above is probably too much detail for this section**
+<!--TODO: RSM reference above is probably too much detail for this section-->
 
 Note, an agent does not have its own DID. DIDs are orthogonal to Agents. Agents can be identified by a local name, or by the public key used in a particular relationship. 
 
@@ -165,13 +167,12 @@ TODO: Summarize and reference
   * [Concept: Schema Elements](https://docs.google.com/document/d/1VT8myB5XcCJIrIU2xEE3Vgxpfa47aFswh1qDCFCBtIg)
   * [Sovrin.org/schema](https://drive.google.com/open?id=130GRcmmLwDgCY9bgf9bYHarymkDLXO-R)
 
-**TODO: Must work for individuals and institutions alike.**
+<!--TODO: content needed: Must work for individuals and institutions alike.-->
 
-**TODO: Using Sovrin as the Public Registry and the Public Ledger.**
+<!--TODO: content needed: Using Sovrin as the Public Registry and the Public Ledger.-->
 
 ##Key components of the Sovrin Protocol include:
 
 * [Janus](janus/README.md) (a protocol for secure and private communication)
 * [Themis](themis/README.md) (a subprotocol for issuing digital credentials and proving things with them in a privacy-preserving way)
 * [Hermes](hermes/README.md) (a subprotocol for exchanging economic value)
-
