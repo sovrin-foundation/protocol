@@ -79,7 +79,7 @@ The object issuing the credential to a holder. This usually is an organisation l
 The object that requests (from the holder) and receives verifiable attributes or some predicates over those. It then validates the signature over the verifiable attributes.
 
 8. Proof  
-The holders shares the verifiable attributes and any predicates over those with the relying party in the form of a proof. It contists of any revealed attribute values and additional cryptographic data that is sufficient for the relying party to verify the issuer's signature.
+The holders shares the verifiable attributes and any predicates over those with the relying party in the form of a proof. It contists of any revealed attribute values and additional cryptographic data that is sufficient for the relying party to verify the issuer's signature. *Note: The request and generation of proof are using Zklang which involves more objects, see [here](zklang.md) for details.*
 
 9. Proof request  
 The message sent by the relying party to the holder describing the verifiable attributes and appropriate conditions (predicates, issuer of attributes, schema of the credentials used, etc) that the holder need to satisfy. [Example](non-public-objects.md#Proof%2Request)
