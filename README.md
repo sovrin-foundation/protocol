@@ -40,7 +40,7 @@ There are three orthogonal dimensions to Alice's digital identity: (1) her _rela
 
 In Sovrin, identifiers are not shared across contexts. This helps protect privacy by limiting unwanted or cross-context correlation. Identifiers can be thought of as correlation handles. Correlation handles, like identifiers, are very useful within a context. Because identifiers are not shared across contexts, Alice uses a different identifier for every relationship she has. Because each relationship, or "pairing," has a different identifier, you can say that Sovrin uses pairwise identifiers.
 
-Sovrin's identifiers are DIDs. DID stands for Decentralized Identifier. (reference the DID spec).
+Sovrin's identifiers are DIDs. DID stands for Decentralized Identifier. (For more information, see the DID specification here: https://w3c-ccg.github.io/did-spec/).
 
 Sovrin supports groups. It can be said that a pair is just another group, a group of two. There are cases where an identifier is well known, as in the case of a public corporation. The corporation can have one or more "public" DIDs. This holds true to the constraint that identifiers are not shared across contexts, because the context of these DIDs is a public one. This is an exceptional case. Even though a person is free to create a public DID, it's important not to attach to that DID a reputation that must be carried into other contexts.
 
@@ -64,13 +64,15 @@ The important thing to note is an agent is owned by one person or entity. Even i
 
 Some agents have endpoints. These agents can serve as simple message proxies or perform more sophisticated actions.
 
-There are two types of agents: Edge Agents, and Cloud Agents.
+There are two types of agents: Edge Agents, and Cloud Agents. 
+
+**TODO: reconcile with description found elsewhere** 
 
 Agents hold keys which are authorized for certain types of activity. This allows the Agent owner to assign low privileges to lower trust Cloud Agents, and higher privileges to higher trust Edge Agents. Some privileges may require multiple keys held by different agents, including agents of trusted associates, to perform certain types of activities. For example, perhaps a funds transfer of greater than $10,000 USD would require two of four keys (phone, tablet, notebook, and Alice's partner, Bob).
 
 Reference diagrams found here: [DIDs, Credentials and Agents slides](https://docs.google.com/presentation/d/1oz1uB7y4J6GuqlmzyRmqrAwNiQQaWXs1LuHfFayAnwI) 
 
-TODO: pull diagrams into this doc. 
+**TODO: pull diagrams into this doc.** 
 
 ## The Intersections of Dimensions
 
@@ -87,6 +89,8 @@ Sovrin Credentials allow for an individual to dynamically generate proofs from o
 Because a person or entity has multiple relationships (represented by a pair of DIDs), an agent must support multiple DIDs. 
 
 Not every agent needs to be used in every relationship. The Relationship-Agent plane is represented by a "Relationship State Machine," which is implemented with a replicated microledger. Agents are authorized within the microledger so the other party (or parties) in the relationship know how to regard each agent (identified by public key). For example, a cloud agent may _not_ be authorized to sign on behalf of a person, but may be authorized to communicate GPS coordinates or be a message relay.
+
+**TODO: RSM reference above is probably too much detail for this section**
 
 Note, an agent does not have its own DID. DIDs are orthogonal to Agents. Agents can be identified by a local name, or by the public key used in a particular relationship. 
 
