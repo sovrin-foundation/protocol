@@ -108,12 +108,10 @@ Agents have special keys that allow them to be able to generate proofs about cre
 A person may selectively copy credentials to different agents, effectively limiting which credentials are provable from which agents.
 
 For more details about how these dimensions work together, see [How DIDs, Keys, Credentials, and Agents Work Together in Sovrin](https://docs.google.com/document/d/1hnQPEdfmAG-DnXGrDXowjc5J571pK7Ub4bWkUlzrH1Y).
+
 ## General Requirements
 
 In order to achieve the conceptual model, we need the following:
-
-
-
 1.  A Secure and private way to connect to and communicate with peers
 1.  A privacy-respecting ability to prove things about oneself and assert things about others
 1.  Control all her things (e.g., agent provisioning, authorization, revocation)
@@ -133,29 +131,43 @@ In order to achieve the conceptual model, we need the following:
 ### Privacy-respecting issuing and proving
 
 **TODO: introduce these concepts**
-*   Privacy-respecting attribute exchange protocol
-*   Public Registry for Issuer public keys and Signature types
-*   Public Registry for Credential Revocation
+* Privacy-respecting attribute exchange protocol
+  * TODO: https://github.com/evernym/protocol/blob/changes/attribute-exchange.md
+* Public Registry for Issuer public keys and Signature types
+* Public Registry for Credential Revocation
 
 
 ### Control
 
 **TODO: introduce these concepts**
-*   (e.g., agent provisioning, authorization, revocation) (**3DIM**)
-*   Decentralized Key Management protocol
-*   Public Registry for Agent Authorization Policy
+* (e.g., agent provisioning, authorization, revocation) (**3DIM**)
+  * [Microledgers](https://github.com/evernym/protocol/blob/aff664fff9184d66fcb496c19398350ee4077db6/relationship-state-machine.md)
+* Decentralized Key Management protocol
+  * [DID / DID Document](https://github.com/evernym/protocol/blob/aff664fff9184d66fcb496c19398350ee4077db6/did.md)
+* Public Registry for Agent Authorization Policy
+  * [Agent Authorization Policy](https://github.com/evernym/protocol/blob/aff664fff9184d66fcb496c19398350ee4077db6/dkms/overview.md)
+	
+	
+
+
+
 
 
 ### Privacy-respecting value transfer
 
 **TODO: introduce these concepts**
 *   Public Ledger for payments
+TODO: Summarize and reference 
 
 
 ### Semantic interoperability
 
 **TODO: introduce these concepts**
-*   Public Registry for Schema
+* Public Registry for Schema
+* The Sovrin Type System
+* Proof Request Proposal
+  * [Concept: Schema Elements](https://docs.google.com/document/d/1VT8myB5XcCJIrIU2xEE3Vgxpfa47aFswh1qDCFCBtIg)
+  * [Sovrin.org/schema](https://drive.google.com/open?id=130GRcmmLwDgCY9bgf9bYHarymkDLXO-R)
 
 **TODO: Must work for individuals and institutions alike.**
 
@@ -163,7 +175,7 @@ In order to achieve the conceptual model, we need the following:
 
 ##Key components of the Sovrin Protocol include:
 
-* [Janus](janus/README.md) (a subprotocol for secure and private communication)
+* [Janus](janus/README.md) (a protocol for secure and private communication)
 * [Themis](themis/README.md) (a subprotocol for issuing digital credentials and proving things with them in a privacy-preserving way)
 * [Hermes](hermes/README.md) (a subprotocol for exchanging economic value)
 
