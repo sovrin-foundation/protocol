@@ -108,6 +108,58 @@ Agents have special keys that allow them to be able to generate proofs about cre
 A person may selectively copy credentials to different agents, effectively limiting which credentials are provable from which agents.
 
 For more details about how these dimensions work together, see [How DIDs, Keys, Credentials, and Agents Work Together in Sovrin](https://docs.google.com/document/d/1hnQPEdfmAG-DnXGrDXowjc5J571pK7Ub4bWkUlzrH1Y).
+## General Requirements
+
+In order to achieve the conceptual model, we need the following:
+
+
+
+1.  A Secure and private way to connect to and communicate with peers
+1.  A privacy-respecting ability to prove things about oneself and assert things about others
+1.  Control all her things (e.g., agent provisioning, authorization, revocation)
+1.  Privacy respecting value transfer that is compliant with regulation
+1.  Semantic Interop (intra-ecosystem)
+
+
+### Secure peer-to-peer communications
+
+**TODO: introduce these concepts**
+*   DID specification
+*   Janus Protocol
+*   Public Registry for DIDs, public keys, endpoints
+*   Microledgers
+
+
+### Privacy-respecting issuing and proving
+
+**TODO: introduce these concepts**
+*   Privacy-respecting attribute exchange protocol
+*   Public Registry for Issuer public keys and Signature types
+*   Public Registry for Credential Revocation
+
+
+### Control
+
+**TODO: introduce these concepts**
+*   (e.g., agent provisioning, authorization, revocation) (**3DIM**)
+*   Decentralized Key Management protocol
+*   Public Registry for Agent Authorization Policy
+
+
+### Privacy-respecting value transfer
+
+**TODO: introduce these concepts**
+*   Public Ledger for payments
+
+
+### Semantic interoperability
+
+**TODO: introduce these concepts**
+*   Public Registry for Schema
+
+**TODO: Must work for individuals and institutions alike.**
+
+**TODO: Using Sovrin as the Public Registry and the Public Ledger.**
 
 ##Key components of the Sovrin Protocol include:
 
