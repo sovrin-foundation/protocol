@@ -6,90 +6,13 @@ Verifiable attributes allow individuals to use the relationship they have with t
 __Taken from [Schema Elements doc](https://docs.google.com/document/d/1VT8myB5XcCJIrIU2xEE3Vgxpfa47aFswh1qDCFCBtIg/edit#). Reference this in that doc__
 1. Schema  
 Describes the various attributes present in a credential. Contains a field called *name* and an ordered array of locally named references to Schema Elements (see below) and other Schemas. Every member of a schema must have a unique name. It can optionally contains a field called *spec* that describes the schema.
-Note: When a field’s "name" attribute is missing, it inherits its name from the schema or schema element that named.
-  ```
-  {
-    "name": "name",
-    "items": [
-      {name: "first", element: <first_name>, encoding: <utf8_sha256>},
-      {name: "middle", element: <middle_name>, encoding: <utf8_sha256>},
-      {name: "last", element: <last_name>, encoding: <utf8_sha256>}
-    ]
-  }
-
-  {
-    "name": "address",
-    "items": [
-      {name: "line_1", element: <address_line>, encoding: <utf8_sha256>},
-      {name: "line_2", element: <address_line>, encoding: <utf8_sha256>},
-      {name: "line_3", element: <address_line>, encoding: <utf8_sha256>},
-      {element: <city>, encoding: <utf8_sha256>},
-      {name: "state", element: <us_state>, encoding: <alpha2>},
-      {element: <zip_code>, encoding: <dpbc>}
-    ]
-  }
-
-  {
-    "name": "work_address",
-    "spec": "address where subject is employed",
-    "items": [{schema: <address>, flatten: true}]
-  }
-
-  {
-    "name": "home_address",
-    "spec": "address where subject lives",
-    "items": [{schema: <address>, flatten: true}]
-  }
-
-  {
-    "name": "loan_application",
-    "spec": "application for a basic loan",
-    "items": [
-      {schema: <name>},
-      {schema: <work_address>},
-      {schema: <home_address>},
-    …
-    ]
-  }
-
-  ```
+Note: When a field’s "name" attribute is missing, it inherits its name from the schema or schema element that named. [Examples](public-objects.md#Schema) 
 
 2. Schema Elements  
-These are the low-level reusable elements that can be composed into Schema.  
-Examples:  
-  i. first_name: {spec: "subject's first given name"}
-  ii. middle_name: {spec: "subject's other given names minus surname"}
-  surname: {spec: "subject's surname"}  
-  iii. address_line: {spec: "one line of a physical address"}  
-  iv: city: {spec: "third line of a physical address"}  
-  v:  us_state: {spec: "one of the states or territories of the USA"}  
-  vi: zip_code: {spec: "US zip code"}  
-  vii:  birthdate: {spec: "date subject was born"}  
-  viii: expires: {spec: "date credential expires"}  
-  ix: driving_class: {spec: "US driving classification"} 
-  x: hair_color: {spec: "color of the subject's hair"}  
-  xi: eye_color: {spec: "color of the subject's eyes"}  
-  xii: weight: {spec: "subject's weight"}  
-  xiii: height: {spec: "subject's height"}  
-  xiv: corrective_lenses: {spec: "subject is required to wear corrective lenses"}  
-  xv: daytime_only: {spec: "a subject's privilege is restricted to daytime"}  
+These are the low-level reusable elements that can be composed into Schema. [Examples](public-objects.md#Schema%20Elements)
 
 3. Encodings  
-Data must be encoded in order to prove things about it. Cryptographic methods work with large integer in finite fields, so we must encode elements of a credential in integers.
-Examples:  
-  i. since_1870: {spec: "date as a count of days since 1/1/1870"}  
-  ii. us_driving_class: {spec: "US driving class; 'standard' -> 0, 'commercial' -> 1"}  
-  iii. utf8_sha256: {spec: "SHA256 hash of string encoded as UTF-8"}  
-  iv. alpha2: {spec: "two character abbreviation"}  
-  v. dpbc: {spec: "9 digit integer; 5 digit zip code encoded with trailing zeros; remove hyphen in zip+4; examples: '90210' -> 90210000, '90210-2222' -> 902102222"}  
-  vi. hair_color_codes: {spec: "color of hair; bald -> "BA", black -> "BL, blonde -> "BE", brown -> "BR", gray -> "GR", red/auburn -> "RA", sandy -> "SA", unknown -> "UN", white -> "WH"}  
-  vii. hair_color: {spec: "color of hair; 'bald' -> 9, 'black' -> 1, 'blonde' -> 2, 'brown' -> 3, 'gray' -> 4, 'red/auburn' -> 5, 'sandy' -> 6, 'unknown' -> 7, 'white' -> 8"}  
-  viii. eye_color: {spec: "color of eyes; 'black' -> 0, 'blue' -> 1, 'brown' -> 2, 'dichromat' -> 3, 'gray' -> 4, 'green' -> 5, 'hazel' -> 6, 'maroon' -> 7, 'pink' -> 8, 'unknown' -> 9"}  
-  ix. weight_lbs: {spec: "weight in whole number of pounds (avoirdupois)"}  
-  x. weight_grams: {spec: "weight in whole number of grams"}  
-  xi. length_half_inches: {spec: "length in whole number of half inches"}  
-  xii. length_mm: {spec: "length in whole number of millimeters"}  
-  xiii. bool: {spec: "'true' -> 2, 'false' -> 1, 'unknown' -> 0"}  
+Data must be encoded in order to prove things about it. Cryptographic methods work with large integer in finite fields, so we must encode elements of a credential in integers. [Examples](public-objects.md#Encodings)  
 
 In the case where only one encoding is used for both proving and revealing, the encoding attribute can be a simple reference to an encoding.  
 
@@ -156,33 +79,25 @@ The object issuing the credential to a holder. This usually is an organisation l
 The object that requests (from the holder) and receives verifiable attributes or some predicates over those. It then validates the signature over the verifiable attributes.
 
 8. Proof  
-The holders shares the verifiable attributes and any predicates over those with the relying party in the form of a proof. It contists of any revealed attribute values and additional cryptographic data that is sufficient for the relying party to verify the issuer's signature.  
-Structure: TBD (include ZKLang, proof of correctness)
+The holders shares the verifiable attributes and any predicates over those with the relying party in the form of a proof. It contists of any revealed attribute values and additional cryptographic data that is sufficient for the relying party to verify the issuer's signature.
 
 9. Proof request  
-The message sent by the relying party to the holder describing the verifiable attributes and appropriate conditions (predicates, issuer of attributes, schema of the credentials used, etc) that the holder need to satisfy. 
+The message sent by the relying party to the holder describing the verifiable attributes and appropriate conditions (predicates, issuer of attributes, schema of the credentials used, etc) that the holder need to satisfy. [Example](non-public-objects.md#Proof%2Request)
 
 10. Credential Definition  
-For the holder to create a proof from a credential and the relying party to verify the proof generated from a credential, they need the issuer's public key. These public keys correspond to the secret keys the issuer used to sign the credential. The credential definition also specifies the signature scheme used by the issuer and references the schema for the credential.
-```
-  "type":"CL",        // the signature schema
-  "schemaId":21,      // txn no of the schema
-  "publicKey": {
-    "N": <a large number>,
-    "S": <a large number>,
-    "Z": <a large number>,
-    "R": {
-      "a1": <a large number>,
-      "a2": <a large number>,
-      .....
-    }
-  },
-```
+For the holder to create a proof from a credential and the relying party to verify the proof generated from a credential, they need the issuer's public key. These public keys correspond to the secret keys the issuer used to sign the credential. The credential definition also specifies the signature scheme used by the issuer and references the schema for the credential. The credential definition is created by the issuer using a [transaction](public-objects.md#Credential%20Definition)
 
 11. Credential Offer  
-An issuer might want to give a credential to a holder. The message used for this communication is called Credential Offer. More... TBD
+An issuer might want to give a credential to a holder. The message used for this communication is called Credential Offer. [Example](non-public-objects.md#Credential%20Offer)
 
 12. Credential Request  
-A holder might request an issuer for a certain credential. The message used for this communication is called Credential Request. More... TBD
+A holder might request an issuer for a certain credential. The message used for this communication is called Credential Request. [Example](non-public-objects.md#Credential%2Request)
 
-13. Revocation registry TBD
+13. Revocation Authority  
+This is entity responsible for managing the revocation of credentials. This might or might not be the issuer of the credential.
+
+14. Revocation registry definition  
+This describes the kind of revocation mechanism used for managing the revocation and/or issuance of credentials. The kind of data structure used, keys to manage that data structure and other data needed to compute the witness is mentioned here. This is done by the revocation authority in a [transaction](public-objects.md#Revocation%20Registry%20Definition) 
+
+15. Revocation registry entryby the revocation authority in a transaction.  
+When claims are issued and/or revoked, the revocation registry needs to be updated, this is done by the revocation authority in a [transaction](public-objects.md#Revocation%20Registry%20Entry)

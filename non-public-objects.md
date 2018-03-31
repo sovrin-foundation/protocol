@@ -1,6 +1,6 @@
 # Non Public Objects
 
-## CRED_OFFER
+## Credential Offer
 ```json
 {
   "schema_seq_no": "<a reference to the schema, like sequence number of schema on the ledger>",
