@@ -144,13 +144,9 @@ In order to achieve the conceptual model, we need the following:
   * [Microledgers](https://github.com/evernym/protocol/blob/aff664fff9184d66fcb496c19398350ee4077db6/relationship-state-machine.md)
 * Decentralized Key Management protocol
   * [DID / DID Document](https://github.com/evernym/protocol/blob/aff664fff9184d66fcb496c19398350ee4077db6/did.md)
+  * **TODO: DKMS reference**
 * Public Registry for Agent Authorization Policy
   * [Agent Authorization Policy](https://github.com/evernym/protocol/blob/aff664fff9184d66fcb496c19398350ee4077db6/dkms/overview.md)
-	
-	
-
-
-
 
 
 ### Privacy-respecting value transfer
