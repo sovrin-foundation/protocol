@@ -1,5 +1,9 @@
-# Public Objects
-## Credential Definition
+# Credential Definition
+
+A credential definition associates an issuer and their public issuance
+keys with a particular schema and revocation strategy. Credential
+definitions are published on the ledger.
+
 ```json
 {
   "schema_ref": "<schema id>",
@@ -15,7 +19,6 @@
 ```
 <span style="color:yellow">TODO: Needs Issuer reference</span>
 
-# Signature Schemes
 ## Primary Credential Signature Schemes
 This is the value of the "primary" element in a Credential Definition.
 
