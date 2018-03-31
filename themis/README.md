@@ -1,5 +1,4 @@
 ![Themis](themis.jpg)
-<p style="text-align:right;font-size:80%;color:gray">photo by Rae Allen, <a target="_blank" href="https://creativecommons.org/licenses/by/2.0/">CC2</a></p>
 
 # Themis
 

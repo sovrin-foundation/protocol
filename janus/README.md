@@ -2,10 +2,11 @@
 
 # Janus
 
-Janus is a protocol that enables secure communication between peers. Its
-name refers to the two-faced figure from Greek mythology, emphasizing
-a two-way flow of information. (This also feels appropriate for the
-classic crypto communication stories with Alice and Bob.)
+Janus is the current codename for a protocol that enables secure
+communication between peers. Its name refers to the two-faced figure
+from Greek mythology, emphasizing a two-way flow of information.
+(This also feels appropriate for the classic crypto communication
+stories that feature Alice and Bob.)
 
 Janus is a subset or subprotocol of the overarching protocol for self-sovereign
 identity. It assumes the existence of certain ecosystem features such as
@@ -45,7 +46,13 @@ There are two agent types:
    Trust is somewhat tempered. Manage delegated, limited-use keys.
 
 Every participant in secure communication has at least one agent.
-Each agent needs its own keys. Keys are never copied.
+Each agent needs its own keys. Keys are never copied. (For deep
+background on the theory and principles of key management espoused
+by Janus, see [this recent research report](https://drive.google.com/open?id=1OEOl5cv69dEidK_Efx8blcYwgyPiaU_c).)
+
+The distinction between identity owners and their keys and agents, and
+the trust differences between technologies in the cloud and at the
+edge, imply a [model of the ecosystem that is layered and nuanced](message-layers.md).
 
 ## Messages
 
