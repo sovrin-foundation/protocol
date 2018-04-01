@@ -1,4 +1,4 @@
- DKMS Design and Architecture V3
+# DKMS Design and Architecture V3
 
 2018-01-31
 
@@ -68,7 +68,9 @@ The most relevant special requirements are highlighted in the following sections
 
 ## 2.2. Decentralization
 
-The DKMS design MUST NOT assume any reliance on a centralized authority for the system as a whole. The DKMS design MUST assume all participants are independent actors identified with DIDs conformant with the Decentralized Identifiers (DID) specification but otherwise acting in their own decentralized security and privacy domains. The DKMS design MUST support options for decentralized key recovery.What distinguishes DKMS from conventional CKMS is the fact that the entire design assumes decentralization: outside of the "meta-policies" established by the DKMS specification itself, there is no central authority to dictate policies that apply to all users. So global DKMS infrastructure must achieve interoperability organically based on a shared set of specifications, just like the Internet.
+The DKMS design MUST NOT assume any reliance on a centralized authority for the system as a whole. The DKMS design MUST assume all participants are independent actors identified with DIDs conformant with the Decentralized Identifiers (DID) specification but otherwise acting in their own decentralized security and privacy domains. The DKMS design MUST support options for decentralized key recovery.
+
+What distinguishes DKMS from conventional CKMS is the fact that the entire design assumes decentralization: outside of the "meta-policies" established by the DKMS specification itself, there is no central authority to dictate policies that apply to all users. So global DKMS infrastructure must achieve interoperability organically based on a shared set of specifications, just like the Internet.
 
 Note that the need to maintain decentralization is most acute when it comes to key recovery: the advantages of decentralization are nullified if key recovery mechanisms reintroduce centralization.
 
