@@ -1,10 +1,7 @@
-# The Sovrin Protocol
-The Sovrin Network is a pioneer in Self-Sovereign Identity (SSI). This style of digital identity is designed to be private, secure and in control of the owner of the Identity. SSI enables trusted interactions between individuals, organizations, and things. These interactions often need to be bidirectional in ways that differ fundamentally from assumptions made for the traditional Client-server model. These interactions need to be initiated by both parties. These interactions need to be verifiable by both parties. These interactions need to be private.
+# TODO: these need to be organized
 
-## Asynchronous Messaging
-The framework provides the construct that both parties in an interaction could require human input. Additionally, either party may require time to consider either party's terms. These terms could be complex or simple. These terms could have short or long term implications. Because of this, it's important that either party have time to consider what is being negotiated. Asynchronous message allows either party time to respond to messages.
+## Core Principles
 
-## Guiding Principles of SSI
 TODO reconcile and reference "Sovereign Privacy by Design" document.
 1. The Identity Owner is in control
     1. Distributed/Decentralized
@@ -15,26 +12,6 @@ TODO reconcile and reference "Sovereign Privacy by Design" document.
     1. Functionally accessible (great experience for all users, including low latency)
     1. Scales to work for every person, org, or thing
 
-## Guiding Principles of this Protocol
-### Distributed/Decentralized
-### The Identity Owner is in control
-TODO: They hold the credential. They don't have to go back to the issuer to tweak their credentials to be able to prove things on their credentials.
-
-No coordination needed between Issuer and Relying Parties.
-
-### Privacy by design
-##### Encrypted communications
-TODO: Encrypted only for the recipient.
-cover use of PKAE
-When signing should and should not be used
-
-##### Selective Disclosure
-###### True Selective Disclosure requires ZKP
-There are levels of selective disclosure. An example of selective disclosure might be to share just my birthdate from my driver license when I need to prove I'm over the age of 18. My birthdate can be used with other information about me shared or inferred to strongly identify me. We can do better.
-
-Better would be to share just my birth year, which would work for most people. If I turned 18 this year, then I'd have to fall back to showing birth month, and possibly birth day as well. But it's still better.
-
-Better might be to ask the Issuer to include a field just for "over 18". Then I can prove I'm over 18 without sharing my birthdate or birth year. But what if I'm a smoker and I travel to a state in the US that has a 19 year-old smoking statute? What if I'm over 18 in the UK, and I travel to the US and want to prove I'm over 21 (US drinking age). 
 
 One of the core principles of SSI is the issuer has minimal coordination with relying parties. The more flexibility an Identity Owner has to prove things about him/herself the more useful those credentials will be.
 
@@ -79,7 +56,7 @@ The protocol stores the following Public Objects on the ledger:
 5. Anchors (root hashes of other ledgers, private or public, to aid in proof of existence)
 
 ## What's not on the Ledger?
-1. Private keys, symmetric keys, 
+1. Private keys, symmetric keys,
 1. Personally identifiable information (PII), including hashes of PII
 1. Credentials
 1. Proofs
@@ -103,7 +80,7 @@ Issuers of Credentials need three basic Public Objects before they can issue Cre
 An Issuer is a well-known entity in the Sovrin ecosystem. They have a public DID that is referenced by their Credential Definitions and Revocation Registries.
 
 #### Credential Definition
-An Issuer issues Credentials against a Credential type, called a Credential Definition. A Credential Definition includes two major parts: (1) a reference to a Schema, and (2) public keys specific to the credentials issued under that Credential Definition. 
+An Issuer issues Credentials against a Credential type, called a Credential Definition. A Credential Definition includes two major parts: (1) a reference to a Schema, and (2) public keys specific to the credentials issued under that Credential Definition.
 
 The Schema is a template that defines the fields and data types and semmantics of the credentials issued under that Credential Definitions. A Credential Definition can reference any public Schema created by any party. This allows for public reuse of well-designed Schema, which should drive consolidation and a form of standardization over time.
 
@@ -141,7 +118,7 @@ Updates to a Revocation Registry can be batched. If an Issuer issues and revokes
 The Authentication sub-protocol describes the interaction between the Relying Party and Identity Owner. This interaction also follows the Negotiation Pattern with one caveat: there would not be a leading Proof Offer. The Authentication Sub-Protocol would start with a Proof Request. If a Credential holder could not or wished not to provide Proof as requested by the Proof Request, then the credential holder could send a Proof Offer that described the proof it was willing to share. The Authentication sub-protocol lists guidelines that the Relying Party could follow while constructing the Proof Request such that the Identity Owner can ensure that requested information respects its privacy. 
 
 Here is the mapping to the pattern:
-* The **Relying Party** assumes the *Acquirer* role in the pattern. 
+* The **Relying Party** assumes the *Acquirer* role in the pattern.
 * The **Identity Owner** assumes the *Producer* role.
 * The **Proof Offer** maps to the *Offer*.
 * The **Proof Request** maps to the *Request*.
@@ -156,7 +133,7 @@ Agents are dedicated to supporting one *Owner* (person or organization), which i
 Agents come in two basic flavors: (1) Edge Agents and (2) Cloud Agents.
 
 ### Edge Agents
-An owner's Edge Agents, also known as Local Agents, are Sovrin-aware code (perhaps in the form of an SDK) running on a device in direct control of the owner. Devices include mobile phones, tablets, PCs, and servers controlled by enterprises. 
+An owner's Edge Agents, also known as Local Agents, are Sovrin-aware code (perhaps in the form of an SDK) running on a device in direct control of the owner. Devices include mobile phones, tablets, PCs, and servers controlled by enterprises.
 
 ### Cloud Agents
 An owner's Cloud Agents are any of its agents running on hardware physically controlled by another party.

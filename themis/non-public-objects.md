@@ -42,3 +42,17 @@
 
 ## Credential Notice
 When an issuer is making a change that affects its credential holders, it should let them know of the change. This could be because that the Issuer is updating its Credentials to a new schema, or rotating its public keys, or some breach was detected and credentials issued between a certain date period need to be reissued, or a particular credential was revoked (e.g, driver privileges suspended due to court order). This is done by sending the credential holder(s) a Credential Notice message.
+
+## Proof
+```json
+{
+  "msg_type": "proof",  // required
+  "version": "0.1",   // required
+  "to_did": "did:sov:BnRXf8yDMUwGyZVDkSENeq",   // optional
+  "from_did": "did:btc:GxtnGN6ypZYgEqcftSQFnC", // optional
+  "proof_request_id": "cCanHnpFAD",
+  "proofs": { ... },
+  "aggregated_proof": { ... },
+  "requested_proof": { ... }
+}
+```

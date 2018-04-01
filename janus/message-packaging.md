@@ -4,6 +4,38 @@ Message delivery is complex. The hops in message delivery between two parties mi
 
 For this reason, the protocol does not prescribe a single encryption, a single format, a single routing strategy. Instead, it defines some primitives and some standard patterns for how these primitives are combined. By composing these primitives according to circumstances, a wide variety of use cases can be addressed by a sender, with predictable and modest handling effort by the receiver.
 
+## Crypto Transformations
+
+Janus uses elliptic curve cryptography to achieve message availability,
+confidentiality, and integrity. It offers three crypto primitives:
+
+```anon_crypt(msg, recipient_verkey)```
+<blockquote>Encrypt only for recipient. Sender is anonymous. Parties can be unknown
+to each other. The message is tamper evident.</blockquote>
+
+```auth_crypt(msg, recipient_verkey, sender_verkey, sender_sigkey)```
+<blockquote>Encrypt only for recipient. Recipient learns sender’s verkey but can’t
+prove to anybody else who the sender is (making the message repudiable).
+Parties can be unknown to each other. The message is tamper evident.</blockquote>
+
+```sign(msg, sender_sigkey)```
+<blockquote>Associate a non-repudiable signature with a message.</blockquote>
+
+## Other Transformations
+
+```Forward(msg)```
+<blockquote>Specify where and how to send something.</blockquote>
+
+```Topicalize(msg)```
+<blockquote>Give a message a context/thread and a sequence number within that context.</blockquote>
+
+```Bundle(msg)```
+<blockquote>Great multiple messages as a unit.</blockquote>
+
+```Type(msg)```
+ <blockquote>Describe message type, format, and version to an observer
+ or participant in a communication chain.</blockquote>
+
 # Message Packaging Primitives
 
 ### Typed Messages
