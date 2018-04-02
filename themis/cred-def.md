@@ -6,14 +6,14 @@ keys with a particular schema and revocation strategy. Credential
 definitions are published on the ledger. 
 
 ```json
+{
   "schemaId": "<schema id>", // In Sovrin, it is the txn no of the schema
-  "publicKeys": {
-    "primary": "<issuance public key>", // described below
-    "revocation": "<revocation public key>" // described below, this can be empty if the credential is non-revocable.
-  }
+  "primary": "<issuance data>", // described below
+  "revocation": "<revocation data>" // described below, this can be empty if the credential is non-revocable.
+}
 ```
 
-**Issuance Public key**:
+**Issuance data**:
 ```json
 {
   "sigType": "<credential issuance signature scheme>", // In Sovrin, there is only 1 as of now called CL,
@@ -31,7 +31,7 @@ definitions are published on the ledger.
 }
 ```
 
-**Revocation Public key**:
+**Revocation data**:
 ```json
 {
   "sigType": "<credential revocation signature scheme>", // In Sovrin, there is only 1 as of now called type-3-pairing
@@ -55,19 +55,19 @@ definitions are published on the ledger.
 ## Revocation Registry Definition
 ```json
 {
+  "revocDefType": "<revocation registry scheme>",  // In Sovrin, there is only 1 as of now called CL_ACCUM
   "credDefId": "<reference to the credential definition>",
   "issuanceType": "<issued by default or not>",
   "maxCredNum": "<maximum number of credentials that can be issued>",
-  "publicKey": "<public key for the revocation registry>", // described below
+  "publicKey": "<public data for the revocation registry>", // described below
   "tailsHash": "<SHA256 hash>",
   "tailsLocation": "<URL>"
 }
 ```
 
-**Revocation Registry Public Key**:
+**Revocation Registry Public Data**:
 ```json
 {
-  "revocDefType": "<revocation registry scheme>",  // In Sovrin, there is only 1 as of now called CL_ACCUM
   "z": "<the field FP_12>"
 }
 ```
