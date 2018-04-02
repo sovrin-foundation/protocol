@@ -48,7 +48,8 @@ Some may argue that Relying Parties will simply ask for enough information to un
 
 
 ## What's on the Ledger?
-The protocol stores the following Public Objects on the ledger:
+The protocol stores the following Public Objects on the ledger:  
+*Note:  The public objects on the ledger are created/updated through events called transactions. Each transaction has 2 sections, a payload section called `data` and a meta section called `reqMetadata` that will contain metadata like the author of transaction, nonce for the transaction, etc.*
 1. Public DIDs and DID Documents (including public keys and addressable endpoints)
 2. Schema
 3. Credential Definitions (references a Schema and includes public keys created by the Issuer for that type of Credential)
