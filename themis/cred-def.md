@@ -10,7 +10,7 @@ definitions are published on the ledger.
   "sigType": "<credential issuance signature scheme>", // In Sovrin, there is only 1 as of now called CL
   "publicKeys": {
     "primary": "<issuance public key>", // described below
-    "revocation": "<revocation public key>" // described below
+    "revocation": "<revocation public key>" // described below, this can be empty if the credential is non-revocable.
   },
 ```
 
