@@ -1,67 +1,73 @@
 # Credential Definition
+*Note:The objects described below are the desired format, the current format will soon be changed to the one mentioned below. Also in the actual ledger transaction, the format described below will be wrapped in a `data` section and there will be one more section called `reqMetadata` that will contain metadata like the author of transaction, nonce for the transaction, etc.*  
 
 A credential definition associates an issuer and their public issuance
 keys with a particular schema and revocation strategy. Credential
-definitions are published on the ledger.
+definitions are published on the ledger. 
 
 ```json
-{
-  "schema_ref": "<schema id>",
-  "primary": {
-    "sig_type": "<primary credential signature scheme>",
-    "verification_key": { <scheme-specific public key material> }
+  "schemaId":21,      // txn no of the schema
+  "sigType": "CL",
+  "publicKeys": {
+    // One or more public keys, one is described below below
   },
-  "revocation": {
-    "sig_type": "<revocation signature scheme>",
-    "verification_key": { <scheme-specific public key material> }
-  }
-}
 ```
-<span style="color:yellow">TODO: Needs Issuer reference</span>
 
-## Primary Credential Signature Schemes
-This is the value of the "primary" element in a Credential Definition.
-
-There is currently only one scheme in use today: CL.
-###The "CL" Primary Credential Signature Scheme
+**Public key**:
 ```json
 {
-  "sig_type": "CL",
-  "verification_key": {
-    "rctxt": "<large integer>",
-    "rms": "<large integer>",
-    "n": "<large integer>",
-    "s": "<large integer>",
-    "r": {
-      "<field1>": "<large integer>",
-      "<field2>": "<large integer>",
-      ...
-    }
+  "rctxt": "<large integer>",
+  "z": "<large integer>",
+  "n": "<large integer>",
+  "s": "<large integer>",
+  "r": {
+    "<field1>": "<large integer>",
+    "<field2>": "<large integer>",
+    ...
   }
 }
 ```
 
-## Revocation Signature Schemes
-This is the value of the "revocation" element in a Credential Definition.
-
-There is currently only one scheme in use today: CL(TODO).
-###The "CL(TODO)" Revocation Signature Scheme
+## Revocation Registry Definition
 ```json
 {
-  "sig_type": "(TODO: what do we all our revocation sig scheme?)",
-  "verification_key": {
-    "y": "<large random number in G2>",
-    "pk": "<large random number in G1>",
-    "h": "<large random number in G1>",
-    "h0": "<large random number in G1>",
-    "h1": "<large random number in G1>",
-    "h2": "<large random number in G1>",
-    "htilde": "<large random number in G1>",
-    "hhat": "<large random number in G2>",
-    "g": "<large random number in G1>",
-    "gprime": "<large random number in G2>",
-    "u": "<large random number in G2>",
-    "qr": "<large number specifying the order of the pairing group>",
-  }
+  "revocDefType":"type-3-pairing",
+  "credDefId":"<reference to the credential definition>",
+  "issuanceType": "<issued by default or not>",
+  "maxCredNum": 1000000,
+  "publicKeys": {
+      // One or more public keys, one is described below below
+  },
+  "tailsHash": "<SHA256 hash>",
+  "tailsLocation": "<URL>"
+}
+```
+
+**Public key**:
+```json
+{
+  "y": "<large random number in G2>",
+  "pk": "<large random number in G1>",
+  "h": "<large random number in G1>",
+  "h0": "<large random number in G1>",
+  "h1": "<large random number in G1>",
+  "h2": "<large random number in G1>",
+  "htilde": "<large random number in G1>",
+  "hhat": "<large random number in G2>",
+  "g": "<large random number in G1>",
+  "gprime": "<large random number in G2>",
+  "u": "<large random number in G2>",
+  "qr": "<large number specifying the order of the pairing group>",
+}
+```
+## Revocation Registry Entry
+```json
+{
+  "revocRegDefId": "reference to the revocation registry definition",
+  "revocDefType":"type-3-pairing",
+  "prevAccum":"<prev_accum_value>",
+  "accum":"<accum_value>",
+  "issued": [], (optional)
+  "revoked": [],
 }
 ```
