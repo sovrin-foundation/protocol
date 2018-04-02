@@ -2,7 +2,6 @@
 *Note: The objects described below are the desired format, the current format will soon be changed to the one mentioned below. The format below is only for the `data` part of the ledger transaction.*  
 
 ## Schema
-Examples:
 ```
 {
   "name": "name",

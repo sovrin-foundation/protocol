@@ -10,7 +10,7 @@ definitions are published on the ledger.
   "publicKeys": {
     "primary": "<issuance public key>", // described below
     "revocation": "<revocation public key>" // described below, this can be empty if the credential is non-revocable.
-  },
+  }
 ```
 
 **Issuance Public key**:
