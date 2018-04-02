@@ -141,15 +141,9 @@ In order to achieve the conceptual model, we need the following:
 
 ### Control
 
-**TODO: introduce these concepts**
-* (e.g., agent provisioning, authorization, revocation) (**3DIM**)
-  * [Microledgers](https://github.com/evernym/protocol/blob/aff664fff9184d66fcb496c19398350ee4077db6/relationship-state-machine.md)
-* Decentralized Key Management protocol
-  * [DID / DID Document](https://github.com/evernym/protocol/blob/aff664fff9184d66fcb496c19398350ee4077db6/did.md)
-  * [Decentralized Key Management](dkms/README.md)
-* Public Registry for Agent Authorization Policy
-  * [Agent Authorization Policy](https://github.com/evernym/protocol/blob/aff664fff9184d66fcb496c19398350ee4077db6/dkms/overview.md)
-
+* [DID / DID Document](did.md)
+* [Relationship State Machine](relationship-state-machine.md)
+* [Decentralized Key Management protocol](dkms/README.md)
 
 ### Privacy-respecting value transfer
 
