@@ -1,9 +1,12 @@
 # Credential Definition
 *Note: The objects described below are the desired format, the current format will soon be changed to the one mentioned below. The format below is only for the `data` part of the ledger transaction.*
 
+For the holder to create a proof from a credential and the relying party to 
+verify the proof generated from a credential, they need the issuer's public key. These public keys correspond to the secret keys the issuer used to sign the credential. 
 A credential definition associates an issuer and their public issuance
-keys with a particular schema and revocation strategy. Credential
-definitions are published on the ledger. 
+keys with a particular schema and revocation strategy. The credential definition 
+also specifies the signature scheme used by the issuer and references the schema for the credential.
+Credential definitions are published on the ledger. 
 
 ```json
 {
@@ -55,6 +58,8 @@ There is currently only one revocation scheme in use today, "T3P". This is the s
 ```
 
 ## Revocation Registry Definition
+This describes the kind of revocation mechanism used for managing the revocation and/or issuance of credentials. 
+The kind of data structure used, keys to manage that data structure and other data needed to compute the witness is mentioned here.
 ```json
 {
   "revocDefType": "<revocation registry scheme>",  // In Sovrin, there is only 1 as of now called CL_ACCUM
@@ -75,6 +80,7 @@ There is currently only one revocation scheme in use today, "T3P". This is the s
 ```
 
 ## Revocation Registry Entry
+When claims are issued and/or revoked, the revocation registry needs to be updated. An update looks like this:
 ```json
 {
   "revocRegDefId": "<reference to the revocation registry definition>",
