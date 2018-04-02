@@ -140,13 +140,13 @@ In order to achieve the conceptual model, we need the following:
 
 
 ### Control
+
+**TODO: introduce these concepts (e.g., agent provisioning, authorization, revocation)**
 * [DID / DID Document](did.md)
 * [Relationship State Machine](relationship-state-machine.md)
 * [Decentralized Key Management protocol](dkms/README.md)  
-* **TODO: introduce these concepts**	
-    * (e.g., agent provisioning, authorization, revocation) (**3DIM**)
-    
-    
+
+
 ### Privacy-respecting value transfer
 
 **TODO: introduce these concepts**
