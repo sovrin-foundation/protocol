@@ -2,8 +2,9 @@
 
 2018-04-02
 
-Authors: Drummond Reed, Jason Law, Daniel Hardman, Mike Lodder
-Contributors: Devin Fisher, Lovesh Harchandani, Dmitry Khovratovich, Corin Kochenower
+**Authors:** Drummond Reed, Jason Law, Daniel Hardman, Mike Lodder
+
+**Contributors:** Devin Fisher, Lovesh Harchandani, Dmitry Khovratovich, Corin Kochenower
 
 STATUS: This is the third draft of a document developed by Evernym Inc. under [a contract with the U.S. Department of Homeland Security Science & Technology Directorate](https://www.dhs.gov/science-and-technology/news/2017/07/20/news-release-dhs-st-awards-749k-evernym-decentralized-key). This draft is being released on 3 April 2018 to begin an open public review and comment process in preparation for DKMS to be submitted to a standards development organization such as [OASIS](http://www.oasis-open.org/) for formal standardization.
 
