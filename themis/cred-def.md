@@ -34,7 +34,7 @@ definitions are published on the ledger.
   "revocDefType":"<credential revocation signature scheme>",  // In Sovrin, there is only 1 as of now called type-3-pairing
   "credDefId":"<reference to the credential definition>",
   "issuanceType": "<issued by default or not>",
-  "maxCredNum": <maximum number of credentials that can be issued>,
+  "maxCredNum": "<maximum number of credentials that can be issued>",
   "publicKeys": {
       // One or more public keys, one is described below below
   },
