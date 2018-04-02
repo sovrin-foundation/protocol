@@ -8,47 +8,49 @@ definitions are published on the ledger.
 ```json
 {
   "schemaId": "<schema id>", // In Sovrin, it is the txn no of the schema
-  "primary": "<issuance data>", // described below
-  "revocation": "<revocation data>" // described below, this can be empty if the credential is non-revocable.
+  "primary": {
+    "sigType": "<primary credential signature scheme>",
+    "publicKey": { <scheme-specific public key material> }
+  },
+  "revocation": {
+    "sigType": "<revocation signature scheme>",
+    "publicKey": { <scheme-specific public key material> }
+  } // described below, this can be empty if the credential is not revocable.
 }
 ```
 
-**Issuance data**:
+**Example of primary publicKey**:
+There is currently only one scheme in use today, "CL". This is the structure for that scheme.
 ```json
 {
-  "sigType": "<credential issuance signature scheme>", // In Sovrin, there is only 1 as of now called CL,
-  "publicKey": {
-    "rctxt": "<large integer>",
-    "z": "<large integer>",
-    "n": "<large integer>",
-    "s": "<large integer>",
-    "r": {
-      "<field1>": "<large integer>",
-      "<field2>": "<large integer>",
-      ...
-    }
+  "rctxt": "<large integer>",
+  "z": "<large integer>",
+  "n": "<large integer>",
+  "s": "<large integer>",
+  "r": {
+    "<field1>": "<large integer>",
+    "<field2>": "<large integer>",
+    ...
   }
 }
 ```
 
-**Revocation data**:
+**Example of revocation public key**:
+There is currently only one revocation scheme in use today, "T3P". This is the structure for that scheme.
 ```json
 {
-  "sigType": "<credential revocation signature scheme>", // In Sovrin, there is only 1 as of now called type-3-pairing
-  "publicKey": {
-    "y": "<large random number in G2>",
-    "pk": "<large random number in G1>",
-    "h": "<large random number in G1>",
-    "h0": "<large random number in G1>",
-    "h1": "<large random number in G1>",
-    "h2": "<large random number in G1>",
-    "htilde": "<large random number in G1>",
-    "hhat": "<large random number in G2>",
-    "g": "<large random number in G1>",
-    "gprime": "<large random number in G2>",
-    "u": "<large random number in G2>",
-    "qr": "<large number specifying the order of the pairing group>",
-  }
+  "y": "<large number in G2>",
+  "pk": "<large number in G1>",
+  "h": "<large number in G1>",
+  "h0": "<large number in G1>",
+  "h1": "<large number in G1>",
+  "h2": "<large number in G1>",
+  "htilde": "<large number in G1>",
+  "hhat": "<large number in G2>",
+  "g": "<large number in G1>",
+  "gprime": "<large number in G2>",
+  "u": "<large number in G2>",
+  "qr": "<large number specifying the order of the pairing group>",
 }
 ```
 
@@ -78,8 +80,8 @@ definitions are published on the ledger.
   "revocRegDefId": "<reference to the revocation registry definition>",
   "prevAccum": "<prev_accum_value>",
   "accum": "<accum_value>",
-  "issued": [<contains 0 or more entries>], (optional)
-  "revoked": [<contains 0 or more entries>], (optional)
+  "issued": [<0 or more entries>],
+  "revoked": [<0 or more entries>],
 }
 ```
 
