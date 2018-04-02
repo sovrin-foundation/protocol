@@ -6,14 +6,15 @@ keys with a particular schema and revocation strategy. Credential
 definitions are published on the ledger. 
 
 ```json
-  "schemaId":"<schema id>", // In Sovrin, it is the txn no of the schema
+  "schemaId": "<schema id>", // In Sovrin, it is the txn no of the schema
   "sigType": "<credential issuance signature scheme>", // In Sovrin, there is only 1 as of now called CL
   "publicKeys": {
-    // One or more public keys, one is described below below
+    "primary": "<issuance public key>", // described below
+    "revocation": "<revocation public key>" // described below
   },
 ```
 
-**Public key**:
+**Issuance Public key**:
 ```json
 {
   "rctxt": "<large integer>",
@@ -28,22 +29,7 @@ definitions are published on the ledger.
 }
 ```
 
-## Revocation Registry Definition
-```json
-{
-  "revocDefType":"<credential revocation signature scheme>",  // In Sovrin, there is only 1 as of now called type-3-pairing
-  "credDefId":"<reference to the credential definition>",
-  "issuanceType": "<issued by default or not>",
-  "maxCredNum": "<maximum number of credentials that can be issued>",
-  "publicKeys": {
-      // One or more public keys, one is described below below
-  },
-  "tailsHash": "<SHA256 hash>",
-  "tailsLocation": "<URL>"
-}
-```
-
-**Public key**:
+**Revocation Public key**:
 ```json
 {
   "y": "<large random number in G2>",
@@ -60,6 +46,27 @@ definitions are published on the ledger.
   "qr": "<large number specifying the order of the pairing group>",
 }
 ```
+
+## Revocation Registry Definition
+```json
+{
+  "revocDefType":"<credential revocation signature scheme>",  // In Sovrin, there is only 1 as of now called type-3-pairing
+  "credDefId":"<reference to the credential definition>",
+  "issuanceType": "<issued by default or not>",
+  "maxCredNum": "<maximum number of credentials that can be issued>",
+  "publicKey": "public key for the revocation registry", // described belwo
+  "tailsHash": "<SHA256 hash>",
+  "tailsLocation": "<URL>"
+}
+```
+
+**Revocation Registry**:
+```json
+{
+  z: "<the field FP_12>"
+}
+```
+
 ## Revocation Registry Entry
 ```json
 {
@@ -67,7 +74,7 @@ definitions are published on the ledger.
   "revocDefType":"type-3-pairing",
   "prevAccum":"<prev_accum_value>",
   "accum":"<accum_value>",
-  "issued": [], (optional)
-  "revoked": [],
+  "issued": [<contains 0 or more entries>], (optional)
+  "revoked": [<contains 0 or more entries>], (optional)
 }
 ```
