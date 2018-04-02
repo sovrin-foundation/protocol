@@ -6,8 +6,8 @@ keys with a particular schema and revocation strategy. Credential
 definitions are published on the ledger. 
 
 ```json
-  "schemaId":21,      // txn no of the schema
-  "sigType": "CL",
+  "schemaId":"<schema id>", // In Sovrin, it is the txn no of the schema
+  "sigType": "<credential issuance signature scheme>", // In Sovrin, there is only 1 as of now called CL
   "publicKeys": {
     // One or more public keys, one is described below below
   },
@@ -31,10 +31,10 @@ definitions are published on the ledger.
 ## Revocation Registry Definition
 ```json
 {
-  "revocDefType":"type-3-pairing",
+  "revocDefType":"<credential revocation signature scheme>",  // In Sovrin, there is only 1 as of now called type-3-pairing
   "credDefId":"<reference to the credential definition>",
   "issuanceType": "<issued by default or not>",
-  "maxCredNum": 1000000,
+  "maxCredNum": <maximum number of credentials that can be issued>,
   "publicKeys": {
       // One or more public keys, one is described below below
   },
