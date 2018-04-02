@@ -167,7 +167,7 @@ TODO: Summarize and reference
 
 <!--TODO: content needed: Using Sovrin as the Public Registry and the Public Ledger.-->
 
-##Key components of the Sovrin Protocol include:
+## Key components of the Sovrin Protocol include:
 
 * [Janus](janus/README.md) (a protocol for secure and private communication)
 * [Themis](themis/README.md) (a subprotocol for issuing digital credentials and proving things with them in a privacy-preserving way)
