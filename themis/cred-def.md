@@ -1,5 +1,5 @@
 # Credential Definition
-*Note:The objects described below are the desired format, the current format will soon be changed to the one mentioned below. Also in the actual ledger transaction, the format described below will be wrapped in a `data` section and there will be one more section called `reqMetadata` that will contain metadata like the author of transaction, nonce for the transaction, etc.*  
+*Note: The objects described below are the desired format, the current format will soon be changed to the one mentioned below. The format below is only for the `data` part of the ledger transaction.*
 
 A credential definition associates an issuer and their public issuance
 keys with a particular schema and revocation strategy. Credential
@@ -78,3 +78,6 @@ definitions are published on the ledger.
   "revoked": [<contains 0 or more entries>], (optional)
 }
 ```
+
+## Code references to ledger objects
+1. [CLAIM_DEF](https://github.com/hyperledger/indy-sdk/blob/778a38d92234080bb77c6dd469a8ff298d9b7154/libindy/src/services/ledger/types.rs#L234)

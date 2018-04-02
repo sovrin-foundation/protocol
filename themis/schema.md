@@ -1,5 +1,5 @@
 # Schema, Schema Elements and Encodings
-*Note:The objects described below are the desired format, the current format will soon be changed to the one mentioned below. Also in the actual ledger transaction, the format described below will be wrapped in a `data` section and there will be one more section called `reqMetadata` that will contain metadata like the author of transaction, nonce for the transaction, etc.*  
+*Note: The objects described below are the desired format, the current format will soon be changed to the one mentioned below. The format below is only for the `data` part of the ledger transaction.*  
 
 ## Schema
 Examples:
@@ -111,3 +111,6 @@ length_mm: {spec: "length in whole number of millimeters"}
 
 bool: {spec: "'true' -> 2, 'false' -> 1, 'unknown' -> 0"}  
 ```
+
+## Code references to ledger objects
+1. [SCHEMA](https://github.com/hyperledger/indy-sdk/blob/778a38d92234080bb77c6dd469a8ff298d9b7154/libindy/src/services/ledger/types.rs#L144)
