@@ -50,8 +50,8 @@ definitions are published on the ledger.
 ## Revocation Registry Definition
 ```json
 {
-  "revocDefType":"<credential revocation signature scheme>",  // In Sovrin, there is only 1 as of now called type-3-pairing
-  "credDefId":"<reference to the credential definition>",
+  "revocDefType": "<credential revocation signature scheme>",  // In Sovrin, there is only 1 as of now called type-3-pairing
+  "credDefId": "<reference to the credential definition>",
   "issuanceType": "<issued by default or not>",
   "maxCredNum": "<maximum number of credentials that can be issued>",
   "publicKey": "public key for the revocation registry", // described belwo
@@ -63,7 +63,7 @@ definitions are published on the ledger.
 **Revocation Registry**:
 ```json
 {
-  z: "<the field FP_12>"
+  "z": "<the field FP_12>"
 }
 ```
 
@@ -71,9 +71,9 @@ definitions are published on the ledger.
 ```json
 {
   "revocRegDefId": "reference to the revocation registry definition",
-  "revocDefType":"type-3-pairing",
-  "prevAccum":"<prev_accum_value>",
-  "accum":"<accum_value>",
+  "revocDefType": "type-3-pairing",
+  "prevAccum": "<prev_accum_value>",
+  "accum": "<accum_value>",
   "issued": [<contains 0 or more entries>], (optional)
   "revoked": [<contains 0 or more entries>], (optional)
 }
