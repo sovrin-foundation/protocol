@@ -1,12 +1,11 @@
-# DKMS Design and Architecture V3
+# DKMS (Decentralized Key Management System) Design and Architecture V3
 
-2018-01-31
+2018-04-02
 
-Evernym Inc. Drummond Reed, Principal Investigator
+Authors: Drummond Reed, Jason Law, Daniel Hardman, Mike Lodder
+Contributors: Devin Fisher, Lovesh Harchandani, Dmitry Khovratovich, Corin Kochenower
 
-STATUS: This is the THIRD draft of the DKMS Design and Architecture document. This will be part of the final deliverable to DHS S&T as part of Milestone 4 of the Evernym DKMS project. Please add comments or suggestions directly to the document—the editors will process them all before the final deliverable.
-
-NOTE: ACTION ITEMS for DKMS contributors are listed at the end of the document.
+STATUS: This is the third draft of a document developed by Evernym Inc. under [a contract with the U.S. Department of Homeland Security Science & Technology Directorate](https://www.dhs.gov/science-and-technology/news/2017/07/20/news-release-dhs-st-awards-749k-evernym-decentralized-key). This draft is being released on 3 April 2018 to begin an open public review and comment process in preparation for DKMS to be submitted to a standards development organization such as [OASIS](http://www.oasis-open.org/) for formal standardization.
 
 **Table of Contents**
 
@@ -794,17 +793,5 @@ Now the trustee’s edge agent is ready to return the recovery data share to Ali
 
 9. **DID phishing.** DKMS can only enable security, it cannot by itself prevent a malicious actor or agency sending malicious invitations to form malicious connections that appear to be legitimate connection invitations (section 10.9).
 
-# ACTION ITEMS FOR DKMS CONTRIBUTORS
 
-## To Be Assigned
-
-1. Add a section to V3 to discuss MITM attacks and protections.
-
-## MikeL
-
-1. Update all PUML diagrams:
-
-    1. Replace "recovery buddy" with “trustee”
-
-    2. Add the term "recovery connection" to describe the special ephemeral connection used during recovery.
 
