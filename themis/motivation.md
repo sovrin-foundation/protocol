@@ -4,7 +4,7 @@ Verifiable attributes allow individuals to use the relationship they have with t
 
 __Taken from [Schema Elements doc](https://docs.google.com/document/d/1VT8myB5XcCJIrIU2xEE3Vgxpfa47aFswh1qDCFCBtIg/edit#). Reference this in that doc__
 1. [Schema](schema.md#Schema)
-2. [Schema Elements](schema.md#Schema%20Elements)
+2. [Schema Elements](schema.md#Schema-Elements)
 3. [Encodings](schema.md#Encodings)
 4. [Subjects](schema.md#Subjects)
 5. Holder  
@@ -19,10 +19,10 @@ The holders shares the verifiable attributes and any predicates over those with 
 It consists of any revealed attribute values and additional cryptographic data that is sufficient for the relying party to verify the issuer's signature.
 More details can be found [here](proof.md)
 *Note: The request and generation of proof are using ZkLang which involves more objects, see [here](zklang.md) for details.*
-10. [Credential Definition](cred-def.md#Credential%20Definition) 
+10. [Credential Definition](cred-def.md#Credential-Definition) 
 11. [Credential Offer](cred-offer.md)
 12. [Credential Request](cred-request.md)  
 13. Revocation Authority  
 This is entity responsible for managing the revocation of credentials. This might or might not be the issuer of the credential.
-14. [Revocation registry definition](cred-def.md#Revocation%20Registry%20Definition) 
-15. [Revocation registry entry](cred-def.md#Revocation%20Registry%20Entry)
+14. [Revocation registry definition](cred-def.md#Revocation-Registry-Definition) 
+15. [Revocation registry entry](cred-def.md#Revocation-Registry-Entry)  
