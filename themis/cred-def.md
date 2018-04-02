@@ -34,7 +34,7 @@ definitions are published on the ledger.
 **Revocation Public key**:
 ```json
 {
-  "sigType": "<credential issuance signature scheme>", // In Sovrin, there is only 1 as of now called type-3-pairing
+  "sigType": "<credential revocation signature scheme>", // In Sovrin, there is only 1 as of now called type-3-pairing
   "publicKey": {
     "y": "<large random number in G2>",
     "pk": "<large random number in G1>",
