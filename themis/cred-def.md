@@ -39,7 +39,8 @@ There is currently only one scheme in use today, "CL". This is the structure for
 ```
 
 **Example of revocation public key**:
-There is currently only one revocation scheme in use today, "T3P". This is the structure for that scheme.
+There is currently only one revocation scheme in use today, "CKS" (named after its authors Jan Camenisch, Markulf Kohlweiss and Claudio Soriente, here is the [paper](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/main-51.pdf)).   
+This is the structure for that scheme.
 ```json
 {
   "y": "<large number in G2>",
