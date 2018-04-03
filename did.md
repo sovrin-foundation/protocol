@@ -15,3 +15,7 @@ A DID and DID document are created, resolved, and managed on a system using a sp
 
 ## The Sovrin DID Method Spec
 DIDs written to the Sovrin ledger will follow the requirements defined in the [Sovrin DID method spec](https://github.com/sovrin-foundation/sovrin/blob/master/spec/did-method-spec-template.html).
+
+## Public (Global) DIDs on Sovrin 
+Public (Global) DIDs are created and updated in Sovrin using a [NYM](https://github.com/hyperledger/indy-node/blob/24a86c5ebf86a2aed26f12c3db0dfc6667137d11/docs/transactions.md#nym) transaction.  
+[Code reference](https://github.com/hyperledger/indy-sdk/blob/778a38d92234080bb77c6dd469a8ff298d9b7154/libindy/src/services/ledger/types.rs#L43)  to NYM transaction.

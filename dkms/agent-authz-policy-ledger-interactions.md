@@ -103,7 +103,7 @@ The hash of above can then be used to lookup (it is not, more on this later) the
 ### Caches
 There is an agent\_authz cache used for optimisations are:
 The cache is a name-value store (leveldb) and offers a constant lookup time for lookup by name.
-1. Policy values: The authorization of each agent per policy. The values for the keys are rlp encoding of the list of at most 2 items, `authorization bitset` with each bit respresenting a different auth, `commitment` is optional and relevant only when agent has the `PROVE` authorisation.
+1. Policy values: The authorization of each agent per policy. The values for the keys are rlp encoding of the list of at most 2 items, `authorization bitset` with each bit respresenting a different auth, `commitment` is optional and relevant only when agent has the `PROVE` authorization.
 
 ```
 {

@@ -1,0 +1,33 @@
+@startuml
+
+
+component "Proof Request" as preq
+component "wallet" as w
+component "Proof Resolution" as pr
+component "public registry" as reg
+component "ZKL-ProofSpec" as ps
+component "ZKL-Witness" as zw
+component "ZKL-Proof" as zp
+component "Sovrin Proof" as p
+component "Disclosed\nAttributes" as da
+
+preq --> pr
+w --> pr: available creds
+
+pr --> ps
+reg --> ps
+
+ps --> zp
+zw --> zp
+
+ps -> zw
+w --> zw: secrets
+
+w --> da
+da --> ps
+
+pr --> p
+zp --> p
+da --> p
+
+@enduml

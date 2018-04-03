@@ -141,14 +141,10 @@ In order to achieve the conceptual model, we need the following:
 
 ### Control
 
-**TODO: introduce these concepts**
-* (e.g., agent provisioning, authorization, revocation) (**3DIM**)
-  * [Microledgers](https://github.com/evernym/protocol/blob/aff664fff9184d66fcb496c19398350ee4077db6/relationship-state-machine.md)
-* Decentralized Key Management protocol
-  * [DID / DID Document](https://github.com/evernym/protocol/blob/aff664fff9184d66fcb496c19398350ee4077db6/did.md)
-  * [Decentralized Key Management](dkms/README.md)
-* Public Registry for Agent Authorization Policy
-  * [Agent Authorization Policy](https://github.com/evernym/protocol/blob/aff664fff9184d66fcb496c19398350ee4077db6/dkms/overview.md)
+**TODO: introduce these concepts (e.g., agent provisioning, authorization, revocation)**
+* [DID / DID Document](did.md)
+* [Relationship State Machine](relationship-state-machine.md)
+* [Decentralized Key Management protocol](dkms/README.md)  
 
 
 ### Privacy-respecting value transfer
@@ -171,7 +167,7 @@ TODO: Summarize and reference
 
 <!--TODO: content needed: Using Sovrin as the Public Registry and the Public Ledger.-->
 
-##Key components of the Sovrin Protocol include:
+## Key components of the Sovrin Protocol include:
 
 * [Janus](janus/README.md) (a protocol for secure and private communication)
 * [Themis](themis/README.md) (a subprotocol for issuing digital credentials and proving things with them in a privacy-preserving way)
