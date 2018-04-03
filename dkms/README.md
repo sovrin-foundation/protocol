@@ -31,7 +31,7 @@ in the trustees own agent(s).
 
 These methods are not exclusive and should be combined with key rotation and revocation for proper security.
 
-1. [Design and architecture](https://docs.google.com/document/d/1Cwolj9DOzvJ0obGy5qOVShUZyeIjbOT57HeM7FKhVCI/)
+1. [Design and architecture](DKMS%20Design%20and%20Architecture%20V3.md)
 2. **Public Registry for Agent Authorization Policy**. An identity owner create a policy on the ledger that defines its agents and their authorizations. 
    Agents while acting on the behalf of the identity owner need to prove that they are authorised. [More details](https://docs.google.com/document/d/12Z10n4ZI3RmCZy-wCz7gs5DVqKr8BigC4rHCC-mvh2g/)  
    
