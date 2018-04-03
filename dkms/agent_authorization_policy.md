@@ -93,7 +93,7 @@ This is a public record, but no information in this public record is ever shared
 
     4.5. <img src="https://latex.codecogs.com/gif.latex?C_4&space;\leftarrow&space;\mathrm{Comm}(C_1,&space;r_4)" title="C_4 \leftarrow \mathrm{Comm}(C_1, r_4)" />
 
-    4.6. <img src="https://latex.codecogs.com/gif.latex?\mathcal{A}" title="\mathcal{A}" /> is the accumulator that contains <img src="https://latex.codecogs.com/gif.latex?C_1%0" title="C_1%0" />. This is shown by the next 4 statements (4.6.1 to 4.6.4)
+    4.6. <img src="https://latex.codecogs.com/gif.latex?\mathcal{A}" title="\mathcal{A}" /> is the accumulator that contains <img src="https://latex.codecogs.com/gif.latex?C_1" title="C_1" />. This is shown by the next 4 statements (4.6.1 to 4.6.4)
 
     4.6.1. <img src="https://latex.codecogs.com/gif.latex?\mathcal{A}[u,N](b_1,b_2,\ldots,b_n)" title="\mathcal{A}[u,N](b_1,b_2,\ldots,b_n)" /> is defined for prime <img src="https://latex.codecogs.com/png.latex?\inline&space;\small&space;b_i\in[B;B^2-1]" title="\small b_i\in[B;B^2-1]" />
 
@@ -115,15 +115,15 @@ This is a public record, but no information in this public record is ever shared
 
     4.12. <img src="https://latex.codecogs.com/gif.latex?\inline&space;\small&space;\pi&space;\leftarrow&space;\mathrm{DComm}_S(C_2,&space;C_3)&space;\wedge&space;\mathrm{DComm}_K(C_3,&space;C_4)&space;\wedge&space;CommAcc_{C_1}(C_4,&space;\mathcal{A})&space;\wedge&space;I&space;\in&space;Claim" title="\small \pi \leftarrow \mathrm{DComm}_S(C_2, C_3) \wedge \mathrm{DComm}_K(C_3, C_4) \wedge CommAcc_{C_1}(C_4, \mathcal{A}) \wedge I \in Claim" />
 
-    4.13. The proof can be prepared as concatenation of
+    4.13. The proof can be prepared as concatenation of the following 4:
 
-        4.13.1. NIZK{ (r4,C1): (C1 in A) && C4 = Comm(C1,r4) } = CommAcc proof
+      4.13.1. NIZK{ (<img src="https://latex.codecogs.com/gif.latex?r_4" title="r_4" />,<img src="https://latex.codecogs.com/gif.latex?C_1" title="C_1" />): (<img src="https://latex.codecogs.com/gif.latex?C_1" title="C_1" /> in <img src="https://latex.codecogs.com/gif.latex?\mathcal{A}" title="\mathcal{A}" />) && <img src="https://latex.codecogs.com/gif.latex?C_4" title="C_4" /> = Comm(<img src="https://latex.codecogs.com/gif.latex?C_1" title="C_1" />, <img src="https://latex.codecogs.com/gif.latex?r_4" title="r_4" />) } = Comm<sub>Acc</sub> proof
 
-        4.13.2. NIZK{ (K,I,r2): Credential(I) && C3 =Comm(K,I,r2) } = Claim+commitment proof
+      4.13.2. NIZK{ (K,I,<img src="https://latex.codecogs.com/gif.latex?r_2" title="r_2" />): Credential(I) && <img src="https://latex.codecogs.com/gif.latex?C_3" title="C_3" /> =Comm(K,I,<img src="https://latex.codecogs.com/gif.latex?r_2" title="r_2" />) } = Claim+commitment proof
 
-        4.13.3. NIZK{ (K,I,r2,r4): C3 = Comm(K,I,r2) && C4 = Comm(Comm(K,I),r4) }        = DComm proof
+      4.13.3. NIZK{ (K,I,<img src="https://latex.codecogs.com/gif.latex?r_2" title="r_2" />,<img src="https://latex.codecogs.com/gif.latex?r_4" title="r_4" />): <img src="https://latex.codecogs.com/gif.latex?C_3" title="C_3" /> = Comm(K,I,<img src="https://latex.codecogs.com/gif.latex?r_2" title="r_2" />) && <img src="https://latex.codecogs.com/gif.latex?C_4" title="C_4" /> = Comm(Comm(K,I),<img src="https://latex.codecogs.com/gif.latex?r_4" title="r_4" />) } = D<sub>Comm</sub> proof
 
-        4.13.4. NIZK{ (S,r0,r1,r2,I): C2 = Comm(S,r1) && C3 =  Comm(Comm(S,r0),I,r2)}  = DComm proof
+      4.13.4. NIZK{ (S,<img src="https://latex.codecogs.com/gif.latex?r_0" title="r_0" />,<img src="https://latex.codecogs.com/gif.latex?r_1" title="r_1" />,<img src="https://latex.codecogs.com/gif.latex?r_2" title="r_2" />,I): <img src="https://latex.codecogs.com/gif.latex?C_2" title="C_2" /> = Comm(S,<img src="https://latex.codecogs.com/gif.latex?r_1" title="r_1" />) && <img src="https://latex.codecogs.com/gif.latex?C_3" title="C_3" /> =  Comm(Comm(S,<img src="https://latex.codecogs.com/gif.latex?r_0" title="r_0" />),I,<img src="https://latex.codecogs.com/gif.latex?r_2" title="r_2" />)}  = D<sub>Comm</sub> proof
 
     These 4 proofs can be united into a single one with some reduction in size.
 
