@@ -93,7 +93,7 @@ This is a public record, but no information in this public record is ever shared
 
     4.5. ![image alt text](aap_4.png)
 
-    4.6. ![image alt text](aap_5.png) is the accumulator that contains ![image alt text](aap_6.png). This is shown by the next 4 statements (4.6.1 to 4.6.4)
+    4.6. 4.6.1. ![alt text](https://latex.codecogs.com/png.latex?%5Cinline%20%5Csmall%20%5Cmathcal%7BA%7D%5Bu%2CN%5D%28b_1%2Cb_2%2C%5Cldots%2Cb_n%29) is defined for prime <img src="https://latex.codecogs.com/png.latex?\inline&space;\small&space;b_i\in[B;B^2-1]" title="\small b_i\in[B;B^2-1]" />
 
     4.6.1. ![image alt text](aap_7.png) is defined for prime ![image alt text](aap_8.png)
 
