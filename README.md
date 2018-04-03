@@ -1,5 +1,3 @@
-<!-- TODO: Add link to this doc from here: https://wiki.hyperledger.org/projects/indy/documentation -->
-
 # The Sovrin Protocol
 
 The Sovrin Protocol is a set of standards, patterns, and tools that facilitate
