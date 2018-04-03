@@ -20,7 +20,7 @@ elsewhere.
 
 At the highest level, Janus aims to:
 
-1. Provide highly secure comm channels, with correct basis for trust.
+1. Provide highly secure communication channels, with correct basis for trust.
 2. Provide strong privacy guarantees as demanded by [Self-Sovereign
    Privacy by Design](
    https://docs.google.com/document/d/1fKAw9p8eJI-7hAZuQ8orMDGYnq7WWpE6QYs1YOTWgjA/edit).

@@ -35,7 +35,7 @@ For a more detailed discussion on these principles, see [Self-Sovereign Privacy 
 
 ## Three Dimensions of Self Sovereign Identity
 
-There are three orthogonal dimensions to Alice's digital identity: (1) her _relationships_, (2) her _attributes_, and (3) her _agents_. Separating these three dimensions allows for a clear understanding of how they interact. Conflating them confuses the proper role of actors and systems and weakens security.
+There are three orthogonal dimensions to Alice's digital identity: (1) her _**relationships**_, (2) her _**attributes**_, and (3) her _**agents**_. Separating these three dimensions allows for a clear understanding of how they interact. Conflating them confuses the proper role of actors and systems and weakens security.
 
 
 ### Relationships
@@ -115,60 +115,71 @@ For more details about how these dimensions work together, see [How DIDs, Keys, 
 
 In order to achieve the conceptual model, we need the following:
 1.  A Secure and private way to connect to and communicate with peers
-1.  A privacy-respecting ability to prove things about oneself and assert things about others
+1.  A privacy-respecting ability to assert things about others and prove assertions about oneself
 1.  Control all her things (e.g., agent provisioning, authorization, revocation)
 1.  Privacy respecting value transfer that is compliant with regulation
-1.  Semantic Interop (intra-ecosystem)
+1.  Semantic Interoperability
 
 
 ### Secure peer-to-peer communications
+In order for Alice to interact securely with others, she'll need a transport-agnostic protocol that encrypts all information and ensures authentication at every level. It should allow for multi-hop communications without needing to trust intermediaries or share more information than is minimally necessary to accomplish the task. [Janus](janus/README.md) is the working name for a protocol that meets these requirements. Janus uses pairwise [DIDs](did.md) as mentioned above. 
 
-**TODO: introduce these concepts**
-*   DID specification
-*   Janus Protocol
-*   Public Registry for DIDs, public keys, endpoints
-*   Microledgers
-
+Alice also needs a way to bootstrap trust and ensure she's still interacting with who she thinks she is. The Sovrin network acts as a public registry for DIDs, public keys, and endpoints.
 
 ### Privacy-respecting issuing and proving
 
 **TODO: introduce these concepts**
-* Privacy-respecting attribute exchange protocol
-  * TODO: https://github.com/evernym/protocol/blob/changes/attribute-exchange.md
-* Public Registry for Issuer public keys and Signature types
-* Public Registry for Credential Revocation
+Alice needs a way to receive credentials from issuers. She also needs a way to prove that she holds a credential from a certain issuer with certain attributes or characteristics. She needs to do this in a way that doesn't share any more information than she intends. And her sharing of attributes should not result in disclosing correlation handles. [Themis](themis/README.md) is the working name for a protocol that accomplishes these requirements.
 
+The Sovrin network acts as a public registry for Credential Definitions, Schema definitions, and Issuer public keys. Issuer public keys are used to verify proofs from credentials issued.
+
+An issuer of a credential should also be able to revoke that credential. Alice should be able to prove she posesses a credential that is not revoked, without strongly identifying _which_ credential she holds. Privacy-respecting Revocation is a key to any credentialing system. 
+
+The Sovrin network also acts as a public registry for Credential revocation.
 
 ### Control
+Alice needs to be able to exercise control over her keys and agents without interference and without permission from a third party. * [DIDs and DID Documents](did.md) provide much of that functionality. The [Relationship State Machine](relationship-state-machine.md) is a concept that allows for pairwise relationships to be established securely without an initial write to Sovrin. Microledgers are an implementation of the the Relationship State Machine concept.
 
-**TODO: introduce these concepts (e.g., agent provisioning, authorization, revocation)**
-* [DID / DID Document](did.md)
-* [Relationship State Machine](relationship-state-machine.md)
-* [Decentralized Key Management protocol](dkms/README.md)  
+With Sovrin, reliance on a centralized third party is removed by design. This moves key management to the edge. It increases the responsibility of applications to properly manage keys and recovery. The [Decentralized Key Management (DKMS)](dkms/README.md) protocol outlines ways in which Alice can significantly reduce reliance on centralized third parties, while still being able to interact safely and securely.
+
+Alice needs a way to provision new agents, and revoke them remotely if they are lost or compromised, and do this without communicating with them. Agent Authorization Policies, outlined in the DKMS documents, help to ensure only trusted devices are able to prove certain things on behalf of Alice. The Sovrin network is used to store a sophisticated agent provisioning policy along with a mechanism for proving in a privacy-respecting way that the agent used is authorized.
 
 
 ### Privacy-respecting value transfer
+Alice needs to be able to send payment in interactions with others. For example, paying a fee for a Driver License. She needs a privacy respecting way to pay for transactions on the Sovrin ledger. Issuers need a way to recover some of the costs of issuing. Holders can pay Issuers, as in the case of Alice paying a fee for her driver license. Relying parties can also pay Issuers, as in the case of credit reporting agencies. All this should be done in a privacy respecting way.
 
-**TODO: introduce these concepts**
-*   Public Ledger for payments
-TODO: Summarize and reference 
-
+<!--TODO: content needed.-->
 
 ### Semantic interoperability
+Issuers and Relying Parties should not need to have strong agreements in place, or build expensive integrations. Sovrin [Schemas](themis/schema.md) are published on the Sovrin ledger by Sovrin users. Anyone can publish a schema.
 
-**TODO: introduce these concepts**
-* Public Registry for Schema
-* The Sovrin Type System
+Because they are public, others can see what kinds of attributes are being issued in credentials. Relying parties can adjust to those schemas, or suggest improvements to the Issuers.
+ 
+Issuers can see what other issuers in their ecosystem are publishing and what relying parties are accepting. They can adjust to make it easier for relying parties to accept proofs of their credentials.
+
+We believe there will be a natural and organic convergence around the most useful schemas.
+
+<!--TODO: formalize the Sovrin type system.-->
+
+<!--TODO: 
+
 * Proof Request Proposal
   * [Concept: Schema Elements](https://docs.google.com/document/d/1VT8myB5XcCJIrIU2xEE3Vgxpfa47aFswh1qDCFCBtIg)
   * [Sovrin.org/schema](https://drive.google.com/open?id=130GRcmmLwDgCY9bgf9bYHarymkDLXO-R)
 
+-->
+
 <!--TODO: content needed: Must work for individuals and institutions alike.-->
 
 <!--TODO: content needed: Using Sovrin as the Public Registry and the Public Ledger.-->
+
+<!--TODO: directory of concepts mentioned above
 
 ## Key components of the Sovrin Protocol include:
 
 * [Janus](janus/README.md) (a protocol for secure and private communication)
 * [Themis](themis/README.md) (a subprotocol for issuing digital credentials and proving things with them in a privacy-preserving way)
 * [Hermes](hermes/README.md) (a subprotocol for exchanging economic value)
+
+-->
+
