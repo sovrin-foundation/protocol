@@ -83,37 +83,37 @@ This is a public record, but no information in this public record is ever shared
 
 4. Claim Presenter sends disclosed claim attributes and other proofs (in zero-knowledge) and a zero-knowledge proof that
 
-    4.1. ![image alt text](aap_0.png)
+    4.1. <img src="https://latex.codecogs.com/gif.latex?K&space;\leftarrow&space;\mathrm{Comm}(S,&space;r_0)" title="K \leftarrow \mathrm{Comm}(S, r_0)" />
 
-    4.2. ![image alt text](aap_1.png)
+    4.2. <img src="https://latex.codecogs.com/gif.latex?C_1&space;\leftarrow&space;\mathrm{Comm}(K,&space;I)" title="C_1 \leftarrow \mathrm{Comm}(K, I)" />
 
-    4.3. ![image alt text](aap_2.png)
+    4.3. <img src="https://latex.codecogs.com/gif.latex?C_2&space;\leftarrow&space;\mathrm{Comm}(S,&space;r_1)" title="C_2 \leftarrow \mathrm{Comm}(S, r_1)" />
 
-    4.4. ![image alt text](aap_3.png)
+    4.4. <img src="https://latex.codecogs.com/gif.latex?C_3&space;\leftarrow&space;\mathrm{Comm}(K,&space;r_2)" title="C_3 \leftarrow \mathrm{Comm}(K, r_2)" />
 
-    4.5. ![image alt text](aap_4.png)
+    4.5. <img src="https://latex.codecogs.com/gif.latex?C_4&space;\leftarrow&space;\mathrm{Comm}(C_1,&space;r_4)" title="C_4 \leftarrow \mathrm{Comm}(C_1, r_4)" />
 
-    4.6. $\mathcal{A}$ is the accumulator that contains $C_1$. This is shown by the next 4 statements (4.6.1 to 4.6.4)
+    4.6. <img src="https://latex.codecogs.com/gif.latex?\mathcal{A}" title="\mathcal{A}" /> is the accumulator that contains <img src="https://latex.codecogs.com/gif.latex?C_1%0" title="C_1%0" />. This is shown by the next 4 statements (4.6.1 to 4.6.4)
 
-    4.6.1. ![alt text](https://latex.codecogs.com/png.latex?%5Cinline%20%5Csmall%20%5Cmathcal%7BA%7D%5Bu%2CN%5D%28b_1%2Cb_2%2C%5Cldots%2Cb_n%29) is defined for prime <img src="https://latex.codecogs.com/png.latex?\inline&space;\small&space;b_i\in[B;B^2-1]" title="\small b_i\in[B;B^2-1]" />
+    4.6.1. <img src="https://latex.codecogs.com/gif.latex?\mathcal{A}[u,N](b_1,b_2,\ldots,b_n)" title="\mathcal{A}[u,N](b_1,b_2,\ldots,b_n)" /> is defined for prime <img src="https://latex.codecogs.com/png.latex?\inline&space;\small&space;b_i\in[B;B^2-1]" title="\small b_i\in[B;B^2-1]" />
 
-    4.6.2. ![image alt text](aap_9.png)
+    4.6.2. <img src="https://latex.codecogs.com/gif.latex?\mathcal{A}&space;\leftarrow&space;u^{b_1&space;b_2\cdots&space;b_n}\bmod{N}" title="\mathcal{A} \leftarrow u^{b_1 b_2\cdots b_n}\bmod{N}" /> 
 
-    4.6.3. We say that ![image alt text](aap_10.png) for ![image alt text](aap_11.png).
+    4.6.3. We say that <img src="https://latex.codecogs.com/gif.latex?b_i\in&space;\mathcal{A}" title="b_i\in \mathcal{A}" /> for <img src="https://latex.codecogs.com/gif.latex?b_1,b_2,\ldots,b_n" title="b_1,b_2,\ldots,b_n" />.
 
-    4.6.4. It must hold that ![image alt text](aap_12.png)
+    4.6.4. It must hold that <img src="https://latex.codecogs.com/gif.latex?B^2-1&space;<q/2" title="B^2-1 <q/2" />
 
-    4.7. ![image alt text](aap_13.png)
+    4.7. <img src="https://latex.codecogs.com/gif.latex?\mathrm{wit}&space;\leftarrow&space;\mathcal{A}^{-C_1}\bmod{N}" title="\mathrm{wit} \leftarrow \mathcal{A}^{-C_1}\bmod{N}" />
 
-    4.8. Our intention is to prove the hierarchy of commitments: ![image alt text](aap_14.png) is a commitment to K, which is itself a commitment to S. We want to prove the knowledge of S by putting it in another commitment ![image alt text](aap_15.png).
+    4.8. Our intention is to prove the hierarchy of commitments: <img src="https://latex.codecogs.com/gif.latex?C_3" title="C_3" /> is a commitment to K, which is itself a commitment to S. We want to prove the knowledge of S by putting it in another commitment <img src="https://latex.codecogs.com/gif.latex?C_2" title="C_2" />.
 
     4.9. All values not enclosed in ()’s are assumed to be known to the verifier. 
 
-    4.10. We want to prove  ![image alt text](zpok.png)
+    4.10. We want to prove <img src="https://latex.codecogs.com/gif.latex?ZKPoK\{(S,&space;K,&space;C_1,&space;I,&space;r_0):&space;I&space;\in&space;\mathrm{Claim}&space;\wedge&space;C_1&space;\in&space;\mathcal{A}&space;\wedge&space;K&space;=&space;\mathrm{Comm}(S,&space;r_0)&space;\}" title="ZKPoK\{(S, K, C_1, I, r_0): I \in \mathrm{Claim} \wedge C_1 \in \mathcal{A} \wedge K = \mathrm{Comm}(S, r_0) \}" />
 
     4.11. For this we need additional commitments C2,C3,C4.
 
-    4.12. ![image alt text](proof.png)
+    4.12. <img src="https://latex.codecogs.com/gif.latex?\inline&space;\small&space;\pi&space;\leftarrow&space;\mathrm{DComm}_S(C_2,&space;C_3)&space;\wedge&space;\mathrm{DComm}_K(C_3,&space;C_4)&space;\wedge&space;CommAcc_{C_1}(C_4,&space;\mathcal{A})&space;\wedge&space;I&space;\in&space;Claim" title="\small \pi \leftarrow \mathrm{DComm}_S(C_2, C_3) \wedge \mathrm{DComm}_K(C_3, C_4) \wedge CommAcc_{C_1}(C_4, \mathcal{A}) \wedge I \in Claim" />
 
     4.13. The proof can be prepared as concatenation of
 
@@ -129,27 +129,27 @@ This is a public record, but no information in this public record is ever shared
 
     4.14. Claim index i has not been revoked yet.
 
-5. Claim Presenter generates ![image alt text](aap_18.png)
+5. Claim Presenter generates <img src="https://latex.codecogs.com/gif.latex?s',&space;k',&space;i'%0" title="s', k', i'%0" />
 
 6. Claim Presenter computes
 
-    6.1. ![image alt text](aap_19.png)
+    6.1. <img src="https://latex.codecogs.com/gif.latex?v&space;\leftarrow&space;\mathrm{Comm}(s',&space;k',&space;i')" title="v \leftarrow \mathrm{Comm}(s', k', i')" />
 
-    6.2. ![image alt text](aap_20.png)
+    6.2. <img src="https://latex.codecogs.com/gif.latex?c&space;\leftarrow&space;H(C_2&space;||&space;C_3&space;||&space;C_4&space;||&space;v&space;)" title="c \leftarrow H(C_2 || C_3 || C_4 || v )" />
 
-    6.3. ![image alt text](aap_21.png)
+    6.3. <img src="https://latex.codecogs.com/gif.latex?\widetilde{s}&space;\leftarrow&space;s'&space;-&space;Sc" title="\widetilde{s} \leftarrow s' - Sc" />
 
-    6.4. ![image alt text](aap_22.png)
+    6.4. <img src="https://latex.codecogs.com/gif.latex?\widetilde{k}&space;\leftarrow&space;k'&space;-&space;Kc" title="\widetilde{k} \leftarrow k' - Kc" />
 
-    6.5. ![image alt text](aap_23.png)
+    6.5. <img src="https://latex.codecogs.com/gif.latex?\widetilde{i}&space;\leftarrow&space;i'&space;-&space;Ic" title="\widetilde{i} \leftarrow i' - Ic" />
 
-7. Claim Presenter sends ![image alt text](aap_24.png) to Verifier
+7. Claim Presenter sends <img src="https://latex.codecogs.com/gif.latex?\{C_2,&space;C_3,&space;C_4,&space;\widetilde{s},&space;\widetilde{k},&space;\widetilde{i},&space;c\}%0" title="\{C_2, C_3, C_4, \widetilde{s}, \widetilde{k}, \widetilde{i}, c\}%0" /> to Verifier
 
 8. Verifier validates the proof
 
-    8.1. Computes ![image alt text](aap_25.png) and ![image alt text](aap_26.png)
+    8.1. Computes <img src="https://latex.codecogs.com/gif.latex?\overline{v}&space;\leftarrow&space;\mathrm{Comm}(\widetilde{s},&space;\widetilde{k},&space;\widetilde{i})&space;{C_2}^c&space;{C_3}^c&space;{C_4}^c" title="\overline{v} \leftarrow \mathrm{Comm}(\widetilde{s}, \widetilde{k}, \widetilde{i}) {C_2}^c {C_3}^c {C_4}^c" /> and <img src="https://latex.codecogs.com/gif.latex?\overline{c}&space;\leftarrow&space;H(C_2&space;||&space;C_3&space;||&space;C_4&space;||&space;\overline{v})" title="\overline{c} \leftarrow H(C_2 || C_3 || C_4 || \overline{v})" />
 
-    8.2. Verifies that ![image alt text](aap_27.png)
+    8.2. Verifies that <img src="https://latex.codecogs.com/gif.latex?\overline{c}&space;=&space;c" title="\overline{c} = c" />
 
 "I am a valid claim presenter"<=
 
