@@ -128,7 +128,6 @@ Alice also needs a way to bootstrap trust and ensure she's still interacting wit
 
 ### Privacy-respecting issuing and proving
 
-**TODO: introduce these concepts**
 Alice needs a way to receive credentials from issuers. She also needs a way to prove that she holds a credential from a certain issuer with certain attributes or characteristics. She needs to do this in a way that doesn't share any more information than she intends. And her sharing of attributes should not result in disclosing correlation handles. [Themis](themis/README.md) is the working name for a protocol that accomplishes these requirements.
 
 The Sovrin network acts as a public registry for Credential Definitions, Schema definitions, and Issuer public keys. Issuer public keys are used to verify proofs from credentials issued.
