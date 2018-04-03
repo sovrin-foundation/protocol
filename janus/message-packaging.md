@@ -13,7 +13,7 @@ confidentiality, and integrity. It offers three crypto primitives:
 <blockquote>Encrypt only for recipient. Sender is anonymous. Parties can be unknown
 to each other. The message is tamper evident.</blockquote>
 
-```auth_crypt(msg, recipient_verkey, sender_verkey, sender_sigkey)```
+```auth_crypt(msg, recipient_verkey, sender_sigkey)```
 <blockquote>Encrypt only for recipient. Recipient learns sender’s verkey but can’t
 prove to anybody else who the sender is (making the message repudiable).
 Parties can be unknown to each other. The message is tamper evident.</blockquote>
