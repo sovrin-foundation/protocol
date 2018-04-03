@@ -4,9 +4,16 @@
 
 **Authors:** Drummond Reed, Jason Law, Daniel Hardman, Mike Lodder
 
-**Contributors:** Devin Fisher, Lovesh Harchandani, Dmitry Khovratovich, Corin Kochenower
+**Contributors:** Christopher Allen, Devin Fisher, Lovesh Harchandani, Dmitry Khovratovich, Corin Kochenower
 
-STATUS: This is the third draft of a document developed by Evernym Inc. under [a contract with the U.S. Department of Homeland Security Science & Technology Directorate](https://www.dhs.gov/science-and-technology/news/2017/07/20/news-release-dhs-st-awards-749k-evernym-decentralized-key). This draft is being released on 3 April 2018 to begin an open public review and comment process in preparation for DKMS to be submitted to a standards development organization such as [OASIS](http://www.oasis-open.org/) for formal standardization.
+**Advisors**: Stephen Wilson
+
+**STATUS:** This design and architecture for a decentralized key management system (DKMS) has been developed by Evernym Inc. under [a contract with the U.S. Department of Homeland Security Science & Technology Directorate](https://www.dhs.gov/science-and-technology/news/2017/07/20/news-release-dhs-st-awards-749k-evernym-decentralized-key). This third draft is being released on 3 April 2018 to begin an open public review and comment process in preparation for DKMS to be submitted to a standards development organization such as [OASIS](http://www.oasis-open.org/) for formal standardization.
+
+**Acknowledgements:** Work on DKMS Design and Architecture has been funded in part by a Small Business Innovation Research (SBIR) grant from the **U.S. Department of Homeland Security Science and Technology Directorate**. The content of this specification does not necessarily reflect the position or the policy of the U.S. Government and no official endorsement should be inferred.
+
+**The Internet Security Research Lab at Brigham Young University** gathered feedback on decentralized key management and recovery from user surveys and UX usability studies. They also provided feedback on earlier drafts of this document. Contributions were made by Kent Seamons (faculty), Daniel Zappala (faculty), Ken Reese, Brad Spendlove, Trevor Smith, and Luke Dickinson.
+
 
 **Table of Contents**
 
