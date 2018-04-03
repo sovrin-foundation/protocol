@@ -26,13 +26,14 @@ This is a public record, but no information in this public record is ever shared
 
 1. Trusted setup
 
-    1.1. There is a global accumulator needed to store commitments to the keys with PROVE authorizations. From this accumulator, a key can prove in zero knowledge that it is authorized to prove. This requires a trusted setup.
+    1.1. There is a global accumulator needed to store commitments to the keys with PROVE authorizations. 
+    From this accumulator, a key can prove in zero knowledge that it is authorized to prove. This requires a trusted setup.
 
 #### ID Owner's First Agent
 
-1. Agent creates policy management keypair (Appk, Apsk) and a secret S
+1. Agent creates policy management keypair (A<sub>p</sub><sup>pk</sup>, A<sub>p</sub><sup>sk</sup>) and a secret S
 
-2. Agent creates policy address **_I_** on the ledger and adds Appk  as a key and ensures that key has all authorizations (111).
+2. Agent creates policy address **_I_** on the ledger and adds A<sub>p</sub><sup>pk</sup>  as a key and ensures that key has all authorizations (111).
 
 3. Agent adds K = Comm(S, r0) to the PROVE authorization.
 
@@ -44,11 +45,11 @@ This is a public record, but no information in this public record is ever shared
 
 1. One authorized agent (or multiple agents in a multisig scenario) provisions a new agent. 
 
-2. The new Agent creates policy management keypair (Appk, Apsk) and S. 
+2. The new Agent creates policy management keypair (A<sub>p</sub><sup>pk</sup>, A<sub>p</sub><sup>sk</sup>) and S. 
 
-3. New agent sends Appk and K= Comm(S, r0) back to the provisioning agent(s).
+3. New agent sends A<sub>p</sub><sup>pk</sup> and K= Comm(S, r0) back to the provisioning agent(s).
 
-4. Provisioning agent(s) adds authorization for Appk and K to the policy.
+4. Provisioning agent(s) adds authorization for A<sub>p</sub><sup>pk</sup> and K to the policy.
 
 #### Lifecycle
 
@@ -60,17 +61,17 @@ This is a public record, but no information in this public record is ever shared
 
 1. Claim Receiver sends a Claim Request, which contains a blinded link secret and blinded address **_I_**.
 
-2. Issuer selects an index i for the claim from his non-revocation accumulator AI.
+2. Issuer selects an index i for the claim from his non-revocation accumulator A<sub>I</sub>.
 
-3. Issuer generates claim C using AI.
+3. Issuer generates claim C using A<sub>I</sub>.
 
-4. Issuer sends C and AI to Claim Receiver.
+4. Issuer sends C and A<sub>I</sub> to Claim Receiver.
 
-5. Issuer adds i to his non-revocation accumulator AI.
+5. Issuer adds i to his non-revocation accumulator A<sub>I</sub>.
 
-6. Claim Receiver provides C and AI to Identity Owner.
+6. Claim Receiver provides C and A<sub>I</sub> to Identity Owner.
 
-7. Identity Owner gives C, and AI to Proof Presenter. 
+7. Identity Owner gives C, and A<sub>I</sub> to Proof Presenter. 
 
 #### Proof Presentation
 
