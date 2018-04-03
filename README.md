@@ -31,7 +31,7 @@ Alice should be able to establish trust with another party with minimal reliance
 
 Alice's digital interactions should be essentially free, regardless of her circumstances and regardless of where she lives in the world. The cost of interactions should not be an inhibitor to interaction. Alice should not feel compelled to give up privacy in exchange for the ability to interact digitally, or compelled to exchange her personal information for services.
 
-For a more detailed discussion on these principles, see [Self-Sovereign Privacy By Design - V1](https://docs.google.com/document/d/1fKAw9p8eJI-7hAZuQ8orMDGYnq7WWpE6QYs1YOTWgjA).
+For a more detailed discussion on these principles, see [Self-Sovereign Privacy By Design - V1](self_sovereign_privacy_by_design_v1.md).
 
 ## Three Dimensions of Self Sovereign Identity
 
