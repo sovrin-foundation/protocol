@@ -202,7 +202,7 @@ This is a public record, but no information in this public record is ever shared
 
 TO ADD: agents can be linkable within the same relationship (DID-DID), but not across relationships.
 
-UPDATE: [Simplification](#heading=h.uprg8ca5r5kr) with scheme
+UPDATE: [Simplification](agent_authorization_policy.md#4.%20Simplification) with scheme
 
 ### 0. Introduction
 
@@ -233,7 +233,7 @@ This protocol supports:
     <td>Claim Issuer</td>
   </tr>
   <tr>
-    <td>Agent key aag</td>
+    <td>Agent key a<sub>ag</sub></td>
     <td></td>
     <td></td>
     <td></td>
@@ -244,7 +244,7 @@ This protocol supports:
     <td></td>
   </tr>
   <tr>
-    <td>Agent revocation key aar</td>
+    <td>Agent revocation key a<sub>ar</sub></td>
     <td></td>
     <td></td>
     <td></td>
@@ -255,7 +255,7 @@ This protocol supports:
     <td></td>
   </tr>
   <tr>
-    <td>Agent ID Vag</td>
+    <td>Agent ID V<sub>ag</sub></td>
     <td></td>
     <td>KM</td>
     <td></td>
@@ -266,7 +266,7 @@ This protocol supports:
     <td></td>
   </tr>
   <tr>
-    <td>Agent Revoker ID Var</td>
+    <td>Agent Revoker ID V<sub>ar</sub></td>
     <td></td>
     <td>K</td>
     <td></td>
@@ -277,7 +277,7 @@ This protocol supports:
     <td></td>
   </tr>
   <tr>
-    <td>Provisioning key apr</td>
+    <td>Provisioning key a<sub>pr</sub></td>
     <td></td>
     <td>O</td>
     <td></td>
@@ -288,7 +288,7 @@ This protocol supports:
     <td></td>
   </tr>
   <tr>
-    <td>Provisioning ID Vpr</td>
+    <td>Provisioning ID V<sub>pr</sub></td>
     <td></td>
     <td>O</td>
     <td>K</td>
@@ -299,7 +299,7 @@ This protocol supports:
     <td></td>
   </tr>
   <tr>
-    <td>Agent certificate Sa</td>
+    <td>Agent certificate S<sub>a</sub></td>
     <td></td>
     <td>KM</td>
     <td></td>
@@ -310,7 +310,7 @@ This protocol supports:
     <td></td>
   </tr>
   <tr>
-    <td>Link secret als</td>
+    <td>Link secret a<sub>ls</sub></td>
     <td>O</td>
     <td></td>
     <td>K</td>
@@ -321,7 +321,7 @@ This protocol supports:
     <td></td>
   </tr>
   <tr>
-    <td>Claim revocation key acr</td>
+    <td>Claim revocation key a<sub>cr</sub></td>
     <td></td>
     <td></td>
     <td></td>
@@ -332,7 +332,7 @@ This protocol supports:
     <td></td>
   </tr>
   <tr>
-    <td>Claim revocation ID Vcr</td>
+    <td>Claim revocation ID V<sub>cr</sub></td>
     <td></td>
     <td></td>
     <td>K</td>
@@ -343,7 +343,7 @@ This protocol supports:
     <td></td>
   </tr>
   <tr>
-    <td>Owner defined attributes AO</td>
+    <td>Owner defined attributes A<sub>O</sub></td>
     <td>O</td>
     <td></td>
     <td>K</td>
@@ -354,7 +354,7 @@ This protocol supports:
     <td></td>
   </tr>
   <tr>
-    <td>Issuer defined attributes AI</td>
+    <td>Issuer defined attributes A<sub>I</sub></td>
     <td></td>
     <td></td>
     <td>K</td>
@@ -377,17 +377,17 @@ KM: knows multiple values
 
 ### 2. Construction
 
-* (aag, Vag) - private-public signature keypair, unique for agent.
+* (a<sub>ag</sub>, V<sub>ag</sub>) - private-public signature keypair, unique for agent.
 
-* (aar,Var) - private-public signature keypair;
+* (a<sub>ar</sub>,V<sub>ar</sub>) - private-public signature keypair;
 
-* (apr,Vpr) - private-public signature keypair;
+* (a<sub>pr</sub>,V<sub>pr</sub>) - private-public signature keypair;
 
-* Sa = Siga_pr(Var,Vag)
+* S<sub>a</sub> = Sig<sub>a_pr</sub>(V<sub>ar</sub>,V<sub>ag</sub>)
 
-* (acr,Vcr) - private-public signature keypair;
+* (a<sub>cr</sub>,V<sub>cr</sub>) - private-public signature keypair;
 
-* Claim attributes signed by Issuer: Vpr,als, identity attributes
+* Claim attributes signed by Issuer: V<sub>pr</sub>,a<sub>ls</sub>, identity attributes
 
 ### 3. Use cases
 
@@ -397,59 +397,59 @@ KM: knows multiple values
 
 1. Identity Owner generates link secret als as a random value
 
-2. Identity Owner defines owner-defined attributes AO;
+2. Identity Owner defines owner-defined attributes A<sub>O</sub>;
 
 3. Identity Owner selects an agent accumulator: his own one or a global one.
 
 ##### 3.1.2 Provisioner
 
-1. Provisioner generates provisioning key apr;
+1. Provisioner generates provisioning key a<sub>pr</sub>;
 
-2. Provisioner computes provisioning ID Vpr;
+2. Provisioner computes provisioning ID V<sub>pr</sub>;
 
-3. Provisioner tells Vpr to Identity Owner.
+3. Provisioner tells V<sub>pr</sub> to Identity Owner.
 
 ##### 3.1.3 Claim Receiver
 
-1. Claim Receiver gets Vpr from Identity Owner.
+1. Claim Receiver gets V<sub>pr</sub> from Identity Owner.
 
 ##### 3.1.4 Agent Revoker
 
-1. Agent Revoker generates agent revocation key aar and agent revocation ID Var.
+1. Agent Revoker generates agent revocation key aar and agent revocation ID V<sub>ar</sub>.
 
-2. Agent Revoker submits Var to Provisioner.
+2. Agent Revoker submits V<sub>ar</sub> to Provisioner.
 
 ##### 3.1.5 Claim Presenter
 
-1. Claim Presenter generates agent key aag and agent ID Vag.
+1. Claim Presenter generates agent key aag and agent ID V<sub>ag</sub>.
 
-2. Claim Presenter submits Vag to Provisioner.
+2. Claim Presenter submits V<sub>ag</sub> to Provisioner.
 
-3. Provisioner creates agent certificate Sa for Claim Presenter.
+3. Provisioner creates agent certificate S<sub>a</sub> for Claim Presenter.
 
-4. Provisioner adds Sa  to the agent accumulator and sends Sa to Agent Revoker.
+4. Provisioner adds S<sub>a</sub> to the agent accumulator and sends S<sub>a</sub> to Agent Revoker.
 
-5. Claim Presenter stores Sa.
+5. Claim Presenter stores S<sub>a</sub>.
 
 #### 3.2 Claim Lifecycle
 
 ##### 3.2.1 Issuance
 
-8. Claim Receiver gets AO, als from Identity Owner;
+8. Claim Receiver gets A<sub>O</sub>, als from Identity Owner;
 
-9. Claim Receiver contacts the Issuer  and submits AO, als, and Vpr in the blinded form.
+9. Claim Receiver contacts the Issuer and submits A<sub>O</sub>, a<sub>ls</sub>, and V<sub>pr</sub> in the blinded form.
 
-10. Issuer selects an index i for the claim and adds it to AI.
+10. Issuer selects an index i for the claim and adds it to A<sub>I</sub>.
 
-11. Issuer generates claim C using AI.
+11. Issuer generates claim C using A<sub>I</sub>.
 
-12. Issuer sends C and AI to Claim Receiver.
+12. Issuer sends C and A<sub>I</sub> to Claim Receiver.
 
 13. Issues adds i to his non-revocation accumulator.
 
-14. Claim Receiver provides C and AI to Identity Owner.
+14. Claim Receiver provides C and A<sub>I</sub> to Identity Owner.
 
-15. Identity Owner gives C, AO, als,AI, and Vpr to Claim Presenter.
+15. Identity Owner gives C, A<sub>O</sub>, a<sub>ls</sub>,A<sub>I</sub>, and V<sub>pr</sub> to Claim Presenter.
 
 ##### 3.2.2 Presentation
 
@@ -463,9 +463,9 @@ KM: knows multiple values
 
     23. He knows Vpr contained in the claim;
 
-    24. He knows (Var,Vag),Sa, where Sa is a signature of (Var,Vag) on Vpr;
+    24. He knows (V<sub>ar</sub>,V<sub>ag</sub>),S<sub>a</sub>, where S<sub>a</sub> is a signature of (V<sub>ar</sub>,V<sub>ag</sub>) on V<sub>pr</sub>;
 
-    25. He knows private key corresponding to Vag;
+    25. He knows private key corresponding to V<sub>ag</sub>;
 
     26. Vag has not been revoked yet.
 
@@ -481,13 +481,13 @@ KM: knows multiple values
 
 #### 3.3 Agent Revocation
 
-1. Agent Revoker selects the agent he revokes and retrieves his agent ID Vag and certificate Sa.
+1. Agent Revoker selects the agent he revokes and retrieves his agent ID Vag and certificate S<sub>a</sub>.
 
-2. Agent Revoker approaches the agent accumulator and provides Sa and a zero knowledge proof that
+2. Agent Revoker approaches the agent accumulator and provides S<sub>a</sub> and a zero knowledge proof that
 
-    1. Sa  is a signature on some key on some (Var,Vag).
+    1. S<sub>a</sub> is a signature on some key on some (V<sub>ar</sub>,V<sub>ag</sub>).
 
-    2. He knows the private key from Var.
+    2. He knows the private key from V<sub>ar</sub>.
 
 #### 3.4 Agent Revoker Rotation
 
