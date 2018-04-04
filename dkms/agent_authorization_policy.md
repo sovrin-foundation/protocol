@@ -53,7 +53,7 @@ This is a public record, but no information in this public record is ever shared
 
 #### Lifecycle
 
- As agents are granted PROVE authorization in address **_I_****_, _**the ledger adds or removes the commitments to the accumulator. Agents can be added to be provisioners and revokers by admin agents. The provision or revoke policy can be changed to require more than one agent to agree on a change like 2 of 3. The ledger will enforce these rules by requiring multiple signatures complete the transaction.
+ As agents are granted PROVE authorization in address **_I_**, the ledger adds or removes the commitments to the accumulator. Agents can be added to be provisioners and revokers by admin agents. The provision or revoke policy can be changed to require more than one agent to agree on a change like 2 of 3. The ledger will enforce these rules by requiring multiple signatures complete the transaction.
 
 ### Claim Lifecycle
 
