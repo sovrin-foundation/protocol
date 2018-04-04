@@ -35,7 +35,7 @@ This is a public record, but no information in this public record is ever shared
 
 2. Agent creates policy address **_I_** on the ledger and adds A<sub>p</sub><sup>pk</sup>  as a key and ensures that key has all authorizations (111).
 
-3. Agent adds K = Comm(S, r0) to the PROVE authorization.
+3. Agent adds K = Comm(S, r<sub>0</sub>) to the PROVE authorization.
 
     1. What kind of accumulator to use?
 
@@ -169,13 +169,13 @@ This is a public record, but no information in this public record is ever shared
 
 <="I know K and S s.t. K is a commitment to S, and (K,I) belong to the key-policy accumulator in the claim, and I is the policy in the claim”<=
 
-<="Here is C1 which is a commitment to K which is a commitment to S, s.t. (K,I) belong to the key-policy accumulator, and I is the policy in the claim”
+<="Here is C<sub>1</sub> which is a commitment to K which is a commitment to S, s.t. (K,I) belong to the key-policy accumulator, and I is the policy in the claim”
 
 ### Potential attacks
 
-1. Inspecting the ledger reveals all of the agents that are associated with an entity. Hence even if Appk is revealed for one agent, agent is correlated to the entity, all agents of that entity are correlated.
+1. Inspecting the ledger reveals all of the agents that are associated with an entity. Hence even if A<sub>p</sub><sup>pk</sup> is revealed for one agent, agent is correlated to the entity, all agents of that entity are correlated.
 
-    1. The security is provided by the fact that Appk cannot be derived from or correlated to the proof.
+    1. The security is provided by the fact that A<sub>p</sub><sup>pk</sup> cannot be derived from or correlated to the proof.
 
 2. An agency that is malicious or compromised (all storage is encrypted). Kinds of compromises:
 
@@ -498,7 +498,7 @@ KM: knows multiple values
 
 3. Replace the old agent certificates with the old ones.
 
-4. Revoke the old agent certificates/
+4. Revoke the old agent certificates
 
 ### 4. Simplification
 
