@@ -347,11 +347,11 @@ DKMS key management must encompass the keys needed by different DID methods as w
 
 2. **DID keys:** (one per relationship per agent) Ed25519 keys used for non-repudiation signing and verification for DIDs. Each agent manages their own set of DID keys.
 
-3. **Agent policy keys: **(one per agent) Ed25519 key pairs used with the agent policy registry. See section 7.2. The public key is stored with the agent policy registry. Transactions made to the policy registry are signed by the private key. The keys are used in zero-knowledge during proof presentation to show the agent is authorized by the identity owner to present the proof. Unauthorized agents MUST NOT be trusted by verifiers.
+3. **Agent policy keys:** (one per agent) Ed25519 key pairs used with the agent policy registry. See section 7.2. The public key is stored with the agent policy registry. Transactions made to the policy registry are signed by the private key. The keys are used in zero-knowledge during proof presentation to show the agent is authorized by the identity owner to present the proof. Unauthorized agents MUST NOT be trusted by verifiers.
 
-4. **Agent recovery keys: **(a fraction per trustee) Ed25519 keys. A public key is stored by the agent and used for encrypting backups. The private key is saved to an offline medium or split into shares and given to trustees. To encrypt a backup, an ephemeral X25519 key pair is created where the ephemeral private key is used to perform a Diffie-Hellman agreement with the public recovery key to create a wallet encryption key. The private ephemeral key is forgotten and the ephemeral public key is stored with the encrypted wallet backup. To decrypt a backup, the private recovery key performs a Diffie-Hellman agreement with the ephemeral public key to create the same wallet encryption key.
+4. **Agent recovery keys:** (a fraction per trustee) Ed25519 keys. A public key is stored by the agent and used for encrypting backups. The private key is saved to an offline medium or split into shares and given to trustees. To encrypt a backup, an ephemeral X25519 key pair is created where the ephemeral private key is used to perform a Diffie-Hellman agreement with the public recovery key to create a wallet encryption key. The private ephemeral key is forgotten and the ephemeral public key is stored with the encrypted wallet backup. To decrypt a backup, the private recovery key performs a Diffie-Hellman agreement with the ephemeral public key to create the same wallet encryption key.
 
-5. **Wallet encryption keys: **(one per wallet segment) 256 bit symmetric keys for encrypting wallets and backups.
+5. **Wallet encryption keys:** (one per wallet segment) 256 bit symmetric keys for encrypting wallets and backups.
 
 ## 5.2. Key Generation
 
@@ -461,11 +461,11 @@ To protect from either, there are techniques available: **rotation,** **revocati
 
 Keys SHOULD be changed periodically to limit tampering. When keys are rotated, the previous keys are revoked and new ones are added. It is RECOMMENDED for keys to expire for the following reasons:
 
-* **Technology advances. **Encryption (and encryption breaking) technologies are constantly advancing.  Expiring keys helps enforce migrating to better technologies.
+* **Technology advances.** Encryption (and encryption breaking) technologies are constantly advancing.  Expiring keys helps enforce migrating to better technologies.
 
-* **Mitigation of compromises. **Keys that change often prevent attackers from using them even if they are able to steal them. Expiring keys spreads this immunity.
+* **Mitigation of compromises.** Keys that change often prevent attackers from using them even if they are able to steal them. Expiring keys spreads this immunity.
 
-* **Changing needs. **Key owners may only use certain secrets while performing a specific task. The task may end after a certain date and all secrets tied to that task should also be terminated. Expiring keys helps enforce this this policy.
+* **Changing needs.** Key owners may only use certain secrets while performing a specific task. The task may end after a certain date and all secrets tied to that task should also be terminated. Expiring keys helps enforce this this policy.
 
 ## 8.2. Key Revocation
 
@@ -785,9 +785,9 @@ Now the trustee’s edge agent is ready to return the recovery data share to Ali
 
 # 11. Open Issues
 
-1. **DID specification. **The DKMS specification has major dependencies on the DID specification which is still in progress at the W3C Credentials Community Group. Although we are not concerned that the resulting specification will not support DKMS requirements, we cannot be specific about certain details of how DKMS will interact with DIDs until that specification is finalized. 
+1. **DID specification.** The DKMS specification has major dependencies on the DID specification which is still in progress at the W3C Credentials Community Group. Although we are not concerned that the resulting specification will not support DKMS requirements, we cannot be specific about certain details of how DKMS will interact with DIDs until that specification is finalized. 
 
-2. **DID methods. **Different DID methods may support different levels of assurance about DKMS keys. Thus we may need to address more about the role of ledgers as a decentralized source of truth and the requirements of the ledger for the hosting of DIDs and DID documents.
+2. **DID methods.** Different DID methods may support different levels of assurance about DKMS keys. Thus we may need to address more about the role of ledgers as a decentralized source of truth and the requirements of the ledger for the hosting of DIDs and DID documents.
 
 3. **DID TLS.** It is an open issue whether this should be defined as a separate but adjacent specification.
 
@@ -797,7 +797,7 @@ Now the trustee’s edge agent is ready to return the recovery data share to Ali
 
 6. **Secure elements, TPMs, and TEEs.** Since DKMS is highly dependent on secure elements, we need to decide how a device can communicate or verify its own security capabilities or its ability to attest to authentication factors for the identity owner.
 
-7. **Biometrics. **While they can play a special role in the DKMS architecture because of their ability to intrinsically identify a unique individual, this same quality means a privacy breach of biometric attributes could be disastrous because they may be unrecoverable. So determining the role of biometrics and biometric service providers is a major open question.
+7. **Biometrics.** While they can play a special role in the DKMS architecture because of their ability to intrinsically identify a unique individual, this same quality means a privacy breach of biometric attributes could be disastrous because they may be unrecoverable. So determining the role of biometrics and biometric service providers is a major open question.
 
 8. **Spam and DDOS attacks.** There are several areas where this must be considered, particularly on connection requests (section 10.7).
 
