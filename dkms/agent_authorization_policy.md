@@ -83,7 +83,7 @@ This is a public record, but no information in this public record is ever shared
 
 4. Claim Presenter sends disclosed claim attributes and other proofs (in zero-knowledge) and a zero-knowledge proof that
 
-    4.1. <img src="https://latex.codecogs.com/gif.latex?K&space;\leftarrow&space;\mathrm{Comm}(S,&space;r_0)" title="K \leftarrow \mathrm{Comm}(S, r_0)" />
+    4.1. <img src="https://latex.codecogs.com/gif.latex?K&space;\leftarrow&space;\mathrm{Comm}(S,&space;r_0)" />
 
     4.2. <img src="https://latex.codecogs.com/gif.latex?C_1&space;\leftarrow&space;\mathrm{Comm}(K,&space;I)" title="C_1 \leftarrow \mathrm{Comm}(K, I)" />
 
