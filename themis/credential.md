@@ -1,6 +1,8 @@
-# Advanced Sovrin Protocol Concepts
-## Premium Credentials
-Premium Credentials are "locked". Proofs generated from locked credentials are also locked, and these cannot be verified without being unlocked. The Relying Party can only unlock such a proof with the help of the Issuer. 
+# Credential
+**TODO: Define**
+
+## Locked Credentials
+Proofs generated from locked credentials are also locked, and these cannot be verified without being unlocked. The Relying Party can only unlock such a proof with the help of the Issuer. 
 
 The privacy requirements are still in effect, in that the Relying Party and only knows what the ID Owner shares, and the Issuer knows nothing about the Proof or Credential except the Credential Pricing Class.
 
