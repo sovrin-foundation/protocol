@@ -1,4 +1,4 @@
-# Proof Format
+# Proof
 
 A proof is a JSON document that derives from one or more credentials. It
 demonstrates in a cryptographic/mathematical way that attributes within
@@ -36,3 +36,6 @@ data is at rest.
 The formats of `proofs` and `aggregated_proof` are documented and governed
 by indy-sdk.
 
+
+## Code reference (some of below might be different from above mentioned structure, the above structure should be considered the correct representation)
+1. [Proof](https://github.com/hyperledger/indy-sdk/blob/ad77c94a1116d2540bc6365cdb4f22ebfc899401/libindy/src/domain/proof.rs#L9)

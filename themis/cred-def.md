@@ -92,5 +92,9 @@ When claims are issued and/or revoked, the revocation registry needs to be updat
 }
 ```
 
-## Code references to ledger objects
+## Code references to ledger objects (some of below might be different from above mentioned structure, the above structure should be considered the correct representation)
 1. [CLAIM_DEF](https://github.com/hyperledger/indy-sdk/blob/778a38d92234080bb77c6dd469a8ff298d9b7154/libindy/src/services/ledger/types.rs#L234)
+2. [Primary public key](https://github.com/hyperledger/indy-crypto/blob/fc078a014a6b72ede838b79696258d3ee56f87d4/libindy-crypto/src/cl/mod.rs#L161)
+3. [Revocation public key](https://github.com/hyperledger/indy-crypto/blob/fc078a014a6b72ede838b79696258d3ee56f87d4/libindy-crypto/src/cl/mod.rs#L202)
+4. [Revocation Registry Definition](https://github.com/hyperledger/indy-crypto/blob/fc078a014a6b72ede838b79696258d3ee56f87d4/libindy-crypto/src/cl/mod.rs#L229)
+5. [Revocation Registry Entry](https://github.com/hyperledger/indy-crypto/blob/fc078a014a6b72ede838b79696258d3ee56f87d4/libindy-crypto/src/cl/mod.rs#L249)

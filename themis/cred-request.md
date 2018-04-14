@@ -23,3 +23,6 @@ to them.
 
 ## Credential Notice
 When an issuer is making a change that affects its credential holders, it should let them know of the change. This could be because that the Issuer is updating its Credentials to a new schema, or rotating its public keys, or some breach was detected and credentials issued between a certain date period need to be reissued, or a particular credential was revoked (e.g, driver privileges suspended due to court order). This is done by sending the credential holder(s) a Credential Notice message.
+
+## Code reference (some of below might be different from above mentioned structure, the above structure should be considered the correct representation)
+1. [Credential Request](https://github.com/hyperledger/indy-sdk/blob/ad77c94a1116d2540bc6365cdb4f22ebfc899401/libindy/src/domain/credential_request.rs#L12)
