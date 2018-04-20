@@ -13,6 +13,7 @@ Example:
 
 https://agency.example.com/msg/
 ## Headers
+<!-- We need a content-type for sovrin messages. Maybe application/sov-msg ??-->
 <span style="color:yellow">TODO: Any thoughts on http headers</span>
 ## Response
 ### Codes
