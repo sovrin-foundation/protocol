@@ -1,9 +1,12 @@
-<!-- Throughout the repo there are at least two types of data: 
-protocol specification (see janus/message-packaging) and 
-philological ideas and principals (see self_sovereign_privacy_by_design_distilled.md).
-Lastly we have something in between (see dkms).
-How do we want to distinguish them (or do we). Should we have a directory that is background
-reading and/or design principles? -->
+<!-- 
+DF: Throughout the repo there are at least two types of data: 
+    protocol specification (see janus/message-packaging) and 
+    philological ideas and principals (see self_sovereign_privacy_by_design_distilled.md).
+    Lastly we have something in between (see dkms).
+    How do we want to distinguish them (or do we). Should we have a directory that is background
+    reading and/or design principles? 
+JL: Yes, I think we should organized them, and cross reference. What do you recommend?
+-->
 
 # The Sovrin Protocol
 
