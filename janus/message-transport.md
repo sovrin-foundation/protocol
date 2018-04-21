@@ -6,23 +6,38 @@ Messaging is transport agnostic. Messaging does not rely on transport for guaran
 Despite the agnostic nature of the messaging protocol, the use of a transport protocol requires agreement on conventions for the use of the said protocol. These conventions will be protocol specific and their scope is only decisions needed to transport the message on the said protocol. Anything related to the meaning, security or routing of the message is expressly out of scope.
 
 # HTTP/HTTPS
-## URL
-The endpoint URL for messages should be a simple endpoint. It should not have route info (ex. DIDs) and should be consistent for all users of the endpoint service.
+## Request
+### URL
+Endpoint URLs for Janus messages should be simple. The URL should not expose any extra information about the message (e.g., the type of message being sent). It should have no route info (e.g., DIDs) and should be consistent for all users of the endpoint service. Message types and destination DIDs are encapsulated in the encrypted messages themselves, so as not to reveal information to proxy agents and routers along the path to the ultimate destination.
 
-Example:
+Example: https://agency.example.com/msg/
 
-https://agency.example.com/msg/
-## Headers
-<!-- We need a content-type for sovrin messages. Maybe application/sov-msg ??-->
-<span style="color:yellow">TODO: Any thoughts on http headers</span>
+### Method
+The method used for Janus messages should be `POST`, and agents with HTTP interfaces that receive a different message are encouraged to return a 405 Method Not Allowed.
+
+Janus does not depend on the transport protocol for confidential communications, therefore an HTTP method can leak details about the message being sent. HTTP is resource-oriented, and Janus is message-oriented. The intent of a Janus message is embedded in the message type.
+
+### Headers
+Accept: message/vnd.janus
+Content-Type: message/vnd.janus
+
 ## Response
-### Codes
-#### OK
-How the message is processed and what response is given is the prerogative of the receiver of the message. There is two conventions for non-error response.
 
-**202 Accepted** -- The message is processed asynchronously. No content is return.
+### Headers
+If a response contains a message then include a Content-Type header.
 
-**200 OK** -- If the message is processed synchronously and the return is the corresponding message.
+Content-Type: message/vnd.janus
 
-#### Error
-Standard 400s codes for client errors and standard 500s codes for server errors.
+### Status Codes
+How the message is processed and what response is given is the prerogative of the receiver of the message. There are two conventions for non-error response.
+
+#### Success
+**200 OK** -- The message was processed successfully, and the body contains the response message.
+
+**202 Accepted** -- The message will be processed asynchronously. No response message.
+
+**204 No Content** -- The message was processed succesfully with no response message.
+
+#### Errors
+
+Standard 4xx codes for client errors and 5xx codes for server errors.
