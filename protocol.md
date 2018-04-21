@@ -83,7 +83,7 @@ An Issuer is a well-known entity in the Sovrin ecosystem. They have a public DID
 #### Credential Definition
 An Issuer issues Credentials against a Credential type, called a Credential Definition. A Credential Definition includes two major parts: (1) a reference to a Schema, and (2) public keys specific to the credentials issued under that Credential Definition.
 
-The Schema is a template that defines the fields and data types and semmantics of the credentials issued under that Credential Definitions. A Credential Definition can reference any public Schema created by any party. This allows for public reuse of well-designed Schema, which should drive consolidation and a form of standardization over time.
+The Schema is a template that defines the fields and data types and semantics of the credentials issued under that Credential Definitions. A Credential Definition can reference any public Schema created by any party. This allows for public reuse of well-designed Schema, which should drive consolidation and a form of standardization over time.
 
 The public keys are used by Relying Parties to verify that a person really has a Credential from that Issuer. The issuer generates special private and public keys for a specific Credential Definition, securely storing the private keys, and publishing the public key in the Credential Definition on the ledger.
 
@@ -130,16 +130,6 @@ Here is the mapping to the pattern:
 ### Revoking Sub-Protocol
 Revocations are accomplished with a Ledger write to the Revocation Registry. The Issuer should also communicate with the Credential holder directly that their Credential was revoked using a CRED_NOTICE message.
 
-## Agents
-Agents are dedicated to supporting one *Owner* (person or organization), which is perpendicular to modern web infrastructure and horizontal architectures in general. An agent is aligned to one and only one Owner, and everything it does is in direct support of that one Owner.
-
-Agents come in two basic flavors: (1) Edge Agents and (2) Cloud Agents.
-
-### Edge Agents
-An owner's Edge Agents, also known as Local Agents, are Sovrin-aware code (perhaps in the form of an SDK) running on a device in direct control of the owner. Devices include mobile phones, tablets, PCs, and servers controlled by enterprises.
-
-### Cloud Agents
-An owner's Cloud Agents are any of its agents running on hardware physically controlled by another party.
 
 ## An independent protocol for Self-Sovereign Identity
 Any public ledger that is capable of storing and maintaining the core Public Objects (DIDs/DID docs, Schema, Credential Defs, Revocation Registries, and Anchors) could provide the Public Ledger requirements of the protocol, as long as the consumers of those objects trusted that particular ledger.
