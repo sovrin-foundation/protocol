@@ -18,3 +18,11 @@ The protocol stores the following Public Objects on the ledger:
 1. Credentials
 1. Proofs
 1. Authentication or Verification transactions
+
+### Requirements
+Generating a new Credential does not require writing to the ledger if the Issuer pre-issues the Revocation Registry. Authentication does not require a write to the ledger either; it requires a read though. 
+
+Proving a Credential is not revoked, and verification of a Proof both require reading from the ledger. Therefore the ledger should have good read performance.
+
+#### Interoperability Requirements
+**TODO**

@@ -112,10 +112,3 @@ Here is the mapping to the pattern:
 
 ### Revoking Sub-Protocol
 Revocations are accomplished with a Ledger write to the Revocation Registry. The Issuer should also communicate with the Credential holder directly that their Credential was revoked using a CRED_NOTICE message.
-
-### Interoperability Requirements
-
-### Ledger Requirements
-Generating a new Credential does not require writing to the ledger if the Issuer pre-issues the Revocation Registry. Authentication does not require a write to the ledger either; it requires a read though. 
-
-Proving a Credential is not revoked, and verification of a Proof both require reading from the ledger. Therefore the ledger should have good read performance.
