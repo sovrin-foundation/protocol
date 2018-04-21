@@ -113,10 +113,6 @@ Here is the mapping to the pattern:
 ### Revoking Sub-Protocol
 Revocations are accomplished with a Ledger write to the Revocation Registry. The Issuer should also communicate with the Credential holder directly that their Credential was revoked using a CRED_NOTICE message.
 
-
-## An independent protocol for Self-Sovereign Identity
-Any public ledger that is capable of storing and maintaining the core Public Objects (DIDs/DID docs, Schema, Credential Defs, Revocation Registries, and Anchors) could provide the Public Ledger requirements of the protocol, as long as the consumers of those objects trusted that particular ledger.
-
 ### Interoperability Requirements
 
 ### Ledger Requirements

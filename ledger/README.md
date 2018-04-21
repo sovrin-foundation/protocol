@@ -1,3 +1,8 @@
+# Ledger
+A public, tamper resistant data structure that is capable of storing and maintaining the core Public Objects 
+(DIDs/DID docs, Schema, Credential Defs, Revocation Registries, and Anchors) could provide the Public Ledger 
+requirements of the protocol, as long as the consumers of those objects trusted that particular ledger.
+
 ## What's on the Ledger?
 The protocol stores the following Public Objects on the ledger:  
 *Note:  The public objects on the ledger are created/updated through events called transactions. Each transaction has 2 sections, a payload section called `data` and a meta section called `reqMetadata` that will contain metadata like the author of transaction, nonce for the transaction, etc.*
