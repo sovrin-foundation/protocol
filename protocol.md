@@ -104,8 +104,8 @@ This has a side benefit of reducing the number writes to the public ledger, whic
 ### Connecting Sub-Protocol
 TODO
 
-### Issuance Sub-Protocol
-The Issuance sub-protocol describes the interaction between the Issuer and Identity Owner. This interaction follows the Negotiation Pattern. Here is the mapping to the pattern:
+### Issuing Sub-Protocol
+The Issuing sub-protocol describes the interaction between the Issuer and Identity Owner. This interaction follows the Negotiation Pattern. Here is the mapping to the pattern:
 * The **Identity Owner** assumes the *Acquirer* role in the pattern. 
 * The **Issuer** assumes the *Producer* role.
 * The **Credential Offer** maps to the *Offer*.
@@ -115,8 +115,10 @@ The Issuance sub-protocol describes the interaction between the Issuer and Ident
 If an Issuer is pre-issuing its Revocation Registry (recommended), then no ledger write is required for Issuance. Otherwise, a single transaction to update the Revocation Registry is required before the Credential can be used.
 
 Updates to a Revocation Registry can be batched. If an Issuer issues and revokes a large number of Credentials in a short period of time, these issuances and revocations can be combined in one efficient transaction.
-### Authentication Sub-Protocol
-The Authentication sub-protocol describes the interaction between the Relying Party and Identity Owner. This interaction also follows the Negotiation Pattern with one caveat: there would not be a leading Proof Offer. The Authentication Sub-Protocol would start with a Proof Request. If a Credential holder could not or wished not to provide Proof as requested by the Proof Request, then the credential holder could send a Proof Offer that described the proof it was willing to share. The Authentication sub-protocol lists guidelines that the Relying Party could follow while constructing the Proof Request such that the Identity Owner can ensure that requested information respects its privacy. 
+
+
+### Proving Sub-Protocol
+The Proving sub-protocol describes the interaction between the Relying Party and Identity Owner. This interaction also follows the Negotiation Pattern with one caveat: there would not be a leading Proof Offer. The Authentication Sub-Protocol would start with a Proof Request. If a Credential holder could not or wished not to provide Proof as requested by the Proof Request, then the credential holder could send a Proof Offer that described the proof it was willing to share. The Authentication sub-protocol lists guidelines that the Relying Party could follow while constructing the Proof Request such that the Identity Owner can ensure that requested information respects its privacy. 
 
 Here is the mapping to the pattern:
 * The **Relying Party** assumes the *Acquirer* role in the pattern.
@@ -125,7 +127,7 @@ Here is the mapping to the pattern:
 * The **Proof Request** maps to the *Request*.
 * The **Proof** maps to the *Matter* in the pattern.
 
-### Revocation Sub-Protocol
+### Revoking Sub-Protocol
 Revocations are accomplished with a Ledger write to the Revocation Registry. The Issuer should also communicate with the Credential holder directly that their Credential was revoked using a CRED_NOTICE message.
 
 ## Agents
