@@ -7,8 +7,11 @@ DF: Throughout the repo there are at least two types of data:
     reading and/or design principles? 
 JL: Yes, I think we should organized them, and cross reference. What do you recommend?
 DF: I'm thinking that maybe we should have a folder/codename like Janus for the background theory, where we layout
-    our case for our goals, princibles, etc. We decribe the folder as not containing specs, per say, but as a foundation to
+    our case for our goals, principles, etc. We decribe the folder as not containing specs, per se, but as a foundation to
     understand our protocol.
+JL: OK, that sounds good. What should the main README have in it then? Super high level summary with a 
+    reference to documents for principles and for specs?
+
 -->
 
 # The Sovrin Protocol
