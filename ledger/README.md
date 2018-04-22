@@ -1,5 +1,5 @@
 # Ledger
-The Ledger acts as a public, tamper evident data structure that is capable of storing and maintaining objects that support signing and authenticating, issuing and revoking, and proving and verifying peer-to-peer interations.
+The Ledger acts as a public, tamper evident data structure that is capable of storing and maintaining objects that support signing and authenticating, issuing and revoking, and proving and verifying peer-to-peer interactions.
 
 ## What's on the Ledger?
 The protocol stores the following Public Objects on the ledger:  
