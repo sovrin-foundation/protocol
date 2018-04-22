@@ -18,18 +18,15 @@ The method used for Janus messages should be `POST`, and agents with HTTP interf
 Janus does not depend on the transport protocol for confidential communications, therefore an HTTP method can leak details about the message being sent. HTTP is resource-oriented, and Janus is message-oriented. The intent of a Janus message is embedded in the message type.
 
 ### Headers
-<!--
-DF: I don't like vnd! vnd suggest that it is vender specific. like vnd.ms-excel from Microsoft. I think we should choose one       even if it's not part of the mime-type spec. We can use it and I think we can get it into the spec fairly easily once we       have adoption.
--->
-Accept: message/vnd.janus
-Content-Type: message/vnd.janus
+Accept: message/janus
+Content-Type: message/janus
 
 ## Response
 
 ### Headers
 If a response contains a message then include a Content-Type header.
 
-Content-Type: message/vnd.janus
+Content-Type: message/janus
 
 ### Status Codes
 How the message is processed and what response is given is the prerogative of the receiver of the message. There are two conventions for non-error response.
