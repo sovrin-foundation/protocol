@@ -3,8 +3,7 @@ This document describes the various items that need to be flushed out or reconci
 Creating github issues from them is an option too.
 
 1. Reconcile the following with [Self-Sovereign Privacy By Design](self_sovereign_privacy_by_design_v1.md)
-## TODO: the following needs to be reconciled and organized with the content above
-
+```
 ## Core Principles
 
 1. The Identity Owner is in control
@@ -49,3 +48,4 @@ Some may argue that Relying Parties will simply ask for enough information to un
 ##### Minimize dependency on the ledger, especially writes.
 
 ## Basic Description of What's Possible with Sovrin
+```
