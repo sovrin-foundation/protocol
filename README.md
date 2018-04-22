@@ -6,6 +6,9 @@ DF: Throughout the repo there are at least two types of data:
     How do we want to distinguish them (or do we). Should we have a directory that is background
     reading and/or design principles? 
 JL: Yes, I think we should organized them, and cross reference. What do you recommend?
+DF: I'm thinking that maybe we should have a folder/codename like Janus for the background theory, where we layout
+    our case for our goals, princibles, etc. We decribe the folder as not containing specs, per say, but as a foundation to
+    understand our protocol.
 -->
 
 # The Sovrin Protocol
