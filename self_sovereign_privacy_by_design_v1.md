@@ -222,4 +222,3 @@ Absolute user anonymity might lead to abuse or fraud. Therefore, in certain appl
 ## Carry over of attributes
 
 The cryptography that we have just described has been extensively tested in a number of European Research projects with real users. In the ABC4Trust project, two pilots were conducted where users were given smart cards to hold and process their credentials. In the first pilots, pupils of a Swedish school could get on-line counseling by proving that they were enlisted with the school but keeping their identity hidden. In the second one, Greek students could collect a credential for each lecture they were attending and then at the end of the semester anonymously grade the course provided they proved to have attended sufficiently many lectures. Further successful pilots were done in the AU2EU and the FIware projects demonstrating the maturity of anonymous credentials.
-
