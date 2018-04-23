@@ -11,6 +11,7 @@ DF: I'm thinking that maybe we should have a folder/codename like Janus for the 
     understand our protocol.
 JL: OK, that sounds good. What should the main README have in it then? Super high level summary with a 
     reference to documents for principles and for specs?
+DF: Yeah, a map to where to go depending on what you are wanting to read.
 
 -->
 
