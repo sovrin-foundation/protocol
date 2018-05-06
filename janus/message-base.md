@@ -1,6 +1,6 @@
 # SSI Base Message Format
 
-> *Note: This is a rough dodcument, and contains inconsistancies, missing sections, etc. These will iron out as work on this document progresses.*
+> *Note: This is a rough document, and contains inconsistancies, missing sections, etc. These will iron out as work on this document progresses.*
 
 The role of the Self-Soverign Identity Message Format is to act as a foundation for the message types that will power the SSI messaging ecosystem.
 This format is intended to be as simple as possible, providing just enough structure to facilitate compatible communication.
@@ -15,28 +15,28 @@ Goals:
 The base message format is a JWT Payload. All JWT standard attributes are reserved. Additional attributes to messages are included based on the type specified. (See Message Types.)
 
 Example:
-```javascript=
+```JSON
 {
-    '@type': 'example.com/basemessage',
-    'iss': 'did:exa:11111111111',
-    'aud': 'did:exa:22222222222',
-    'iat': 'timestamp',
+    "@type": "example.com/basemessage",
+    "iss": "did:exa:11111111111",
+    "aud": "did:exa:22222222222",
+    "iat": "timestamp",
 }
 ```
 ### Applicable JWT attributes
 
-iss (Issuer) - from DID
-sub (Subject)
-aud (Audience) - to DID
-exp (Expiration Time) - ts
-nbf (Not Before) - ts
-iat (Issued At) - ts
-jti (JWT ID) - unique id for JWT to prevent replay
+* **"iss"** (Issuer) - from DID
+* **"sub"** (Subject)
+* **"aud"** (Audience) - to DID
+* **"exp"** (Expiration Time) - ts
+* **"nbf"** (Not Before) - ts
+* **"iat"** (Issued At) - ts
+* **"jti"** (JWT ID) - unique id for JWT to prevent replay
 
 Additional JOSE Headers (for JWS/JWE):
 
-typ (Type) - Should these be used as type designators?
-cty (Content Type)
+* **"typ"** (Type) - Should these be used as type designators?
+* **"cty"** (Content Type)
 
 
 ## Message Types
@@ -45,9 +45,9 @@ Each message should have a type, specified by the top level @type attribute. The
 
 Each type indicates a particular version and format. 
 
-```javascript=
+```JSON
 {
-  '@type': 'example.com/examplemessage/v1'
+  "@type": "example.com/examplemessage/v1"
 }
 ```
 
@@ -92,7 +92,7 @@ Signing is only done when the use case requires it, for several reasons:
 
 If a signature is required, the original message is encoded as BASE64URL and added to a new object with two other signature fields: 
 
-```json
+```JSON
 {
   "signed": "<string encoded message>",
   "sig": "<string encoded signature>",
