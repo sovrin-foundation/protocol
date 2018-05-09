@@ -39,6 +39,10 @@ context associated with a message:
 * <font color="gray"><b>Sender Attributes</b> (_Are certain attributes of
   the sender cryptographically verifiable?_ (See the [themis subprotocol](
   ../themis/README.md).)</font>
+* <font color="gray"><b>Forgeability</b> (_Could a third party have forged this message?_)</font>
+* <font color="gray"><b>Time Sensitive</b> (_Has this message extended past the expiration time?_)</font>
+* <font color="gray"><b>Multi-Factor Authentication</b> (_Were multiple factors of authentication required to sign this message?_</font>
+
 
 ## How to use a security context
 
@@ -71,8 +75,14 @@ void handle_request_for_secret_meeting(HttpRequest locked, SecurityContext ctx) 
             unlock = true;
         }
     } else if (!ctx.has_nonrepudiation()) {
-        deny("I don't accept secret rendezvous requests unless you give me evidence that I could later use to prove you asked for the appointment.");
-    } else {
+        deny("I don't accept secret rendezvous requests unless you give me evidence that I could later use to prove you asked         for the appointment.");
+    } else if (!ctx.has_nonforgeability()) {
+        deny("This message uses an insecure MAC or digital signature scheme and could have been forged.");
+    } else if (!ctx.within_elapsed_time()) {
+        deny("This message was recieved after the elapsed amount of time. The message must be resent.)
+    } else if (!ctx.has_mfa()) {
+        deny("This message requires proof that Multi-Factor authentication was used to sign this signature to be accepted.")
+    else {
         unlock = true;
     }
     if (unlock) {
