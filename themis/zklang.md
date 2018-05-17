@@ -1,5 +1,4 @@
 # ZKLang
-__Taken from [ZKLang Meeting Notes](https://docs.google.com/document/d/1CwVljF8fS5NwF6NAppCvD4jLtH9t2m1rkut54hYGLm0/edit). That is a meeting notes doc so should not be referenced__
 A typical interaction between an identity owner and relying party (which has asked for proof) looks like this.
 1. Relying party asks for proof using Proof Request.
 2. Identity owner examines the proof request and decides what credential definitions need to be used for creating the proof. The resulting object is called a proof resolution.
@@ -8,3 +7,5 @@ A typical interaction between an identity owner and relying party (which has ask
 5. The identity owner then uses the ProofSpec and Witness data to create a Proof object.
 6. The identity owner then sends the Proof and the ProofSpec to the relying party.
 7. The relying party then checks that the ProofSpec is compatible with the sent Proof Request and then verifies the Proof.
+
+__More on ZKLang in [ZKLang Spec](https://docs.google.com/document/d/1CLdkd70Mfa-AhnrqwTMVwBdF-HdvVNBiOKcq13lPstY/edit)__
