@@ -1,4 +1,4 @@
-# CRED_OFFER
+# Credential Offer (CRED_OFFER)
 
 A credential offer is sent from an issuer to a potential holder. It
 communicates the type of credential on offer, and possibly its proposed
