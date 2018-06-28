@@ -80,7 +80,7 @@ Notice the annotation method uses a prepended `@` to indicate it is an annotatio
 ### Signed Message
 Signing is only done when the use case requires it, for several reasons: 
 1. Authentication can be accomplished as part of the Public Key Authenticated Encryption (PKAE). 
-2. The Non-Repudiation offered by signing (DSA, ECDSA, EDDSA) is not always desired, as in the interrim steps of a negotiation. Signatures make a message non-repudiable. 
+2. The Non-Repudiation offered by signing (DSA, ECDSA, EDDSA) is not always desired, as in the interim steps of a negotiation. Signatures make a message non-repudiable. 
 3. Signatures are somewhat more expensive to compute and verify than other ways to authenticate, like PKAE.    
 
 If a signature is required, the original message is encoded as BASE64URL and added to a new object with two other signature fields: 
@@ -231,7 +231,7 @@ Public Key Authenticated Encryption (PKAE) is a method where an elliptic curve d
 #### Anoncrypt Messages
 `anoncrypt` messages use PKAE in conjunction with an ephemeral sender key pair to strongly encrypt a message to an intended recipient.
 
-The anoncrypt function takes the msg and the recipient's verkey as arguments. A nonce is used, but because the ephemeral key is used only once, it is deterministic.
+The anoncrypt function takes the msg and the recipient's verkey as arguments. A nonce is needed, but because the ephemeral key is used only once, it acts as a nonce.
 
 ```
 anoncrypt(msg, recipient_verkey)
@@ -255,9 +255,9 @@ Internal message structure:
 ```
 
 #### Multiplexing Authcrypt Messages
-In cases where two different edge agents need to receive the same message, but the message is being sent through a common cloud agent, one solution is simply to send two separate authcrypt messages. 
+In cases where two different edge agents need to receive the same (`authcrypt`ed) message, but the message is being sent through a common cloud agent, one solution is simply to send two separate authcrypt messages. 
 
-If the message is large, this results in encrypting the message twice, and having to send it twice. It may be desireable to encrypt it and send it only once, while maintaining the requirement that both edge agents still be able to authenticate the message to the source.
+If the message is large, this results in encrypting the message twice, and having to send it twice. It may be desirable to encrypt it and send it only once, while maintaining the requirement that both edge agents still be able to authenticate the message to the source.
  
 This can be done by a process called **Multiplexing**. 
 
@@ -279,11 +279,16 @@ Internal message structure (for each recipient):
 }
 ```
 
-The Meta message's internal structure can be the same for each recipient, including using the same ephemeral keypair. However, each message is encrypted _for_ each recipient using X25519 just like any other message.
+The Meta message's internal structure can be the same for each recipient, including using the same ephemeral keypair. 
+However, each message is encrypted _for_ each recipient using X25519 just like any other message.
 
-The sender can then send a collection of Authcrypt Meta messages, one for each recipient, and one Authcrypt Elemental Message. The Cloud Agent can disperse the appropriate Authcrypt Meta message to each recipient, along with the Elemental Message.
+The sender can then send a collection of Authcrypt Meta messages, one for each recipient, and one Authcrypt Elemental Message. The Cloud Agent can 
+disperse the appropriate Authcrypt Meta message to each recipient, along with the Elemental Message.
 
-The recipients decrypt the Authcrypt Meta messages and verify it like any other Authcrypt message. Then it hashes Elemental and verifies it matches the hash in the Meta. Then it decrypts Elemental using the key in Meta.
+The recipients decrypt the Authcrypt Meta messages and verify it like any other Authcrypt message. Then it hashes Elemental and verifies it matches the hash `msg_hash` in the Meta.
+If the `msg_hash` does not match the hash of the Elemental then it knows that either the sender did not calculate the hash correctly or the Cloud agent tampered the data.   
+
+If the hash matches, it decrypts Elemental using the key `msg_key` in Meta.
 
 ##### Encryption
 To encrypt, the sender calls...
@@ -291,9 +296,9 @@ To encrypt, the sender calls...
 authcrypt(msg, recipient_verkey, sender_ver_key, sender_sig_key)
 ```
 
-The authcrypt function...
+The `authcrypt` function...
 1. Generates a new ephemeral keypair.
-1. Signs the ephmeral public key using `sender_sig_key`.
+1. Signs the ephemeral public key using `sender_sig_key`.
 1. Constructs a JSON object like so:
     ```json
     {
@@ -312,7 +317,7 @@ To decrypt, the recipient calls...
 authdecrypt(msg, recipient_private_key)
 ```
 
-The authdecrypt function...
+The `authdecrypt` function...
 
 1. Removes the appended ephemeral public key
 1. Uses the ephemeral public key and its own private key to decrypt the ciphertext.
