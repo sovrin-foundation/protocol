@@ -1,3 +1,20 @@
+<!-- 
+DF: Throughout the repo there are at least two types of data: 
+    protocol specification (see janus/message-packaging) and 
+    philological ideas and principals (see self_sovereign_privacy_by_design_distilled.md).
+    Lastly we have something in between (see dkms).
+    How do we want to distinguish them (or do we). Should we have a directory that is background
+    reading and/or design principles? 
+JL: Yes, I think we should organized them, and cross reference. What do you recommend?
+DF: I'm thinking that maybe we should have a folder/codename like Janus for the background theory, where we layout
+    our case for our goals, principles, etc. We decribe the folder as not containing specs, per se, but as a foundation to
+    understand our protocol.
+JL: OK, that sounds good. What should the main README have in it then? Super high level summary with a 
+    reference to documents for principles and for specs?
+DF: Yeah, a map to where to go depending on what you are wanting to read.
+
+-->
+
 # The Sovrin Protocol
 
 The Sovrin Protocol is a set of standards, patterns, and tools that facilitate
