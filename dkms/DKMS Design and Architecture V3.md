@@ -1,1 +1,1 @@
-#The DKMS Design and Architecture document has been moved to [the DKMS directory at Hyperledger Indy](https://github.com/hyperledger/indy-sdk/blob/master/doc/dkms/DKMS%20Design%20and%20Architecture%20V3.md). 
+#The DKMS Design and Architecture document has been moved to [the DKMS directory at Hyperledger Indy](https://github.com/hyperledger/indy-sdk/tree/master/doc/design/005-dkms). 
