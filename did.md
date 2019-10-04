@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # DID
 
 A decentralized identifier is a new type of globally unique identifier which are fully under the control of the DID subject with  cryptographically verifiable ownership.  DID’s resolve to DID Documents in similar ways as uniform resource names (URNs) except they do not

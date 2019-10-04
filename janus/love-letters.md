@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Love Letters
 
 Let us use a familiar circumstance as a case study in secure communication.

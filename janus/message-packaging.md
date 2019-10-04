@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Message Packaging
 
 Message delivery is complex. The hops in message delivery between two parties might vary according to whether agents are used, how much they are trusted, and how functional edge devices are. Likewise, the way encryption is applied may need dynamic adjustment.

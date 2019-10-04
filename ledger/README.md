@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Ledger
 The Ledger acts as a public, tamper evident data structure that is capable of storing and maintaining objects that support signing and authenticating, issuing and revoking, and proving and verifying peer-to-peer interactions.
 

@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Agents
 Agents are dedicated to supporting one *Owner* (person or organization), which is perpendicular to modern web infrastructure and horizontal architectures in general. An agent is aligned to one and only one Owner, and everything it does is in direct support of that one Owner.
 

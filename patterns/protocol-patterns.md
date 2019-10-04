@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Protocol Patterns
 As we've modeled the various interactions between parties in the Sovrin protocol, patterns have emerged. Patterns are useful in that they allow us to reason about specific use cases in the context of other use cases just like them. The solution to a problem in one use case can apply nicely as a solution to other use cases that follow the same pattern. Patterns allow us to declare general solutions to problems and create and maintain a smaller and better tested codebase. 
 

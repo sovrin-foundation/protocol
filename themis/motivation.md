@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Motivation
 Attributes describe the characteristics of an identity, name, birthdate, location, current employer, are all attributes (some attributes may change over time). A credential is a collection of attributes of an identity. When the credential is attested (using a digital signature) by another entity (usually an authority of some sort), the credential is called a **verifiable credential** and each attribute of the credential is called a **verifiable attribute**.  
 Verifiable attributes allow individuals to use the relationship they have with trusted institutions to establish new trusted relationships with others, by sharing those attributes. The following objects are involved in Sovrin's attribute exchange protocol.

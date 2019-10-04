@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # CRED_OFFER
 
 A credential offer is sent from an issuer to a potential holder. It

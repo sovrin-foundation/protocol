@@ -1,3 +1,5 @@
+![superseded](../superseded.png)
+
 ![Janus](Janus_coin.png)
 
 # Janus

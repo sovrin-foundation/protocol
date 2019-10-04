@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Credential Request
 
 A credential request is sent from a potential credential holder to an
