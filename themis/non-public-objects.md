@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Non Public Objects
 
 ## Credential Offer

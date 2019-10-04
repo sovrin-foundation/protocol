@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Message Transport
 <span style="color:yellow">We need more details but here is some preliminary ideas.</span>
 

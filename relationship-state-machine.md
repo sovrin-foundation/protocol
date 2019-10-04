@@ -1,3 +1,5 @@
+![superseded](superseded.png)
+
 # Relationship State Machine
 
 A relationship is the way in which two or more people or things are connected. A state machine is a system that manages the transition between valid states. Events are inputs into a state machine that may cause transitions (changes in state). An indentity owner has a unique DID for every relationship he is part of.  

@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # A Layered Ecosystem
 
 As mentioned in the Janus overview, communication unfolds against a

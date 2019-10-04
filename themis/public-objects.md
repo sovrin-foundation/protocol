@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Public Objects
 The public objects are stored on the ledger as transactions. [This](https://github.com/hyperledger/indy-node/blob/master/docs/transactions.md) document describes the transactions. The objects described below are the desired format, the current format will soon be changed to the one mentioned below. ALso in the actual ledger transaction, the format described below will be wrapped in a `data` section and there will be one more section called `reqMetadata` that will contain metadata like the author of transaction, nonce for the transaction, etc.
 

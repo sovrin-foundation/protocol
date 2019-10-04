@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # ZKLang
 A typical interaction between an identity owner and relying party (which has asked for proof) looks like this.
 1. Relying party asks for proof using Proof Request.

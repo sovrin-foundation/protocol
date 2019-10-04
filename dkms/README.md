@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Decentralized Key Management
 
 ### Introduction

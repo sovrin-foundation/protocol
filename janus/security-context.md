@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Security Context
 
 With physical mail, different approaches offer different guarantees. For

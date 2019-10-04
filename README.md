@@ -1,3 +1,6 @@
+![superseded](superseded.png)
+
+
 # The Sovrin Protocol
 
 The Sovrin Protocol is a set of standards, patterns, and tools that facilitate

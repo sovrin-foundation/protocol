@@ -1,3 +1,5 @@
+![superseded](superseded.png)
+
 # Self-Sovereign Privacy By Design 
 
 Why it Matters, What it Entails, and How it Thrives

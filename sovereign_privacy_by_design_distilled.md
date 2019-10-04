@@ -1,3 +1,5 @@
+![superseded](superseded.png)
+
 # Self-Sovereign Privacy By Design, Distilled
 
 November 2017

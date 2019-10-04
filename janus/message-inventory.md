@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Message Inventory
 
 A few message types are well known and trending toward standardization:

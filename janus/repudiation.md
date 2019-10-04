@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Repudiation
 
 If Carol receives a message that purports to come from Alice, she may naturally ask:

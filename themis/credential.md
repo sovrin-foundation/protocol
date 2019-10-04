@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Credential
 **TODO: Define**
 

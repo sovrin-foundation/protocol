@@ -1,3 +1,4 @@
+![superseded](../superseded.png)
 # Proof Format
 
 A proof is a JSON document that derives from one or more credentials. It
