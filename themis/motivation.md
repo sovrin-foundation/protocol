@@ -14,7 +14,7 @@ This is the object that possesses the credential. It might or might not be the s
 The object issuing the credential to a holder. This usually is an organisation like some government authority or even a private organisation. This object also possese some secret cryptographic data that is used to sign the credentials at the time of issuance.
 7. Relying party  
 The object that requests (from the holder) and receives verifiable attributes or some predicates over those. It then validates the signature over the verifiable attributes.
-8. [Proof request](proof-requests.md)
+8. [Proof request](proof-request.md)
 9. Proof  
 The holders shares the verifiable attributes and any predicates over those with the relying party in the form of a proof. 
 It consists of any revealed attribute values and additional cryptographic data that is sufficient for the relying party to verify the issuer's signature.
