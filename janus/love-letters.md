@@ -39,7 +39,7 @@ strictly necessary, either, but again, we include them for illustrative
 purposes. These would be agents at the _agencies_ that host Alice and
 Bob's cloud agents, respectively. Such agents can provide helpful
 services for many customers. They are part of the low trust layer, as
-far as Alice and Bob ar concerned.
+far as Alice and Bob are concerned.
 
 The cryptographic material in the _identity wallets_ of each of these
 agents is listed under the respective number. For example, Alice's edge
