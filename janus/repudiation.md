@@ -25,7 +25,7 @@ Repudiable sending may sound mysterious, but it's actually quite simple.
  secret (e.g., it's encrypted by a negotiated symmetric
  encryption key), then Carol knows the sender must be Alice. However,
  she can't prove it to anyone, because Alice's immediate counter-response
- could be, "Carol could have encrypted this himself. She knows the key, too."
+ could be, "Carol could have encrypted this herself. She knows the key, too."
  Notice that this only works in a pairwise channel.
 
 Non-repudiable messages are typically accomplished with digital
@@ -59,7 +59,7 @@ There are certainly cases where non-repudiation is appropriate. If
 
 Janus supports both modes of communication. However, properly modeled
  interactions tend to favor repudiable messages; non-repudiation must be
- a deliberate choice. For this reason, Jason assumes repudiable until
+ a deliberate choice. For this reason, Janus assumes repudiable until
  an explicit signature is required (in which case the `sign()` crypto
  primitive is invoked. This matches the physical world, where most
  communication is casual and does not carry the weight of legal
